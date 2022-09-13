@@ -523,6 +523,18 @@ return [
                     'text' => 'Pelaporan Hasil Kritis Laboratorium',
                     'url'  => '/ikt/pelaporan_hasil_kritis_laboratorium',
                 ],
+                [
+                    'text' => 'Waktu Tanggap Operasi Seksio Sesarea Emergensi',
+                    'url'  => '/ikt/waktu_tanggap_operasi_seksio_sesarea',
+                ],
+                [
+                    'text' => 'Kepatuhan Upaya Pencegahan Resiko Pasien Jatuh',
+                    'url'  => '/ikt/kepatuhan_upaya_pencegahan_risiko_pasien_jatuh',
+                ],
+                [
+                    'text' => 'Pertumbuhan Realisasi Pendapatan dari Pengelolaan Aset BLU',
+                    'url'  => '/ikt/pertumbuhan_realisasi_pendapatan_pengelolaan_aset_blu',
+                ],
             ],
         ],
     ],

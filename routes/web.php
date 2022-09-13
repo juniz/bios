@@ -194,4 +194,13 @@ Route::prefix('ikt')->group(function () {
 
     Route::get('/pelaporan_hasil_kritis_laboratorium', [App\Http\Controllers\IKT\PelaporanHasilKritisLaboratoriumController::class, 'index'])->named('pelaporan_hasil_kritis_laboratorium');
     Route::post('/pelaporan_hasil_kritis_laboratorium/kirim', [App\Http\Controllers\IKT\PelaporanHasilKritisLaboratoriumController::class, 'store']);
+
+    Route::get('/waktu_tanggap_operasi_seksio_sesarea', [App\Http\Controllers\IKT\WaktuTanggapOperasiSeksioSesareaController::class, 'index'])->named('waktu_tanggap_operasi_seksio_sesarea');
+    Route::post('/waktu_tanggap_operasi_seksio_sesarea/kirim', [App\Http\Controllers\IKT\WaktuTanggapOperasiSeksioSesareaController::class, 'store']);
+
+    Route::get('/kepatuhan_upaya_pencegahan_risiko_pasien_jatuh', [App\Http\Controllers\IKT\KepatuhanUpayaPencegahanResikoPasienJatuhController::class, 'index'])->named('kepatuhan_upaya_pencegahan_risiko_pasien_jatuh');
+    Route::post('/kepatuhan_upaya_pencegahan_risiko_pasien_jatuh/kirim', [App\Http\Controllers\IKT\KepatuhanUpayaPencegahanResikoPasienJatuhController::class, 'store']);
+
+    Route::get('/pertumbuhan_realisasi_pendapatan_pengelolaan_aset_blu', [App\Http\Controllers\IKT\PertumbuhanRealisasiPendapatanPengelolaanAsetBLUController::class, 'index'])->named('pertumbuhan_realisasi_pendapatan_pengelolaan_aset_blu');
+    Route::post('/pertumbuhan_realisasi_pendapatan_pengelolaan_aset_blu/kirim', [App\Http\Controllers\IKT\PertumbuhanRealisasiPendapatanPengelolaanAsetBLUController::class, 'store']);
 });
