@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Traits\Token;
 use App\Http\Traits\RequestAPI;
 use App\Http\Traits\RequestDB;
+use Illuminate\Support\Carbon;
 
 class BidanController extends Controller
 {
@@ -18,12 +19,13 @@ class BidanController extends Controller
         $token = $this->getToken();
         $this->token = $token->json()['token'];
         $this->header = [
-            'token' => $token->json()['token'],
+            'token' => $this->token,
             'Content-Type' => 'multipart/form-data'
         ]; 
         $this->bidang = 'BIDAN';
         $this->url = 'kesehatan/sdm/bidan';
         $this->data = $this->read();
+        $this->tanggal = Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
         $this->headTable = ['Tgl Transaksi', 'Tgl Update', 'PNS', 'PPPK', 'Non PNS Tetap', 'Kontrak', 'Anggota'];
     }
 
@@ -37,6 +39,7 @@ class BidanController extends Controller
             'p3k' => $this->p3k($this->bidang),
             'non_pns' => $this->nonPNS($this->bidang),
             'kontrak' => $this->kontrak($this->bidang),
+            'tanggal' => $this->tanggal,
         ]);
     }
 

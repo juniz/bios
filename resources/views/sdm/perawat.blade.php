@@ -16,21 +16,13 @@
             <x-adminlte-input id="kontrak" name="kontrak" label="Jumlah Kontrak" value="{{$kontrak}}" type="number" fgroup-class="col-md-2" disable-feedback/>
        </div>
        <div class="d-flex flex-row-reverse">
-            <div class="p-1">
-                <x-adminlte-button label="Kirim" onclick="kirimDataPerawat()" theme="primary" />
-            </div>
-            <div class="p-1">
-                <x-adminlte-button label="Refresh" theme="success" />
-            </div>
             <div class="p-2">
                 @php
                     $config = ['format' => 'YYYY-MM-DD'];
                 @endphp
-                <x-adminlte-input-date name="tanggal" :config="$config" placeholder="Pilih Tanggal....">
+                <x-adminlte-input-date name="tanggal" value="{{$tanggal}}" :config="$config" placeholder="Pilih Tanggal....">
                     <x-slot name="appendSlot">
-                        <div class="input-group-text bg-gradient-danger">
-                            <i class="fas fa-calendar-alt"></i>
-                        </div>
+                        <x-adminlte-button label="Kirim" onclick="kirimDataPerawat()" theme="primary" />
                     </x-slot>
                 </x-adminlte-input-date>
             </div>
@@ -69,6 +61,14 @@
 @section('js')
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        function deleteTable(){
+            var tableHeaderRowCount = 1;
+            var table = document.getElementById('tablePerawat');
+            var rowCount = table.rows.length;
+            for (var i = tableHeaderRowCount; i < rowCount; i++) {
+                table.deleteRow(tableHeaderRowCount);
+            }
+        }
         function kirimDataPerawat() {
             let data = {
                 _token:$('meta[name="csrf-token"]').attr('content'),
@@ -79,10 +79,10 @@
                 non_pns_tetap:$("input[name=non_pns]").val(),
                 kontrak:$("input[name=kontrak]").val(),
             };
-            console.log(data);
+            // console.log(data);
             $.ajax({
                 type:'POST',
-                url:'/perawat/kirim',
+                url:'/sdm/perawat/kirim',
                 data:data,
                 dataType:'json',
                 beforeSend:function() {
@@ -120,7 +120,7 @@
                         title: 'Error',
                         text: 'Opsss Terjadi Kesalahan',
                         showConfirmButton: true,
-                        });
+                    });
                 }
             });
         }

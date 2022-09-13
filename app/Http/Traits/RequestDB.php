@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Traits;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 trait RequestDB {
 
@@ -39,7 +39,10 @@ trait RequestDB {
     {
         $data = DB::table('pegawai')
                     ->where('bidang', $bidang)
-                    ->where('stts_kerja', 'NPN')
+                    ->where(function($query) {
+                        $query->orWhere('stts_kerja', 'NPN')
+                              ->orWhere('stts_kerja', 'PT');
+                    })
                     ->where('stts_aktif', '<>', 'KELUAR')
                     ->count('*');
         return $data;
@@ -52,6 +55,13 @@ trait RequestDB {
                     ->where('stts_kerja', 'KB')
                     ->where('stts_aktif', '<>', 'KELUAR')
                     ->count('*');
+        return $data;
+    }
+
+    public function getRekening()
+    {
+        $data = DB::table('rekening_rumkit')
+                    ->get();
         return $data;
     }
 }

@@ -16,25 +16,17 @@
             <x-adminlte-input id="kontrak" name="kontrak" label="Jumlah Kontrak" value="{{$kontrak}}" type="number" fgroup-class="col-md-2" disable-feedback/>
        </div>
        <div class="d-flex flex-row-reverse">
-            <div class="p-1">
-                <x-adminlte-button label="Kirim" onclick="kirimDataPerawat()" theme="primary" />
-            </div>
-            <div class="p-1">
-                <x-adminlte-button label="Refresh" theme="success" />
-            </div>
-            <div class="p-2">
-                @php
-                    $config = ['format' => 'YYYY-MM-DD'];
-                @endphp
-                <x-adminlte-input-date name="tanggal" :config="$config" placeholder="Pilih Tanggal....">
-                    <x-slot name="appendSlot">
-                        <div class="input-group-text bg-gradient-danger">
-                            <i class="fas fa-calendar-alt"></i>
-                        </div>
-                    </x-slot>
-                </x-adminlte-input-date>
-            </div>
-       </div>
+        <div class="p-2">
+            @php
+                $config = ['format' => 'YYYY-MM-DD'];
+            @endphp
+            <x-adminlte-input-date name="tanggal" value="{{$tanggal}}" :config="$config" placeholder="Pilih Tanggal....">
+                <x-slot name="appendSlot">
+                    <x-adminlte-button label="Kirim" onclick="kirimDataPerawat()" theme="primary" />
+                </x-slot>
+            </x-adminlte-input-date>
+        </div>
+    </div>
     </x-adminlte-card>
 
     <x-adminlte-card title="Data Jumlah Bidan" theme="dark" theme-mode="outline">
@@ -82,7 +74,7 @@
             console.log(data);
             $.ajax({
                 type:'POST',
-                url:'/bidan/kirim',
+                url:'/sdm/bidan/kirim',
                 data:data,
                 dataType:'json',
                 beforeSend:function() {

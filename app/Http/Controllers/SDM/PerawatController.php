@@ -7,24 +7,25 @@ use Illuminate\Http\Request;
 use App\Http\Traits\Token;
 use App\Http\Traits\RequestAPI;
 use App\Http\Traits\RequestDB;
-use DB;
+use Illuminate\Support\Carbon;
 
 class PerawatController extends Controller
 {
     use Token, RequestAPI, RequestDB;
-    public $header, $token, $url, $data, $headTable, $bidang;
+    public $header, $token, $url, $data, $headTable, $bidang, $tanggal;
 
     public function __construct()
     {
         $token = $this->getToken();
         $this->token = $token->json()['token'];
         $this->header = [
-            'token' => $token->json()['token'],
+            'token' => $this->token,
             'Content-Type' => 'multipart/form-data'
         ]; 
         $this->bidang = 'PERAWAT';
         $this->url = 'kesehatan/sdm/perawat';
         $this->data = $this->read();
+        $this->tanggal = Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
         $this->headTable = ['Tgl Transaksi', 'Tgl Update', 'PNS', 'PPPK', 'Non PNS Tetap', 'Kontrak', 'Anggota'];
     }
     /**
@@ -36,6 +37,7 @@ class PerawatController extends Controller
     {
         return view('sdm.perawat',[
             'data' => $this->data, 
+            'tanggal' => $this->tanggal,
             'head' => $this->headTable, 
             'anggota' => $this->anggota($this->bidang),
             'pns' => $this->pns($this->bidang),

@@ -63,7 +63,7 @@ return [
     |
     */
 
-    'logo' => '<b>RSB</b>Nganjuk',
+    'logo' => '<b>RSB</b> Nganjuk',
     'logo_img' => 'assets/img/logo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
@@ -267,164 +267,264 @@ return [
 
     'menu' => [
         // Navbar items:
-        [
-            'type'         => 'navbar-search',
-            'text'         => 'search',
-            'topnav_right' => true,
-        ],
+        // [
+        //     'type'         => 'navbar-search',
+        //     'text'         => 'search',
+        //     'topnav_right' => true,
+        // ],
         [
             'type'         => 'fullscreen-widget',
             'topnav_right' => true,
         ],
-
         // Sidebar items:
         [
             'type' => 'sidebar-menu-search',
             'text' => 'search',
         ],
-        ['header' => 'SDM'],
         [
-            'text' => 'Perawat',
-            'url'  => '/perawat',
-            'icon' => 'fas fa-fw fa-user',
+            'text'    => 'SDM',
+            'icon'    => 'fas fa-fw fa-user-md',
+            'submenu' => [
+                [
+                    'text' => 'Perawat',
+                    'url'  => '/sdm/perawat',
+                ],
+                [
+                    'text' => 'Bidan',
+                    'url'  => '/sdm/bidan',
+                ],
+                [
+                    'text' => 'Laboratorium',
+                    'url'  => '/sdm/laboratorium',
+                ],
+                [
+                    'text' => 'Radiographer',
+                    'url'  => '/sdm/radiographer',
+                ],
+                [
+                    'text' => 'Nutritionist',
+                    'url'  => '/sdm/nutritionist',
+                ],
+                [
+                    'text' => 'Pharmacist',
+                    'url'  => '/sdm/pharmacist',
+                ],
+                [
+                    'text' => 'Professional Lainnya',
+                    'url'  => '/sdm/profesionallainnya',
+                ],
+                [
+                    'text' => 'Non Medis',
+                    'url'  => '/sdm/nonmedis',
+                ],
+                [
+                    'text' => 'Sanitarian',
+                    'url'  => '/sdm/sanitarian',
+                ],
+                [
+                    'text' => 'Non-Medis Administrasi',
+                    'url'  => '/sdm/administrasi',
+                ],
+                [
+                    'text' => 'Dokter Spesialis',
+                    'url'  => '/sdm/spesialis',
+                ],
+                [
+                    'text' => 'Dokter Gigi',
+                    'url'  => '/sdm/doktergigi',
+                ],
+                [
+                    'text' => 'Dokter Umum',
+                    'url'  => '/sdm/dokterumum',
+                ],
+            ],
         ],
         [
-            'text' => 'Bidan',
-            'url'  => '/bidan',
-            'icon' => 'fas fa-fw fa-user',
+            'text'    => 'Layanan',
+            'icon'    => 'fas fa-fw fa-medkit',
+            'submenu' => [
+                [
+                    'text' => 'Indeks Kepuasan Masyarakat (IKM)',
+                    'url'  => '/layanan/ikm',
+                ],
+                [
+                    'text' => 'Layanan Laboratorium (sampel)',
+                    'url'  => '/layanan/laboratoriumsampel',
+                ],
+                [
+                    'text' => 'Layanan Farmasi',
+                    'url'  => '/layanan/farmasi',
+                ],
+                [
+                    'text' => 'BOR (Bed Occupancy Ratio)',
+                    'url'  => '/layanan/bor',
+                ],
+                [
+                    'text' => 'TOI (Turn Over Interval)',
+                    'url'  => '/layanan/toi',
+                ],
+                [
+                    'text' => 'ALOS (Average Length of Stay)',
+                    'url'  => '/layanan/alos',
+                ],
+                [
+                    'text' => 'BTO (Bed Turn Over)',
+                    'url'  => '/layanan/bto',
+                ],
+                [
+                    'text' => 'Layanan Laboratorium (parameter)',
+                    'url'  => '/layanan/laboratoriumparameter',
+                ],
+                [
+                    'text' => 'Pasien Rawat Darurat',
+                    'url'  => '/layanan/igd',
+                ],
+                [
+                    'text' => 'Tindakan Operasi',
+                    'url'  => '/layanan/operasi',
+                ],
+                [
+                    'text' => 'Layanan Radiologi',
+                    'url'  => '/layanan/radiologi',
+                ],
+                [
+                    'text' => 'Layanan Forensik',
+                    'url'  => '/layanan/forensik',
+                ],
+                [
+                    'text' => 'Kunjungan Rawat Jalan',
+                    'url'  => '/layanan/ralan',
+                ],
+                [
+                    'text' => 'Pasien BPJS / Non-BPJS',
+                    'url'  => '/layanan/bpjs_non_bpjs',
+                ],
+                [
+                    'text' => 'Pasien Rawat Jalan/Poli',
+                    'url'  => '/layanan/poli',
+                ],
+                [
+                    'text' => 'Pelayanan Dokpol',
+                    'url'  => '/layanan/dokpol',
+                ],
+            ],
         ],
         [
-            'text' => 'Laboratorium',
-            'url'  => '/laboratorium',
-            'icon' => 'fas fa-fw fa-user',
+            'text'    => 'Keuangan',
+            'icon'    => 'fas fa-fw fa-dollar-sign',
+            'submenu' => [
+                [
+                    'text' => 'Operasional',
+                    'url'  => '/keuangan/operasional',
+                ],
+                [
+                    'text' => 'Pengelolaan Kas',
+                    'url'  => '/keuangan/kas',
+                ],
+                [
+                    'text' => 'Dana Kelolaan',
+                    'url'  => '/keuangan/kelolaan',
+                ],
+                [
+                    'text' => 'Penerimaan',
+                    'url'  => '/keuangan/penerimaan',
+                ],
+                [
+                    'text' => 'Pengeluaran',
+                    'url'  => '/keuangan/pengeluaran',
+                ],
+            ],
         ],
         [
-            'text' => 'Radiographer',
-            'url'  => '/radiographer',
-            'icon' => 'fas fa-fw fa-user',
+            'text'    => 'IKT',
+            'icon'    => 'fas fa-fw fa-chart-pie',
+            'submenu' => [
+                [
+                    'text' => 'Visite Pasien <= Jam 10.00',
+                    'url'  => '/ikt/visite1',
+                ],
+                [
+                    'text' => 'Visite Pasien > 10.00 s.d. 12.00',
+                    'url'  => '/ikt/visite2',
+                ],
+                [
+                    'text' => 'Visite Pasien > 12.00',
+                    'url'  => '/ikt/visite3',
+                ],
+                [
+                    'text' => 'Rasio POBO',
+                    'url'  => '/ikt/pobo',
+                ],
+                [
+                    'text' => 'Kegiatan Visite Pasien Pertama',
+                    'url'  => '/ikt/visite_pertama',
+                ],
+                [
+                    'text' => 'DPJP tidak visite',
+                    'url'  => '/ikt/dpjp_non_visite',
+                ],
+                [
+                    'text' => 'Kepuasan Pasien',
+                    'url'  => '/ikt/kepuasan_pasien',
+                ],
+                [
+                    'text' => 'Waktu Tunggu Rawat Jalan',
+                    'url'  => '/ikt/waktu_tunggu_ralan',
+                ],
+                [
+                    'text' => 'Penyelenggaran Rekam Medis Elektronik',
+                    'url'  => '/ikt/penyelenggaraan_erm',
+                ],
+                [
+                    'text' => 'Kepatuhan Penggunaan Alat Pelindung Diri (APD)',
+                    'url'  => '/ikt/kepatuhan_penggunaan_apd',
+                ],
+                [
+                    'text' => 'Penundaan Operasi Elektif',
+                    'url'  => '/ikt/penundaan_operasi_elektif',
+                ],
+                [
+                    'text' => 'Kepatuhan Terhadap Alur Klinis (Clinical Pathway)',
+                    'url'  => '/ikt/kepatuhan_clinical_pathway',
+                ],
+                [
+                    'text' => 'Kepatuhan Kebersihan Tangan',
+                    'url'  => '/ikt/kepatuhan_kebersihan_tangan',
+                ],
+                [
+                    'text' => 'Kepatuhan Penggunaan Formularium Nasional',
+                    'url'  => '/ikt/kepatuhan_penggunaan_fornas',
+                ],
+                [
+                    'text' => 'Kepatuhan Waktu Visite Dokter Penanggung Jawab Pelayanan/DPJP',
+                    'url'  => '/ikt/kepatuhan_waktu_visite_dpjp',
+                ],
+                [
+                    'text' => 'Kepatuhan Pelaksanaan Protokol Kesehatan',
+                    'url'  => '/ikt/kepatuhan_pelaksanaan_prokes',
+                ],
+                [
+                    'text' => 'Persentase Pembelian Alat Kesehatan Produksi Dalam Negeri',
+                    'url'  => '/ikt/pembelian_alkes_dalam_negeri',
+                ],
+                [
+                    'text' => 'Kepatuhan Identifikasi Pasien',
+                    'url'  => '/ikt/kepatuhan_identifikasi_pasien',
+                ],
+                [
+                    'text' => 'Kepatuhan Waktu Visite Dokter',
+                    'url'  => '/ikt/kepatuhan_waktu_visite_dokter',
+                ],
+                [
+                    'text' => 'Kecepatan Waktu Tanggap Komplain',
+                    'url'  => '/ikt/kecepatan_waktu_tunggu_komplain',
+                ],
+                [
+                    'text' => 'Pelaporan Hasil Kritis Laboratorium',
+                    'url'  => '/ikt/pelaporan_hasil_kritis_laboratorium',
+                ],
+            ],
         ],
-        [
-            'text' => 'Nutritionist',
-            'url'  => '/nutritionist',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        // [
-        //     'text' => 'Fisioterapis',
-        //     'url'  => '/fisioterapis',
-        //     'icon' => 'fas fa-fw fa-user',
-        // ],
-        [
-            'text' => 'Pharmacist',
-            'url'  => '/pharmacist',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'Tenaga Professional Lainnya',
-            'url'  => '/profesionallainnya',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'Tenaga Non Medis',
-            'url'  => '/nonmedis',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'Sanitarian',
-            'url'  => '/sanitarian',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'Tenaga Non-Medis Administrasi',
-            'url'  => '/administrasi',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'Dokter Spesialis',
-            'url'  => '/spesialis',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'Dokter Gigi',
-            'url'  => '/doktergigi',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'Dokter Umum',
-            'url'  => '/dokterumum',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        // [
-        //     'text'        => 'pages',
-        //     'url'         => 'admin/pages',
-        //     'icon'        => 'far fa-fw fa-file',
-        //     'label'       => 4,
-        //     'label_color' => 'success',
-        // ],
-        // ['header' => 'account_settings'],
-        // [
-        //     'text' => 'profile',
-        //     'url'  => 'admin/settings',
-        //     'icon' => 'fas fa-fw fa-user',
-        // ],
-        // [
-        //     'text' => 'change_password',
-        //     'url'  => 'admin/settings',
-        //     'icon' => 'fas fa-fw fa-lock',
-        // ],
-        // [
-        //     'text'    => 'multilevel',
-        //     'icon'    => 'fas fa-fw fa-share',
-        //     'submenu' => [
-        //         [
-        //             'text' => 'level_one',
-        //             'url'  => '#',
-        //         ],
-        //         [
-        //             'text'    => 'level_one',
-        //             'url'     => '#',
-        //             'submenu' => [
-        //                 [
-        //                     'text' => 'level_two',
-        //                     'url'  => '#',
-        //                 ],
-        //                 [
-        //                     'text'    => 'level_two',
-        //                     'url'     => '#',
-        //                     'submenu' => [
-        //                         [
-        //                             'text' => 'level_three',
-        //                             'url'  => '#',
-        //                         ],
-        //                         [
-        //                             'text' => 'level_three',
-        //                             'url'  => '#',
-        //                         ],
-        //                     ],
-        //                 ],
-        //             ],
-        //         ],
-        //         [
-        //             'text' => 'level_one',
-        //             'url'  => '#',
-        //         ],
-        //     ],
-        // ],
-        // ['header' => 'labels'],
-        // [
-        //     'text'       => 'important',
-        //     'icon_color' => 'red',
-        //     'url'        => '#',
-        // ],
-        // [
-        //     'text'       => 'warning',
-        //     'icon_color' => 'yellow',
-        //     'url'        => '#',
-        // ],
-        // [
-        //     'text'       => 'information',
-        //     'icon_color' => 'cyan',
-        //     'url'        => '#',
-        // ],
     ],
 
     /*
@@ -532,13 +632,18 @@ return [
             'files' => [
                 [
                     'type' => 'js',
-                    'asset' => false,
-                    'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js',
+                    'asset' => true,
+                    'location' => 'vendor/select2/js/select2.full.min.js',
                 ],
                 [
                     'type' => 'css',
-                    'asset' => false,
-                    'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css',
+                    'asset' => true,
+                    'location' => 'vendor/select2/css/select2.min.css',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/select2-bootstrap4-theme/select2-bootstrap4.min.css',
                 ],
             ],
         ],
