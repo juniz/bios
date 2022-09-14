@@ -282,6 +282,11 @@ return [
             'text' => 'search',
         ],
         [
+            'text' => 'Dashboard',
+            'icon' => 'fas fa-fw fa-user-md',
+            'url' => '/'
+        ],
+        [
             'text'    => 'SDM',
             'icon'    => 'fas fa-fw fa-user-md',
             'submenu' => [

@@ -32,6 +32,7 @@ class OperasionalController extends Controller
             'data' => $this->data, 
             'head' => $this->headTable, 
             'bank' => $this->getBank()->json()['data'],
+            'rekening' => $this->getRekening(),
         ]);
     }
 

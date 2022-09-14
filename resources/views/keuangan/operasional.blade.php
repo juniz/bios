@@ -10,19 +10,20 @@
     <div class="row">
         <div class="col-md-6">
             <x-adminlte-card title="Input Saldo Rekening - Operasional" theme="dark" theme-mode="outline">
+                <x-adminlte-select2 name="no_rekening" label="No. Rekening" data-placeholder="Pilih No. Rekening......." >
+                    <option/>
+                    @foreach($rekening as $rek)
+                        <option value="{{$rek->no_rek}}"><b>{{$rek->no_rek}}</b> - {{$rek->nama}}</option>
+                    @endforeach
+                </x-adminlte-select2>
+                <x-adminlte-select2 name="kdbank" label="Bank" data-placeholder="Pilih Bank......." >
+                    <option/>
+                    @foreach($bank as $bank)
+                        <option value="{{$bank['kode']}}"><b>{{$bank['kode']}}</b> - {{$bank['uraian']}}</option>
+                    @endforeach
+                </x-adminlte-select2>
                 <div class="row">
-                    <x-adminlte-input id="no_rekening" name="no_rekening" label="No. Rekening" type="text" fgroup-class="col-md-6" disable-feedback/>
                     <x-adminlte-input id="unit" name="unit" label="Unit" type="text" fgroup-class="col-md-6" disable-feedback/>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <x-adminlte-select2 name="kdbank" label="Bank" data-placeholder="Pilih Bank......." >
-                            <option/>
-                            @foreach($bank as $bank)
-                                <option value="{{$bank['kode']}}"><b>{{$bank['kode']}}</b> - {{$bank['uraian']}}</option>
-                            @endforeach
-                        </x-adminlte-select2>
-                    </div>
                     <x-adminlte-input id="saldo_akhir" name="saldo_akhir" label="Saldo Akhir" type="number" value="0" fgroup-class="col-md-6" disable-feedback/>
                 </div>
                 @php
@@ -74,7 +75,7 @@
             let data = {
                 _token:$('meta[name="csrf-token"]').attr('content'),
                 tgl_transaksi:$("input[name=tanggal]").val(),
-                no_rekening:$("input[name=no_rekening]").val(),
+                no_rekening:$("select[name=no_rekening]").val(),
                 unit:$("input[name=unit]").val(),
                 saldo_akhir:$("input[name=saldo_akhir]").val(),
                 kdbank:$("select[name=kdbank]").val(),
