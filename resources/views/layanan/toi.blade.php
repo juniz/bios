@@ -18,19 +18,19 @@
                         @endphp
                         <x-adminlte-input-date name="tanggal" label="Tanggal Transaksi" :config="$config" placeholder="Pilih Tanggal....">
                             <x-slot name="appendSlot">
-                                <div class="input-group-text bg-gradient-danger">
-                                    <i class="fas fa-calendar-alt"></i>
-                                </div>
+                                <x-adminlte-button label="Kirim" onclick="kirimDataPerawat()" theme="primary" />
                             </x-slot>
                         </x-adminlte-input-date>
                     </div>
                 </div>
-                <div class="d-flex flex-row-reverse">
-                     <div class="p-1">
-                         <x-adminlte-button label="Kirim" onclick="kirimDataPerawat()" theme="primary" />
-                     </div>
-                </div>
              </x-adminlte-card>
+             <x-adminlte-card title="Keterangan" theme="dark" theme-mode="outline">
+                <ol>
+                    @foreach($keterangan as $keterangan)
+                        <li>{{ $keterangan }}</li>
+                    @endforeach
+                </ol>
+            </x-adminlte-card>
         </div>
         <div class="col-md-6">
             <x-adminlte-card title="Data Jumlah TOI (Turn Over Interval)" theme="dark" theme-mode="outline">

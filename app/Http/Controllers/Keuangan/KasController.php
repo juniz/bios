@@ -10,7 +10,7 @@ use App\Http\Traits\Token;
 class KasController extends Controller
 {
     use Token, RequestAPI, RequestDB;
-    public $header, $token, $url, $data, $headTable;
+    public $header, $token, $url, $data, $headTable, $keterangan;
 
     public function __construct()
     {
@@ -23,6 +23,10 @@ class KasController extends Controller
         $this->url = 'keuangan/saldo/saldo_pengelolaan_kas';
         $this->data = $this->read();
         $this->headTable = ['Tgl Transaksi', 'No. Bilyet', 'Nilai Bunga', 'Nilai Deposito'];
+        $this->keterangan = [
+            'Data yang dikirimkan merupakan posisi data terakhir pada saat tanggal berkenaan, tidak akumulatif.',
+            'Data dikirimkan per periode harian.',
+        ];
     }
 
     public function index()
@@ -31,6 +35,7 @@ class KasController extends Controller
             'data' => $this->data, 
             'head' => $this->headTable, 
             'bank' => $this->getBank()->json()['data'],
+            'keterangan' => $this->keterangan,
         ]);
     }
 

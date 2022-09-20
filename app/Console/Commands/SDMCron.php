@@ -63,4 +63,6 @@ class SDMCron extends Command
         $response = $this->postData($url, $this->header, $input);
         $this->info($response->body());
     }
+
+    
 }

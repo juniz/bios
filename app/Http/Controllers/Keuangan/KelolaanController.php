@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 class KelolaanController extends Controller
 {
     use Token, RequestAPI, RequestDB;
-    public $header, $token, $url, $data, $headTable;
+    public $header, $token, $url, $data, $headTable, $keterangan;
 
     public function __construct()
     {
@@ -24,6 +24,10 @@ class KelolaanController extends Controller
         $this->url = 'keuangan/saldo/saldo_dana_kelolaan';
         $this->data = $this->read();
         $this->headTable = ['Tgl Transaksi', 'No. Rekening', 'Kd. Bank', 'Saldo Akhir'];
+        $this->keterangan = [
+            'Data yang dikirimkan merupakan posisi data terakhir pada saat tanggal berkenaan, tidak akumulatif.',
+            'Data dikirimkan per periode harian.',
+        ];
     }
 
     public function index()
@@ -33,6 +37,7 @@ class KelolaanController extends Controller
             'head' => $this->headTable, 
             'bank' => $this->getBank()->json()['data'],
             'rekening' => $this->getRekening(),
+            'keterangan' => $this->keterangan,
         ]);
     }
 

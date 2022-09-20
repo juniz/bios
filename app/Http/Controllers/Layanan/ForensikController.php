@@ -11,7 +11,7 @@ use Illuminate\Support\Carbon;
 class ForensikController extends Controller
 {
     use Token, RequestAPI, RequestDB;
-    public $header, $token, $url, $data, $headTable, $tanggal;
+    public $header, $token, $url, $data, $headTable, $tanggal, $keterangan;
 
     public function __construct(Request $request)
     {
@@ -25,6 +25,10 @@ class ForensikController extends Controller
         $this->data = $this->read();
         $this->headTable = ['Tgl Transaksi', 'Jumlah'];
         $this->tanggal = $request->input('tgl') ?? Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
+        $this->keterangan = [
+            'Data yang dikirimkan merupakan posisi data terakhir pada saat tanggal berkenaan, tidak akumulatif.',
+            'Data dikirimkan per periode harian.',
+        ];
     }
 
     public function index()
@@ -34,6 +38,7 @@ class ForensikController extends Controller
             'head' => $this->headTable, 
             'jumlah' => 0,
             'tanggal' => $this->tanggal,
+            'keterangan' => $this->keterangan,
         ]);
     }
 

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,11 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('dashboard');
+Route::get('/', [App\Http\Controllers\Auth\LoginController::class, 'index'])->middleware('haslogin');
+Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login']);
+Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout']);
+Route::get('/dashboard', function (Request $request) {
+    $nama = $request->session()->get('nama');
+    return view('dashboard',['nama' => $nama]);
 });
 
-Route::prefix('sdm')->group(function () {
+Route::middleware(['ceklogin'])->prefix('sdm')->group(function () {
 
     Route::get('/perawat', [App\Http\Controllers\SDM\PerawatController::class, 'index'])->named('perawat');
     Route::post('/perawat/kirim', [App\Http\Controllers\SDM\PerawatController::class, 'store']);
@@ -60,7 +65,7 @@ Route::prefix('sdm')->group(function () {
 
 });
 
-Route::prefix('layanan')->group(function () {
+Route::middleware(['ceklogin'])->prefix('layanan')->group(function () {
 
     Route::get('/ikm', [App\Http\Controllers\Layanan\IKMController::class, 'index'])->named('ikm');
     Route::post('/ikm/kirim', [App\Http\Controllers\Layanan\IKMController::class, 'store']);
@@ -112,7 +117,7 @@ Route::prefix('layanan')->group(function () {
 
 });
 
-Route::prefix('keuangan')->group(function () {
+Route::middleware(['ceklogin'])->prefix('keuangan')->group(function () {
 
     Route::get('/operasional', [App\Http\Controllers\Keuangan\OperasionalController::class, 'index'])->named('operasional');
     Route::post('/operasional/kirim', [App\Http\Controllers\Keuangan\OperasionalController::class, 'store']);
@@ -130,7 +135,7 @@ Route::prefix('keuangan')->group(function () {
     Route::post('/pengeluaran/kirim', [App\Http\Controllers\Keuangan\PengeluaranController::class, 'store']);
 });
 
-Route::prefix('ikt')->group(function () {
+Route::middleware(['ceklogin'])->prefix('ikt')->group(function () {
 
     Route::get('/visite1', [App\Http\Controllers\IKT\Visite1Controller::class, 'index'])->named('visite1');
     Route::post('/visite1/kirim', [App\Http\Controllers\IKT\Visite1Controller::class, 'store']);

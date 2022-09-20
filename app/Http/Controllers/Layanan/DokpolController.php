@@ -11,7 +11,7 @@ use Illuminate\Support\Carbon;
 class DokpolController extends Controller
 {
     use Token, RequestAPI, RequestDB;
-    public $header, $token, $url, $data, $headTable, $tanggal;
+    public $header, $token, $url, $data, $headTable, $tanggal, $keterangan;
 
     public function __construct(Request $request)
     {
@@ -29,6 +29,10 @@ class DokpolController extends Controller
             'Kesehatan Tahanan', 'Narkoba', 'Toksikologi Medik', 'Pelayanan DNA', 'PAM Keslap Food Security', 'DVI',
         ];
         $this->tanggal = $request->input('tgl') ?? Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
+        $this->keterangan = [
+            'Data yang dikirimkan merupakan posisi data terakhir pada saat tanggal berkenaan, tidak akumulatif.',
+            'Data dikirimkan per periode harian.',
+        ];
     }
 
     public function index()
@@ -37,6 +41,7 @@ class DokpolController extends Controller
             'data' => $this->data, 
             'head' => $this->headTable, 
             'tanggal' => $this->tanggal,
+            'keterangan' => $this->keterangan,
         ]);
     }
 

@@ -10,7 +10,7 @@ use App\Http\Traits\Token;
 class BorController extends Controller
 {
     use Token, RequestAPI, RequestDB;
-    public $header, $token, $url, $data, $headTable;
+    public $header, $token, $url, $data, $headTable, $keterangan;
 
     public function __construct()
     {
@@ -23,6 +23,10 @@ class BorController extends Controller
         $this->url = 'kesehatan/layanan/bor';
         $this->data = $this->read();
         $this->headTable = ['Tgl Transaksi', 'Jumlah BOR'];
+        $this->keterangan = [
+            'Data yang dikirimkan merupakan posisi data terakhir pada saat tanggal berkenaan, tidak akumulatif.',
+            'Data dikirimkan per periode harian.',
+        ];
     }
 
     public function index()
@@ -30,6 +34,7 @@ class BorController extends Controller
         return view('layanan.bor',[
             'data' => $this->data, 
             'head' => $this->headTable, 
+            'keterangan' => $this->keterangan,
         ]);
     }
 

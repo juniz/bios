@@ -8,24 +8,27 @@
 
 @section('content')
     <x-adminlte-card title="Input Jumlah Non-Medis Administrasi" theme="dark" theme-mode="outline">
-       <div class="row">
-        <x-adminlte-input id="pns" name="pns" label="Jumlah PNS" value="{{$pns}}" type="number" fgroup-class="col-md-2" disable-feedback/>
-        <x-adminlte-input id="pppk" name="pppk" label="Jumlah P3K" value="{{$p3k}}" type="number" fgroup-class="col-md-2" disable-feedback/>
-        <x-adminlte-input id="anggota" name="anggota" label="Jumlah Anggota" value="{{$anggota}}" type="number" fgroup-class="col-md-2" disable-feedback/>
-        <x-adminlte-input id="non_pns" name="non_pns" label="Jumlah Non PNS Tetap" value="{{$non_pns}}" type="number" fgroup-class="col-md-2" disable-feedback/>
-        <x-adminlte-input id="kontrak" name="kontrak" label="Jumlah Kontrak" value="{{$kontrak}}" type="number" fgroup-class="col-md-2" disable-feedback/>
-            <x-adminlte-input id="keterangan" name="keterangan" label="Keterangan" value="{{$keterangan}}" type="text" fgroup-class="col-md-4" disable-feedback/>
-       </div>
-       <div class="d-flex flex-row-reverse">
-        <div class="p-2">
+        <div class="row">
+            <x-adminlte-input id="pns" name="pns" label="Jumlah PNS" value="{{$pns}}" type="number" fgroup-class="col-md-3" disable-feedback/>
+            <x-adminlte-input id="pppk" name="pppk" label="Jumlah P3K" value="{{$p3k}}" type="number" fgroup-class="col-md-3" disable-feedback/>
+            <x-adminlte-input id="anggota" name="anggota" label="Jumlah Anggota" value="{{$anggota}}" type="number" fgroup-class="col-md-3" disable-feedback/>
+            <x-adminlte-input id="non_pns" name="non_pns" label="Jumlah Non PNS Tetap" value="{{$non_pns}}" type="number" fgroup-class="col-md-3" disable-feedback/>
+        </div>
+        <div class="row">
+            <x-adminlte-input id="kontrak" name="kontrak" label="Jumlah Kontrak" value="{{$kontrak}}" type="number" fgroup-class="col-md-3" disable-feedback/>
+            <x-adminlte-input id="keterangan" name="keterangan" label="Keterangan" value="{{$keterangan}}" type="text" fgroup-class="col-md-6" disable-feedback/>
             @php
-                $config = ['format' => 'YYYY-MM-DD'];
+            $config = ['format' => 'YYYY-MM-DD'];
             @endphp
-            <x-adminlte-input-date name="tanggal" value="{{$tanggal}}" :config="$config" placeholder="Pilih Tanggal....">
+            <x-adminlte-input-date name="tanggal" value="{{$tanggal}}" :config="$config" label="Tanggal" fgroup-class="col-md-3" placeholder="Pilih Tanggal....">
                 <x-slot name="appendSlot">
                     <x-adminlte-button label="Kirim" onclick="kirimDataPerawat()" theme="primary" />
                 </x-slot>
             </x-adminlte-input-date>
+        </div>
+       <div class="d-flex flex-row-reverse">
+        <div class="p-2">
+
         </div>
     </div>
     </x-adminlte-card>
@@ -53,6 +56,13 @@
                 @endforeach
             @endif
         </x-adminlte-datatable>
+    </x-adminlte-card>
+    <x-adminlte-card title="Keterangan" theme="dark" theme-mode="outline">
+        <ol>
+            @foreach($ket as $keterangan)
+                <li>{{ $keterangan }}</li>
+            @endforeach
+        </ol>
     </x-adminlte-card>
 @stop
 
@@ -115,7 +125,7 @@
                         title: 'Error',
                         text: 'Opsss Terjadi Kesalahan',
                         showConfirmButton: true,
-                        });
+                    });
                 }
             });
         }

@@ -11,29 +11,25 @@
         <div class="col-md-6">
             <x-adminlte-card title="Input Jumlah Tindakan Operasi" theme="dark" theme-mode="outline">
                 <div class="row">
-                    <div class="col-md-10">
+                    <div class="col-md-12">
                         @php
                             $config = ['format' => 'YYYY-MM-DD'];
                         @endphp
                         <x-adminlte-input-date name="tanggal" value="{{$tanggal}}" :config="$config" placeholder="Pilih Tanggal....">
                             <x-slot name="appendSlot">
-                                <div class="input-group-text bg-gradient-danger">
-                                    <i class="fas fa-calendar-alt"></i>
-                                </div>
+                                <x-adminlte-button label="Cari" onclick="reload()" theme="info" />
                             </x-slot>
                         </x-adminlte-input-date>
-                    </div>
-                    <div class="col-md-2">
-                        <x-adminlte-button label="Cari" onclick="reload()" theme="info" />
                     </div>
                 </div>
                 @foreach($operasi as $item)
                     <div class="row align-items-center">
                         <x-adminlte-input value="{{$item->kategori}}" id="klasifikasi" name="klasifikasi[]" label="Klasifikasi Operasi" type="text" fgroup-class="col-md-8" disable-feedback/>
-                        <x-adminlte-input value="{{$item->jml}}" id="jumlah" name="jumlah[]" label="Jumlah" type="number" fgroup-class="col-md-3" disable-feedback/>
-                        <div class="col-md-1 mt-3">
-                            <x-adminlte-button icon="fas fa-fw fa-trash" class="btn-sm deleteButton" theme="danger" />
-                        </div>
+                        <x-adminlte-input value="{{$item->jml}}" id="jumlah" name="jumlah[]" label="Jumlah" type="number" fgroup-class="col-md-4" disable-feedback>
+                            <x-slot name="appendSlot">
+                                <x-adminlte-button icon="fas fa-fw fa-trash" class="btn-sm deleteButton" theme="danger" />
+                            </x-slot>
+                        </x-adminlte-input>
                     </div>
                 @endforeach
                 <div class="d-flex flex-row-reverse">
@@ -62,6 +58,13 @@
                         @endforeach
                     @endif
                 </x-adminlte-datatable>
+            </x-adminlte-card>
+            <x-adminlte-card title="Keterangan" theme="dark" theme-mode="outline">
+                <ol>
+                    @foreach($keterangan as $keterangan)
+                        <li>{{ $keterangan }}</li>
+                    @endforeach
+                </ol>
             </x-adminlte-card>
         </div>
     </div>

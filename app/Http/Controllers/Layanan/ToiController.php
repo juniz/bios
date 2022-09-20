@@ -10,7 +10,7 @@ use App\Http\Traits\Token;
 class ToiController extends Controller
 {
     use Token, RequestAPI, RequestDB;
-    public $header, $token, $url, $data, $headTable;
+    public $header, $token, $url, $data, $headTable, $keterangan;
 
     public function __construct()
     {
@@ -23,6 +23,10 @@ class ToiController extends Controller
         $this->url = 'kesehatan/layanan/toi';
         $this->data = $this->read();
         $this->headTable = ['Tgl Transaksi', 'Jumlah Toi'];
+        $this->keterangan = [
+            'Data yang dikirimkan merupakan posisi data terakhir pada saat tanggal berkenaan, tidak akumulatif.',
+            'Data dikirimkan per periode harian.',
+        ];
     }
 
     public function index()
@@ -30,6 +34,7 @@ class ToiController extends Controller
         return view('layanan.toi',[
             'data' => $this->data, 
             'head' => $this->headTable, 
+            'keterangan' => $this->keterangan,
         ]);
     }
 

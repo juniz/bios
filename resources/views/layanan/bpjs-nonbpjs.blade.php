@@ -11,30 +11,26 @@
         <div class="col-md-6">
             <x-adminlte-card title="Input Jumlah Pasien BPJS / Non-BPJS" theme="dark" theme-mode="outline">
                 <div class="row">
-                    <x-adminlte-input id="bpjs" name="bpjs" label="BPJS" type="number" value="{{$jumlah_BPJS}}" fgroup-class="col-md-4" disable-feedback/>
-                    <x-adminlte-input id="non_bpjs" name="non_bpjs" label="Non BPJS" type="number" value="{{$jumlah_Non_BPJS}}" fgroup-class="col-md-4" disable-feedback/>
-                    <div class="col-md-4">
-                        @php
-                             $config = ['format' => 'YYYY-MM-DD'];
-                        @endphp
-                        <x-adminlte-input-date name="tanggal" value="{{$tanggal}}" label="Tanggal Transaksi" :config="$config" placeholder="Pilih Tanggal....">
-                            <x-slot name="appendSlot">
-                                <div class="input-group-text bg-gradient-danger">
-                                    <i class="fas fa-calendar-alt"></i>
-                                </div>
-                            </x-slot>
-                        </x-adminlte-input-date>
-                    </div>
+                    <x-adminlte-input id="bpjs" name="bpjs" label="BPJS" type="number" value="{{$jumlah_BPJS}}" fgroup-class="col-md-6" disable-feedback/>
+                    <x-adminlte-input id="non_bpjs" name="non_bpjs" label="Non BPJS" type="number" value="{{$jumlah_Non_BPJS}}" fgroup-class="col-md-6" disable-feedback/>
                 </div>
-                <div class="d-flex flex-row-reverse">
-                     <div class="p-1">
-                         <x-adminlte-button label="Kirim" onclick="kirimDataPerawat()" theme="primary" />
-                     </div>
-                     <div class="p-1">
+                @php
+                    $config = ['format' => 'YYYY-MM-DD'];
+                @endphp
+                <x-adminlte-input-date name="tanggal" value="{{$tanggal}}" label="Tanggal Transaksi" :config="$config" placeholder="Pilih Tanggal....">
+                    <x-slot name="appendSlot">
                         <x-adminlte-button label="Cari" onclick="reload()" theme="success" />
-                    </div>
-                </div>
+                        <x-adminlte-button label="Kirim" onclick="kirimDataPerawat()" theme="primary" />
+                    </x-slot>
+                </x-adminlte-input-date>
              </x-adminlte-card>
+             <x-adminlte-card title="Keterangan" theme="dark" theme-mode="outline">
+                <ol>
+                    @foreach($keterangan as $keterangan)
+                        <li>{{ $keterangan }}</li>
+                    @endforeach
+                </ol>
+            </x-adminlte-card>
         </div>
         <div class="col-md-6">
             <x-adminlte-card title="Data Jumlah Pasien BPJS / Non-BPJS" theme="dark" theme-mode="outline">

@@ -52,6 +52,13 @@
             @endif
         </x-adminlte-datatable>
     </x-adminlte-card>
+    <x-adminlte-card title="Keterangan" theme="dark" theme-mode="outline">
+        <ol>
+            @foreach($keterangan as $keterangan)
+                <li>{{ $keterangan }}</li>
+            @endforeach
+        </ol>
+    </x-adminlte-card>
 @stop
 
 @section('css')

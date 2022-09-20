@@ -28,6 +28,13 @@
                     </x-slot>
                 </x-adminlte-input-date>
              </x-adminlte-card>
+             <x-adminlte-card title="Keterangan" theme="dark" theme-mode="outline">
+                <ol>
+                    @foreach($keterangan as $keterangan)
+                        <li>{{ $keterangan }}</li>
+                    @endforeach
+                </ol>
+            </x-adminlte-card>
         </div>
         <div class="col-md-6">
             <x-adminlte-card title="Data Penerimaan" theme="dark" theme-mode="outline">

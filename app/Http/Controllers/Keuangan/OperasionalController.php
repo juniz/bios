@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 class OperasionalController extends Controller
 {
     use Token, RequestAPI, RequestDB;
-    public $header, $token, $url, $data, $headTable;
+    public $header, $token, $url, $data, $headTable, $keterangan;
 
     public function __construct()
     {
@@ -24,6 +24,10 @@ class OperasionalController extends Controller
         $this->url = 'keuangan/saldo/saldo_operasional';
         $this->data = $this->read();
         $this->headTable = ['Tgl Transaksi', 'No. Rekening', 'Kd. Bank', 'Unit', 'Saldo'];
+        $this->keterangan = [
+            'Data yang dikirimkan merupakan posisi data terakhir pada saat tanggal berkenaan, tidak akumulatif.',
+            'Data dikirimkan per periode harian.',
+        ];
     }
 
     public function index()
@@ -33,6 +37,7 @@ class OperasionalController extends Controller
             'head' => $this->headTable, 
             'bank' => $this->getBank()->json()['data'],
             'rekening' => $this->getRekening(),
+            'keterangan' => $this->keterangan,
         ]);
     }
 
@@ -48,11 +53,4 @@ class OperasionalController extends Controller
         $response = $this->getData($this->url, $this->header);
         return $response->json();
     }
-
-    // public function getBank()
-    // {
-    //     $data = DB::table('bios_bank')
-    //                 ->get();
-    //     return $data;
-    // }
 }

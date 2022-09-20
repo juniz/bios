@@ -52,6 +52,13 @@
             @endif
         </x-adminlte-datatable>
     </x-adminlte-card>
+    <x-adminlte-card title="Keterangan" theme="dark" theme-mode="outline">
+        <ol>
+            @foreach($keterangan as $keterangan)
+                <li>{{ $keterangan }}</li>
+            @endforeach
+        </ol>
+    </x-adminlte-card>
 @stop
 
 @section('css')
@@ -71,7 +78,7 @@
                 non_pns_tetap:$("input[name=non_pns]").val(),
                 kontrak:$("input[name=kontrak]").val(),
             };
-            console.log(data);
+            // console.log(data);
             $.ajax({
                 type:'POST',
                 url:'/sdm/pharmacist/kirim',

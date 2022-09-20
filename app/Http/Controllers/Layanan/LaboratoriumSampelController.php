@@ -26,6 +26,10 @@ class LaboratoriumSampelController extends Controller
         $this->data = $this->read();
         $this->headTable = ['Tgl Transaksi', 'Jumlah'];
         $this->tanggal = $request->input('tgl') ?? Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
+        $this->keterangan = [
+            'Data yang dikirimkan merupakan posisi data terakhir pada saat tanggal berkenaan, tidak akumulatif.',
+            'Data dikirimkan per periode harian.',
+        ];
     }
 
     public function index()
@@ -35,6 +39,7 @@ class LaboratoriumSampelController extends Controller
             'head' => $this->headTable, 
             'jumlah' => $this->countLab(),
             'tanggal' => $this->tanggal,
+            'keterangan' => $this->keterangan,
         ]);
     }
 

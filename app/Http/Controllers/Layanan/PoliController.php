@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 class PoliController extends Controller
 {
     use Token, RequestAPI, RequestDB;
-    public $header, $token, $url, $data, $headTable, $tanggal;
+    public $header, $token, $url, $data, $headTable, $tanggal, $keterangan;
 
     public function __construct(Request $request)
     {
@@ -26,6 +26,10 @@ class PoliController extends Controller
         $this->data = $this->read();
         $this->headTable = ['Tgl Transaksi', 'Nama Poli', 'Jumlah'];
         $this->tanggal = $request->input('tgl') ?? Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
+        $this->keterangan = [
+            'Data yang dikirimkan merupakan posisi data terakhir pada saat tanggal berkenaan, tidak akumulatif.',
+            'Data dikirimkan per periode harian.',
+        ];
     }
 
     public function index()
@@ -35,6 +39,7 @@ class PoliController extends Controller
             'head' => $this->headTable, 
             'tanggal' => $this->tanggal,
             'poli' => $this->countPoli(),
+            'keterangan' => $this->keterangan,
         ]);
     }
 

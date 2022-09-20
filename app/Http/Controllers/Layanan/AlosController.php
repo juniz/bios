@@ -10,7 +10,7 @@ use App\Http\Traits\Token;
 class AlosController extends Controller
 {
     use Token, RequestAPI, RequestDB;
-    public $header, $token, $url, $data, $headTable;
+    public $header, $token, $url, $data, $headTable, $keterangan;
 
     public function __construct()
     {
@@ -23,13 +23,18 @@ class AlosController extends Controller
         $this->url = 'kesehatan/layanan/alos';
         $this->data = $this->read();
         $this->headTable = ['Tgl Transaksi', 'Jumlah ALOS'];
+        $this->keterangan = [
+            'Data yang dikirimkan merupakan posisi data terakhir pada saat tanggal berkenaan, tidak akumulatif.',
+            'Data dikirimkan per periode harian.',
+        ];
     }
 
     public function index()
     {
         return view('layanan.alos',[
             'data' => $this->data, 
-            'head' => $this->headTable, 
+            'head' => $this->headTable,
+            'keterangan' => $this->keterangan, 
         ]);
     }
 

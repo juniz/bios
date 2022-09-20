@@ -12,7 +12,7 @@ use Illuminate\Support\Carbon;
 class PharmacistController extends Controller
 {
     use Token, RequestAPI, RequestDB;
-    public $header, $token, $url, $data, $headTable, $bidang;
+    public $header, $token, $url, $data, $headTable, $bidang, $keterangan;
 
     public function __construct()
     {
@@ -27,6 +27,11 @@ class PharmacistController extends Controller
         $this->data = $this->read();
         $this->tanggal = Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
         $this->headTable = ['Tgl Transaksi', 'Tgl Update', 'PNS', 'PPPK', 'Non PNS Tetap', 'Kontrak', 'Anggota'];
+        $this->keterangan = [
+            'Data yang dikirimkan merupakan posisi data pada saat tanggal berkenaan, bersifat akumulatif.',
+            'Data yang dikirimkan merupakan jumlah pegawai sesuai kriteria.',
+            'Data awal dikirimkan pada awal tahun berkenaan, updating data dikirimkan per periode semesteran/tahunan.'
+        ];
     }
 
     public function index()
@@ -40,6 +45,7 @@ class PharmacistController extends Controller
             'non_pns' => $this->nonPNS($this->bidang),
             'kontrak' => $this->kontrak($this->bidang),
             'tanggal' => $this->tanggal,
+            'keterangan' => $this->keterangan,
         ]);
     }
 

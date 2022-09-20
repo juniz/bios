@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 class PengeluaranController extends Controller
 {
     use Token, RequestAPI, RequestDB;
-    public $header, $token, $url, $data, $headTable;
+    public $header, $token, $url, $data, $headTable, $keterangan;
 
     public function __construct()
     {
@@ -24,6 +24,11 @@ class PengeluaranController extends Controller
         $this->url = 'keuangan/akuntansi/pengeluaran';
         $this->data = $this->read();
         $this->headTable = ['Tgl Transaksi', 'Kd. Akun', 'Jumlah'];
+        $this->keterangan = [
+            'Data yang dikirimkan merupakan posisi data pada saat tanggal berkenaan, bersifat akumulatif.',
+            'Data dikirimkan per periode harian atau per terjadinya transaksi.',
+            'Data yang dikirimkan termasuk yang belum di SP3B/disahkan.'
+        ];
     }
 
     public function index()
@@ -32,6 +37,7 @@ class PengeluaranController extends Controller
             'data' => $this->data, 
             'head' => $this->headTable, 
             'akun' => $this->getAkun()->json()['data'],
+            'keterangan' => $this->keterangan,
         ]);
     }
 
@@ -47,7 +53,4 @@ class PengeluaranController extends Controller
         $response = $this->getData($this->url, $this->header);
         return $response->json();
     }
-
-
-
 }

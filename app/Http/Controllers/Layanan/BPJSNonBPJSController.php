@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 class BPJSNonBPJSController extends Controller
 {
     use Token, RequestAPI, RequestDB;
-    public $header, $token, $url, $data, $headTable, $tanggal;
+    public $header, $token, $url, $data, $headTable, $tanggal, $keterangan;
 
     public function __construct(Request $request)
     {
@@ -26,6 +26,10 @@ class BPJSNonBPJSController extends Controller
         $this->data = $this->read();
         $this->headTable = ['Tgl Transaksi', 'Jumlah BPJS', 'Jumlah Non BPJS'];
         $this->tanggal = $request->input('tgl') ?? Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
+        $this->keterangan = [
+            'Data yang dikirimkan merupakan posisi data terakhir pada saat tanggal berkenaan, tidak akumulatif.',
+            'Data dikirimkan per periode harian.',
+        ];
     }
 
     public function index()
@@ -36,6 +40,7 @@ class BPJSNonBPJSController extends Controller
             'tanggal' => $this->tanggal,
             'jumlah_BPJS' => $this->countBPJS(),
             'jumlah_Non_BPJS' => $this->countNonBPJS(),
+            'keterangan' => $this->keterangan,
         ]);
     }
 
