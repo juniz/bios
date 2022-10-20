@@ -19,8 +19,14 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('cron:sdm')->everyMinute()->appendOutputTo(storage_path('logs/cron_sdm.log'));
-        $schedule->command('cron:layanan')->everyMinute()->appendOutputTo(storage_path('logs/cron_layanan.log'));
+        $schedule->command('cron:sdm')->daily()->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_sdm.log'));
+        $schedule->command('cron:labparam')->daily('01:00')->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_layanan.log'));
+        $schedule->command('cron:igd')->daily('01:30')->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_layanan.log'));
+        $schedule->command('cron:operasi')->daily('02:00')->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_layanan.log'));
+        $schedule->command('cron:penjab')->daily('02:30')->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_layanan.log'));
+        $schedule->command('cron:poli')->daily('03:00')->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_layanan.log'));
+        $schedule->command('cron:radiologi')->daily('03:30')->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_layanan.log'));
+        $schedule->command('cron:ralan')->daily('04:00')->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_layanan.log'));
     }
 
     /**
