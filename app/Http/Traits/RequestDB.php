@@ -64,4 +64,108 @@ trait RequestDB {
                     ->get();
         return $data;
     }
+
+    public function countFarmasi($tanggal)
+    {
+       $data = DB::table('resep_obat')
+                    ->where('tgl_peresepan', $tanggal)
+                    ->count();
+        return $data;
+    }
+
+    public function countIGD($tanggal)
+    {
+       $data = DB::table('reg_periksa')
+                    ->where('tgl_registrasi', $tanggal)
+                    ->where('kd_poli', 'IGDK')
+                    ->distinct()
+                    ->count();
+        return $data;
+    }
+
+    public function getLab($tanggal)
+    {
+        $data = DB::table('periksa_lab')
+                    ->where('tgl_periksa', $tanggal)
+                    ->count();
+        return $data;
+    }
+
+    public function countLab($tanggal)
+    {
+        $data = DB::table('periksa_lab')
+                    ->join('jns_perawatan_lab', 'periksa_lab.kd_jenis_prw', '=', 'jns_perawatan_lab.kd_jenis_prw')
+                    ->where('periksa_lab.tgl_periksa', $tanggal)
+                    ->groupBy('jns_perawatan_lab.nm_perawatan')
+                    ->selectRaw("jns_perawatan_lab.nm_perawatan, count(periksa_lab.kd_jenis_prw) as jml")
+                    ->get();
+        return $data;
+    }
+
+    public function countOperasi($tanggal)
+    {
+        $data = DB::table('operasi')
+                    ->where('tgl_operasi', 'like', $tanggal.'%')
+                    ->groupBy('kategori')
+                    ->selectRaw("kategori, count(no_rawat) as jml")
+                    ->get();
+        return $data;
+    }
+
+    public function countPoli($tanggal)
+    {
+        $data = DB::table('reg_periksa')
+                    ->join('poliklinik', 'reg_periksa.kd_poli', '=', 'poliklinik.kd_poli')
+                    ->where('tgl_registrasi', $tanggal)
+                    ->where('stts', 'Sudah')
+                    ->where('poliklinik.nm_poli', 'like', 'KLINIK%')
+                    ->groupBy('poliklinik.nm_poli')
+                    ->selectRaw("poliklinik.nm_poli, count(reg_periksa.no_rawat) as jml")
+                    ->get();
+        return $data;
+    }
+
+    public function countRadiologi($tanggal)
+    {
+        $data = DB::table('periksa_radiologi')
+                    ->where('tgl_periksa', $tanggal)
+                    ->count();
+        return $data;
+    }
+
+    public function countRalan($tanggal)
+    {
+       $data = DB::table('reg_periksa')
+                    ->where('tgl_registrasi', $tanggal)
+                    ->where('stts', 'Sudah')
+                    ->count();
+        return $data;
+    }
+
+    public function countBPJS($tanggal)
+    {
+       $data = DB::table('reg_periksa')
+                    ->where('tgl_registrasi', $tanggal)
+                    ->where('stts', '<>', 'Batal')
+                    ->where(function($query){
+                        $query->orWhere('kd_pj', 'BPJ')
+                             ->orWhere('kd_pj', 'BTK');
+                    })
+                    ->where('kd_pj', 'BPJ')
+                    ->count();
+        return $data;
+    }
+
+    public function countNonBPJS($tanggal)
+    {
+       $data = DB::table('reg_periksa')
+                    ->where('tgl_registrasi', $tanggal)
+                    ->where('stts', '<>', 'Batal')
+                    ->where(function($query){
+                        $query->orWhere('kd_pj', '<>', 'BPJ')
+                             ->orWhere('kd_pj', '<>', 'BTK');
+                    })
+                    ->count();
+        return $data;
+    }
 }

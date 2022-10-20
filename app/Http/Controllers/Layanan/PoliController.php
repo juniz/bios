@@ -38,7 +38,7 @@ class PoliController extends Controller
             'data' => $this->data, 
             'head' => $this->headTable, 
             'tanggal' => $this->tanggal,
-            'poli' => $this->countPoli(),
+            'poli' => $this->countPoli($this->tanggal),
             'keterangan' => $this->keterangan,
         ]);
     }
@@ -70,16 +70,16 @@ class PoliController extends Controller
         return $response->json();
     }
 
-    public function countPoli()
-    {
-        $data = DB::table('reg_periksa')
-                    ->join('poliklinik', 'reg_periksa.kd_poli', '=', 'poliklinik.kd_poli')
-                    ->where('tgl_registrasi', $this->tanggal)
-                    ->where('stts', 'Sudah')
-                    ->where('poliklinik.nm_poli', 'like', 'KLINIK%')
-                    ->groupBy('poliklinik.nm_poli')
-                    ->selectRaw("poliklinik.nm_poli, count(reg_periksa.no_rawat) as jml")
-                    ->get();
-        return $data;
-    }
+    // public function countPoli()
+    // {
+    //     $data = DB::table('reg_periksa')
+    //                 ->join('poliklinik', 'reg_periksa.kd_poli', '=', 'poliklinik.kd_poli')
+    //                 ->where('tgl_registrasi', $this->tanggal)
+    //                 ->where('stts', 'Sudah')
+    //                 ->where('poliklinik.nm_poli', 'like', 'KLINIK%')
+    //                 ->groupBy('poliklinik.nm_poli')
+    //                 ->selectRaw("poliklinik.nm_poli, count(reg_periksa.no_rawat) as jml")
+    //                 ->get();
+    //     return $data;
+    // }
 }

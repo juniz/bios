@@ -38,7 +38,7 @@ class RalanController extends Controller
             'data' => $this->data, 
             'head' => $this->headTable, 
             'tanggal' => $this->tanggal,
-            'jumlah' => $this->countRalan(),
+            'jumlah' => $this->countRalan($this->tanggal),
             'keterangan' => $this->keterangan,
         ]);
     }
@@ -56,12 +56,12 @@ class RalanController extends Controller
         return $response->json();
     }
 
-    public function countRalan()
-    {
-       $data = DB::table('reg_periksa')
-                    ->where('tgl_registrasi', $this->tanggal)
-                    ->where('stts', 'Sudah')
-                    ->count();
-        return $data;
-    }
+    // public function countRalan()
+    // {
+    //    $data = DB::table('reg_periksa')
+    //                 ->where('tgl_registrasi', $this->tanggal)
+    //                 ->where('stts', 'Sudah')
+    //                 ->count();
+    //     return $data;
+    // }
 }

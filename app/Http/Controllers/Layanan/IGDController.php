@@ -38,7 +38,7 @@ class IGDController extends Controller
             'data' => $this->data, 
             'head' => $this->headTable, 
             'tanggal' => $this->tanggal,
-            'jumlah' => $this->countIGD(),
+            'jumlah' => $this->countIGD($this->tanggal),
             'keterangan' => $this->keterangan,
         ]);
     }
@@ -56,13 +56,13 @@ class IGDController extends Controller
         return $response->json();
     }
 
-    public function countIGD()
-    {
-       $data = DB::table('reg_periksa')
-                    ->where('tgl_registrasi', $this->tanggal)
-                    ->where('kd_poli', 'IGDK')
-                    ->distinct()
-                    ->count();
-        return $data;
-    }
+    // public function countIGD()
+    // {
+    //    $data = DB::table('reg_periksa')
+    //                 ->where('tgl_registrasi', $this->tanggal)
+    //                 ->where('kd_poli', 'IGDK')
+    //                 ->distinct()
+    //                 ->count();
+    //     return $data;
+    // }
 }

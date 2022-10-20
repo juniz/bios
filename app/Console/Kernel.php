@@ -9,6 +9,7 @@ class Kernel extends ConsoleKernel
 {
     protected $commands = [
         Commands\SDMCron::class,
+        Commands\LayananCron::class,
     ];
     /**
      * Define the application's command schedule.
@@ -18,7 +19,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('cron:sdm')->everyMinute();
+        // $schedule->command('cron:sdm')->everyMinute()->appendOutputTo(storage_path('logs/cron_sdm.log'));
+        $schedule->command('cron:layanan')->everyMinute()->appendOutputTo(storage_path('logs/cron_layanan.log'));
     }
 
     /**

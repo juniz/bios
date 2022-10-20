@@ -38,7 +38,7 @@ class FarmasiController extends Controller
             'data' => $this->data, 
             'head' => $this->headTable, 
             'tanggal' => $this->tanggal,
-            'jumlah' => $this->countFarmasi(),
+            'jumlah' => $this->countFarmasi($this->tanggal),
             'keterangan' => $this->keterangan,
         ]);
     }
@@ -56,11 +56,11 @@ class FarmasiController extends Controller
         return $response->json();
     }
 
-    public function countFarmasi()
-    {
-       $data = DB::table('resep_obat')
-                    ->where('tgl_peresepan', $this->tanggal)
-                    ->count();
-        return $data;
-    }
+    // public function countFarmasi()
+    // {
+    //    $data = DB::table('resep_obat')
+    //                 ->where('tgl_peresepan', $this->tanggal)
+    //                 ->count();
+    //     return $data;
+    // }
 }

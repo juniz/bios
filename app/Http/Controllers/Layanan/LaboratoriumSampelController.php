@@ -37,7 +37,7 @@ class LaboratoriumSampelController extends Controller
         return view('layanan.laboratorium-sampel',[
             'data' => $this->data, 
             'head' => $this->headTable, 
-            'jumlah' => $this->countLab(),
+            'jumlah' => $this->getLab($this->tanggal),
             'tanggal' => $this->tanggal,
             'keterangan' => $this->keterangan,
         ]);
@@ -56,11 +56,11 @@ class LaboratoriumSampelController extends Controller
         return $response->json();
     }
 
-    public function countLab()
-    {
-        $data = DB::table('periksa_lab')
-                    ->where('tgl_periksa', $this->tanggal)
-                    ->count();
-        return $data;
-    }
+    // public function countLab()
+    // {
+    //     $data = DB::table('periksa_lab')
+    //                 ->where('tgl_periksa', $this->tanggal)
+    //                 ->count();
+    //     return $data;
+    // }
 }

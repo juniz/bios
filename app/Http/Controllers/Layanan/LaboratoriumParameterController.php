@@ -70,23 +70,23 @@ class LaboratoriumParameterController extends Controller
         return $response->json();
     }
 
-    public function getLab()
-    {
-        $data = DB::table('jns_perawatan_lab')
-                    ->where('status', 1)
-                    ->select('kd_jenis_prw', 'nm_perawatan')
-                    ->get();
-        return $data;
-    }
+    // public function getLab()
+    // {
+    //     $data = DB::table('jns_perawatan_lab')
+    //                 ->where('status', 1)
+    //                 ->select('kd_jenis_prw', 'nm_perawatan')
+    //                 ->get();
+    //     return $data;
+    // }
 
-    public function countLab($tanggal)
-    {
-        $data = DB::table('periksa_lab')
-                    ->join('jns_perawatan_lab', 'periksa_lab.kd_jenis_prw', '=', 'jns_perawatan_lab.kd_jenis_prw')
-                    ->where('periksa_lab.tgl_periksa', $tanggal)
-                    ->groupBy('jns_perawatan_lab.nm_perawatan')
-                    ->selectRaw("jns_perawatan_lab.nm_perawatan, count(periksa_lab.kd_jenis_prw) as jml")
-                    ->get();
-        return $data;
-    }
+    // public function countLab($tanggal)
+    // {
+    //     $data = DB::table('periksa_lab')
+    //                 ->join('jns_perawatan_lab', 'periksa_lab.kd_jenis_prw', '=', 'jns_perawatan_lab.kd_jenis_prw')
+    //                 ->where('periksa_lab.tgl_periksa', $tanggal)
+    //                 ->groupBy('jns_perawatan_lab.nm_perawatan')
+    //                 ->selectRaw("jns_perawatan_lab.nm_perawatan, count(periksa_lab.kd_jenis_prw) as jml")
+    //                 ->get();
+    //     return $data;
+    // }
 }

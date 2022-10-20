@@ -38,7 +38,7 @@ class OperasiController extends Controller
             'data' => $this->data, 
             'head' => $this->headTable, 
             'tanggal' => $this->tanggal,
-            'operasi' => $this->countOperasi(),
+            'operasi' => $this->countOperasi($this->tanggal),
             'keterangan' => $this->keterangan,
         ]);
     }
@@ -70,13 +70,13 @@ class OperasiController extends Controller
         return $response->json();
     }
 
-    public function countOperasi()
-    {
-        $data = DB::table('operasi')
-                    ->where('tgl_operasi', 'like', $this->tanggal.'%')
-                    ->groupBy('kategori')
-                    ->selectRaw("kategori, count(no_rawat) as jml")
-                    ->get();
-        return $data;
-    }
+    // public function countOperasi()
+    // {
+    //     $data = DB::table('operasi')
+    //                 ->where('tgl_operasi', 'like', $this->tanggal.'%')
+    //                 ->groupBy('kategori')
+    //                 ->selectRaw("kategori, count(no_rawat) as jml")
+    //                 ->get();
+    //     return $data;
+    // }
 }

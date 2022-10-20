@@ -37,7 +37,7 @@ class RadiologiController extends Controller
         return view('layanan.radiologi',[
             'data' => $this->data, 
             'head' => $this->headTable, 
-            'jumlah' => $this->countRadiologi(),
+            'jumlah' => $this->countRadiologi($this->tanggal),
             'tanggal' => $this->tanggal,
             'keterangan' => $this->keterangan,
         ]);
@@ -56,11 +56,11 @@ class RadiologiController extends Controller
         return $response->json();
     }
 
-    public function countRadiologi()
-    {
-        $data = DB::table('periksa_radiologi')
-                    ->where('tgl_periksa', $this->tanggal)
-                    ->count();
-        return $data;
-    }
+    // public function countRadiologi()
+    // {
+    //     $data = DB::table('periksa_radiologi')
+    //                 ->where('tgl_periksa', $this->tanggal)
+    //                 ->count();
+    //     return $data;
+    // }
 }

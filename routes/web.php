@@ -15,12 +15,12 @@ use Illuminate\Http\Request;
 */
 
 Route::get('/', [App\Http\Controllers\Auth\LoginController::class, 'index'])->middleware('haslogin');
-Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login']);
+Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])->middleware('throttle:60,1');
 Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout']);
 Route::get('/dashboard', function (Request $request) {
     $nama = $request->session()->get('nama');
     return view('dashboard',['nama' => $nama]);
-});
+})->middleware('ceklogin');
 
 Route::middleware(['ceklogin'])->prefix('sdm')->group(function () {
 
