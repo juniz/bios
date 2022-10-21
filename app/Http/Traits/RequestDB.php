@@ -96,10 +96,18 @@ trait RequestDB {
         $data = DB::table('periksa_lab')
                     ->join('jns_perawatan_lab', 'periksa_lab.kd_jenis_prw', '=', 'jns_perawatan_lab.kd_jenis_prw')
                     ->where('periksa_lab.tgl_periksa', $tanggal)
-                    ->groupBy('jns_perawatan_lab.nm_perawatan')
-                    ->selectRaw("jns_perawatan_lab.nm_perawatan, count(periksa_lab.kd_jenis_prw) as jml")
+                    ->groupBy('jns_perawatan_lab.kd_jenis_prw')
+                    ->selectRaw("jns_perawatan_lab.kd_jenis_prw, jns_perawatan_lab.nm_perawatan, count(periksa_lab.kd_jenis_prw) as jml")
                     ->get();
         return $data;
+    }
+
+    public function nmPerawatanLab($kd_jenis_prw)
+    {
+        $data = DB::table('jns_perawatan_lab')
+                    ->where('kd_jenis_prw', $kd_jenis_prw)
+                    ->first();
+        return $data->nm_perawatan;
     }
 
     public function countOperasi($tanggal)

@@ -16,7 +16,7 @@ class LabParamCron extends Command
      *
      * @var string
      */
-    protected $signature = 'cron:labparam';
+    protected $signature = 'cron:labparam {lab} {jml}';
 
     /**
      * The console command description.
@@ -46,37 +46,55 @@ class LabParamCron extends Command
     public function handle()
     {
         $this->postLayananLabParameter();
-        $this->postLayananLabSample();
+        // $this->postLayananLabSample();
     }
+
+    // public function postLayananLabParameter()
+    // {
+    //     $url = 'kesehatan/layanan/laboratorium_detail';
+    //     $bidang = 'LABORATORIUM PARAMETER';
+    //     $lab = $this->countLab($this->tanggal);
+    //     foreach($lab as $l){
+    //         $input = array(
+    //             'tgl_transaksi' => $this->tanggal,
+    //             'nama_layanan' => $l->nm_perawatan,
+    //             'jumlah' => $l->jml,
+    //         );
+    //         $response = $this->postData($url, $this->header, $input);
+    //         $now = Carbon::now()->isoFormat('YYYY-MM-DD HH:mm:ss');
+    //         $this->info($now.'|'.$this->description.'|'.$bidang.'|'.$l->nm_perawatan.'|'.$response->body());
+    //     }
+    // }
 
     public function postLayananLabParameter()
     {
         $url = 'kesehatan/layanan/laboratorium_detail';
         $bidang = 'LABORATORIUM PARAMETER';
-        $lab = $this->countLab($this->tanggal);
-        foreach($lab as $l){
+        $lab = $this->nmPerawatanLab($this->argument('lab'));
+        // $lab = $this->argument('lab');
+        $jml = $this->argument('jml');
             $input = array(
                 'tgl_transaksi' => $this->tanggal,
-                'nama_layanan' => $l->nm_perawatan,
-                'jumlah' => $l->jml,
+                'nama_layanan' => $lab,
+                'jumlah' => $jml,
             );
             $response = $this->postData($url, $this->header, $input);
             $now = Carbon::now()->isoFormat('YYYY-MM-DD HH:mm:ss');
-            $this->info($now.'|'.$this->description.'|'.$bidang.'|'.$l->nm_perawatan.'|'.$response->body());
-        }
+            $this->info($now.'|'.$this->description.'|'.$bidang.'|'.$lab.'|'.$response->body());
+        
     }
 
-    public function postLayananLabSample()
-    {
-        $url = 'kesehatan/layanan/laboratorium';
-        $bidang = 'LABORATORIUM SAMPLE';
-        $input = array(
-            'tgl_transaksi' => $this->tanggal,
-            'jumlah' =>  $this->getLab($this->tanggal),
-        );
-        $response = $this->postData($url, $this->header, $input);
-        $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-        $this->info($now.'|'.$this->description.'|'.$bidang.'|'.$response->body());
-    }
+    // public function postLayananLabSample()
+    // {
+    //     $url = 'kesehatan/layanan/laboratorium';
+    //     $bidang = 'LABORATORIUM SAMPLE';
+    //     $input = array(
+    //         'tgl_transaksi' => $this->tanggal,
+    //         'jumlah' =>  $this->getLab($this->tanggal),
+    //     );
+    //     $response = $this->postData($url, $this->header, $input);
+    //     $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
+    //     $this->info($now.'|'.$this->description.'|'.$bidang.'|'.$response->body());
+    // }
  
 }
