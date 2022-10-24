@@ -73,7 +73,7 @@ class LabParamCron extends Command
         $lab = $this->nmPerawatanLab($this->argument('lab'));
         // $lab = $this->argument('lab');
         $jml = $this->argument('jml');
-            $input = array(
+        $input = array(
                 'tgl_transaksi' => $this->tanggal,
                 'nama_layanan' => $lab,
                 'jumlah' => $jml,
