@@ -25,10 +25,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('cron:sdm')->weekly()->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_sdm.log'));
 
         $tanggal = Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
-        $jam = strtotime('01:00');
+        $jam = strtotime('07:52');
         $lab = $this->countLab($tanggal);
         foreach($lab as $l){
-            $time = date("H:i", strtotime('+1 minutes', $jam));;
+            $time = date("H:i", strtotime('+2 minutes', $jam));;
             $schedule->command('cron:labparam '.$l->kd_jenis_prw.' '.$l->jml)->daily()->at($time)->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_layanan.log'));
             $jam = strtotime($time);
         }
