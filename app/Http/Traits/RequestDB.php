@@ -176,4 +176,15 @@ trait RequestDB {
                     ->count();
         return $data;
     }
+
+    public function counRanap($tanggal)
+    {
+        return DB::table('kamar')
+                    ->join('kamar_inap', 'kamar_inap.kd_kamar', '=', 'kamar.kd_kamar')
+                    ->where('kamar_inap.tgl_masuk', $tanggal)
+                    ->where('kamar_inap.tgl_keluar', '0000-00-00')
+                    ->groupBy('kamar.kelas')
+                    ->select('kamar.kelas', DB::raw('count(kamar_inap.no_rawat) as jml'))
+                    ->get();
+    }
 }

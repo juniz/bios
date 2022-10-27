@@ -7,9 +7,8 @@ use App\Http\Traits\Token;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 
-class RalanController extends Controller
+class RanapController extends Controller
 {
     use Token, RequestAPI, RequestDB;
     public $header, $token, $url, $data, $headTable, $tanggal, $keterangan;
@@ -22,9 +21,9 @@ class RalanController extends Controller
             'token' => $this->token,
             'Content-Type' => 'multipart/form-data'
         ]; 
-        $this->url = 'kesehatan/layanan/pasien_ralan';
+        $this->url = 'kesehatan/layanan/pasien_ranap';
         $this->data = $this->read();
-        $this->headTable = ['Tgl Transaksi', 'Jumlah'];
+        $this->headTable = ['Tgl Transaksi', 'Kelas', 'Jumlah'];
         $this->tanggal = $request->input('tgl') ?? Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
         $this->keterangan = [
             'Data yang dikirimkan merupakan posisi data terakhir pada saat tanggal berkenaan, tidak akumulatif.',
@@ -34,11 +33,11 @@ class RalanController extends Controller
 
     public function index()
     {
-        return view('layanan.ralan',[
+        return view('layanan.ranap',[
             'data' => $this->data, 
             'head' => $this->headTable, 
             'tanggal' => $this->tanggal,
-            'jumlah' => $this->countRalan($this->tanggal),
+            'ranap' => $this->counRanap($this->tanggal),
             'keterangan' => $this->keterangan,
         ]);
     }
@@ -46,7 +45,21 @@ class RalanController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        $response = $this->postData($this->url, $this->header, $input);
+        $response = [];
+        for($i=0; $i < count($input['kode_kelas']); $i++){
+            $layanan = $input['kode_kelas'][$i];
+            $jumlah =  $input['jumlah'][$i];
+            $body = [
+                'tgl_transaksi' => $input['tgl_transaksi'],
+                'kode_kelas' => $layanan,
+                'jumlah' => $jumlah,
+            ];
+            $response = $this->postData($this->url, $this->header, $body);
+            if($response->json()['status'] != 'MSG20003'){
+                return $response->json();
+            }
+        }
+        
         return $response->json();
     }
 

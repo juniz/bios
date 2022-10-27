@@ -103,6 +103,9 @@ Route::middleware(['ceklogin'])->prefix('layanan')->group(function () {
     Route::get('/ralan', [App\Http\Controllers\Layanan\RalanController::class, 'index'])->named('ralan');
     Route::post('/ralan/kirim', [App\Http\Controllers\Layanan\RalanController::class, 'store']);
 
+    Route::get('/ranap', [App\Http\Controllers\Layanan\RanapController::class, 'index'])->named('ranap');
+    Route::post('/ranap/kirim', [App\Http\Controllers\Layanan\RanapController::class, 'store']);
+
     Route::get('/bpjs_non_bpjs', [App\Http\Controllers\Layanan\BPJSNonBPJSController::class, 'index'])->named('bpjs_non_bpjs');
     Route::post('/bpjs_non_bpjs/kirim', [App\Http\Controllers\Layanan\BPJSNonBPJSController::class, 'store']);
 

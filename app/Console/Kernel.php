@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('cron:sdm')->weekly()->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_sdm.log'));
 
         $tanggal = Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
-        $jam = strtotime('07:52');
+        $jam = strtotime('09:45');
         $lab = $this->countLab($tanggal);
         foreach($lab as $l){
             $time = date("H:i", strtotime('+2 minutes', $jam));;

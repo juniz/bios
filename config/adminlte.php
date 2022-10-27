@@ -401,6 +401,10 @@ return [
                     'url'  => '/layanan/ralan',
                 ],
                 [
+                    'text' => 'Pasien Rawat Inap',
+                    'url'  => '/layanan/ranap',
+                ],
+                [
                     'text' => 'Pasien BPJS / Non-BPJS',
                     'url'  => '/layanan/bpjs_non_bpjs',
                 ],
