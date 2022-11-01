@@ -49,7 +49,7 @@ class RadiographerController extends Controller
             'non_pns' => $this->nonPNS($this->bidang),
             'kontrak' => $this->kontrak($this->bidang),
             'tanggal' => $this->tanggal,
-            'keterangan' => $this->keterang,
+            'keterangan' => $this->keterangan,
         ]);
     }
 

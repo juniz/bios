@@ -9,10 +9,11 @@ use App\Http\Traits\RequestAPI;
 use App\Http\Traits\RequestDB;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use App\Http\Traits\Telegram;
 
 class AdministrasiController extends Controller
 {
-    use Token, RequestAPI, RequestDB;
+    use Token, RequestAPI, RequestDB, Telegram;
     public $header, $token, $url, $data, $headTable, $bidang, $keterangan;
 
     public function __construct()
@@ -30,8 +31,9 @@ class AdministrasiController extends Controller
         $this->keterangan = [
             'Data yang dikirimkan merupakan posisi data pada saat tanggal berkenaan, bersifat akumulatif.',
             'Data yang dikirimkan merupakan jumlah pegawai sesuai kriteria.',
-            'Data awal dikirimkan pada awal tahun berkenaan, updating data dikirimkan per periode semesteran/tahunan.'
+            'Data awal dikirimkan pada awal tahun berkenaan, updating data dikirimkan per periode semesteran/tahunan.',
         ];
+        
     }
 
     public function index()

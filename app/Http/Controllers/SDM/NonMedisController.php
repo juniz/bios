@@ -23,7 +23,7 @@ class NonMedisController extends Controller
             'Content-Type' => 'multipart/form-data'
         ]; 
         $this->bidang = 'TENAGA NON MEDIS';
-        $this->url = 'kesehatan/sdm/non_medis_administrasi';
+        $this->url = 'kesehatan/sdm/non_medis';
         $this->data = $this->read();
         $this->tanggal = Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
         $this->headTable = ['Tgl Transaksi', 'Tgl Update', 'PNS', 'PPPK', 'Non PNS Tetap', 'Kontrak', 'Anggota'];
