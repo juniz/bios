@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Traits\Token;
+use Illuminate\Support\Facades\Cache;
 
 class LoginController extends Controller{
-
+    use Token;
     public function index()
     {
         return view('auth.login');
@@ -30,10 +32,17 @@ class LoginController extends Controller{
                     ->first();
         if($cek){
             if($cek->password == $password){
-                $request->session()->put('username', $cek->username);
-                $request->session()->put('password', $cek->password);
-                $request->session()->put('nama', $cek->nama);
-                return redirect('/dashboard');
+                $token = $this->getToken();
+                if($token->successful()){
+                    // $request->session()->put('token', $token->json()['token']);
+                    Cache::put('token', $token->json()['token']);
+                    $request->session()->put('username', $cek->username);
+                    $request->session()->put('password', $cek->password);
+                    $request->session()->put('nama', $cek->nama);
+                    return redirect('/dashboard');
+                }else{
+                    return back()->withErrors(['message' => 'Gagal mendapatkan Token']);
+                }    
             }else{
                 return back()->withErrors(['password' => 'Password salah']);
             }

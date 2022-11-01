@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Console\Commands;
-use App\Http\Controllers\Layanan\RalanController;
 use Illuminate\Console\Command;
 use App\Http\Traits\Token;
 use App\Http\Traits\RequestDB;
@@ -24,7 +23,7 @@ class LayananCron extends Command
      * @var string
      */
     protected $description = 'Cron job Layanan BIOS';
-    public $token, $header, $tanggal, $now;
+    public $token, $header, $tanggal, $now, $count;
 
     public function __construct()
    {
@@ -37,6 +36,7 @@ class LayananCron extends Command
         ]; 
         $this->tanggal = Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
         $this->now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
+        $this->count = 1; 
    }
 
     /**
@@ -66,7 +66,8 @@ class LayananCron extends Command
             'jumlah' => $this->countFarmasi($this->tanggal),
         );
         $response = $this->postData($url, $this->header, $input);
-        $this->info($this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->info('#'.$this->count.'.'.$this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->count++;
     }
 
     public function postLayananIGD()
@@ -78,7 +79,8 @@ class LayananCron extends Command
             'jumlah' => $this->countIGD($this->tanggal),
         );
         $response = $this->postData($url, $this->header, $input);
-        $this->info($this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->info('#'.$this->count.'.'.$this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->count++;
     }
 
     public function postLayananPoli()
@@ -93,7 +95,8 @@ class LayananCron extends Command
                 'jumlah' => $p->jml,
             );
             $response = $this->postData($url, $this->header, $input);
-            $this->info($this->now.' '.$this->description.'-'.$p->nm_poli.' '.$bidang.':'.$response->body());
+            $this->info('#'.$this->count.'.'.$this->now.' '.$this->description.' '.$bidang.'-'.$p->nm_poli.':'.$response->body());
+            $this->count++;
         }
     }
 
@@ -109,7 +112,8 @@ class LayananCron extends Command
                 'jumlah' => $o->jml,
             );
             $response = $this->postData($url, $this->header, $input);
-            $this->info($this->now.' '.$this->description.'-'.$o->kategori.' '.$bidang.':'.$response->body());
+            $this->info('#'.$this->count.'.'.$this->now.' '.$this->description.' '.$bidang.'-'.$o->kategori.':'.$response->body());
+            $this->count++;
         }
     }
 
@@ -122,7 +126,8 @@ class LayananCron extends Command
             'jumlah' => $this->countRadiologi($this->tanggal),
         );
         $response = $this->postData($url, $this->header, $input);
-        $this->info($this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->info('#'.$this->count.'.'.$this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->count++;
     }
 
     public function postLayananRalan()
@@ -134,7 +139,8 @@ class LayananCron extends Command
             'jumlah' => $this->countRalan($this->tanggal),
         );
         $response = $this->postData($url, $this->header, $input);
-        $this->info($this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->info('#'.$this->count.'.'.$this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->count++;
     }
 
     public function postLayananPenjab()
@@ -147,7 +153,8 @@ class LayananCron extends Command
             'jumlah_non_bpjs' => $this->countNonBPJS($this->tanggal),
         );
         $response = $this->postData($url, $this->header, $input);
-        $this->info($this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->info('#'.$this->count.'.'.$this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->count++;
     }
 
     public function postLayananLabParameter()
@@ -162,7 +169,8 @@ class LayananCron extends Command
                 'jumlah' => $l->jml,
             );
             $response = $this->postData($url, $this->header, $input);
-            $this->info($this->now.' '.$this->description.' '.$bidang.' '.$l->nm_perawatan.' : '.$response->body());
+            $this->info('#'.$this->count.'.'.$this->now.' '.$this->description.' '.$bidang.'-'.$l->nm_perawatan.':'.$response->body());
+            $this->count++;
         }
     }
 
@@ -175,7 +183,8 @@ class LayananCron extends Command
             'jumlah' =>  $this->getLab($this->tanggal),
         );
         $response = $this->postData($url, $this->header, $input);
-        $this->info($this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->info('#'.$this->count.'.'.$this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->count++;
     }
  
 }

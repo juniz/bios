@@ -8,7 +8,7 @@ trait RequestAPI {
     protected $urlGet = 'https://training-bios2.kemenkeu.go.id/api/get/data/';
     public function postData($url, $header, $body)
     {
-        $response = Http::asForm()->withHeaders($header)->retry(5, 100)->post(env('URL_POST_DATA' ,$this->urlPost). $url, $body);
+        $response = Http::asForm()->withHeaders($header)->retry(5, 1000000)->post(env('URL_POST_DATA' ,$this->urlPost). $url, $body);
         return $response;
     }
 

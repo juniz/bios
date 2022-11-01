@@ -16,7 +16,7 @@ class LabParamCron extends Command
      *
      * @var string
      */
-    protected $signature = 'cron:labparam {lab} {jml}';
+    protected $signature = 'cron:labparam {lab} {jml} {tgl} {token}';
 
     /**
      * The console command description.
@@ -24,18 +24,13 @@ class LabParamCron extends Command
      * @var string
      */
     protected $description = 'Cron job Lab BIOS';
-    public $token, $header, $tanggal;
+    public $header, $tanggal;
 
     public function __construct()
    {
         parent::__construct();
-        $token = $this->getToken();
-        $this->token = $token->json()['token'];
-        $this->header = [
-            'token' => $this->token,
-            'Content-Type' => 'multipart/form-data'
-        ]; 
-        $this->tanggal = Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
+        // $token = $this->getToken();
+        
    }
 
     /**
@@ -68,19 +63,33 @@ class LabParamCron extends Command
 
     public function postLayananLabParameter()
     {
+        $token = $this->argument('token');
+        $tanggal = $this->argument('tgl');
+        $header = [
+            'token' => $token,
+            'Content-Type' => 'multipart/form-data'
+        ]; 
         $url = 'kesehatan/layanan/laboratorium_detail';
         $bidang = 'LABORATORIUM PARAMETER';
         $lab = $this->nmPerawatanLab($this->argument('lab'));
         // $lab = $this->argument('lab');
         $jml = $this->argument('jml');
         $input = array(
-                'tgl_transaksi' => $this->tanggal,
+                'tgl_transaksi' => $tanggal,
                 'nama_layanan' => $lab,
                 'jumlah' => $jml,
             );
-            $response = $this->postData($url, $this->header, $input);
+            $response = $this->postData($url, $header, $input);
             $now = Carbon::now()->isoFormat('YYYY-MM-DD HH:mm:ss');
-            $this->info($now.'|'.$this->description.'|'.$bidang.'|'.$lab.'|'.$response->body());
+            if($response->json()['status'] == 'MSG20003'){
+                $this->info('['.$now.'] LAB-'.$lab.'.SUCCESS: '.$response->body());
+            }else{
+                if($response->ok()){
+                    $this->info('['.$now.'] LAB-'.$lab.'.ERROR: '.$response->body()); 
+                }else{
+                    $this->info('['.$now.'] LAB-'.$lab.'.ERROR: '.$response->trow()); 
+                }
+            }
         
     }
 

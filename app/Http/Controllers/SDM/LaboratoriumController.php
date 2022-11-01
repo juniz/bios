@@ -8,6 +8,7 @@ use App\Http\Traits\Token;
 use App\Http\Traits\RequestAPI;
 use App\Http\Traits\RequestDB;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 class LaboratoriumController extends Controller
 {
@@ -16,10 +17,9 @@ class LaboratoriumController extends Controller
 
     public function __construct()
     {
-        $token = $this->getToken();
-        $this->token = $token->json()['token'];
+        $this->token = Cache::get('token');
         $this->header = [
-            'token' => $token->json()['token'],
+            'token' => $this->token,
             'Content-Type' => 'multipart/form-data'
         ]; 
         $this->bidang = 'PRANATA LABORATORIUM';

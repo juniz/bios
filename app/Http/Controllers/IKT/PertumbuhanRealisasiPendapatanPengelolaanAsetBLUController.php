@@ -6,7 +6,7 @@ use App\Http\Traits\RequestDB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Traits\Token;
-
+use Illuminate\Support\Facades\Cache;
 class PertumbuhanRealisasiPendapatanPengelolaanAsetBLUController extends Controller
 {
     use Token, RequestAPI, RequestDB;
@@ -14,8 +14,7 @@ class PertumbuhanRealisasiPendapatanPengelolaanAsetBLUController extends Control
 
     public function __construct()
     {
-        $token = $this->getToken();
-        $this->token = $token->json()['token'];
+        $this->token = Cache::get('token');
         $this->header = [
             'token' => $this->token,
             'Content-Type' => 'multipart/form-data'

@@ -5,13 +5,15 @@ namespace App\Console;
 use App\Http\Traits\RequestDB;
 use Illuminate\Support\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
+use App\Http\Traits\Token;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
-    use RequestDB;
+    use RequestDB, Token;
     protected $commands = [
-        Commands\SDMCron::class,
+        // Commands\SDMCron::class,
+        // Commands\LabParamCron::class,
         Commands\LayananCron::class,
     ];
     /**
@@ -22,24 +24,28 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('cron:sdm')->weekly()->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_sdm.log'));
+        $schedule->command('cron:layanan')->daily()->at('09:22')->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_layanan.log'));
+        // $schedule->command('cron:sdm')->weekly()->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_sdm.log'));
 
-        $tanggal = Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
-        $jam = strtotime('09:45');
-        $lab = $this->countLab($tanggal);
-        foreach($lab as $l){
-            $time = date("H:i", strtotime('+2 minutes', $jam));;
-            $schedule->command('cron:labparam '.$l->kd_jenis_prw.' '.$l->jml)->daily()->at($time)->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_layanan.log'));
-            $jam = strtotime($time);
-        }
+        // $tanggal = Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
+        // $token = $this->getToken()->json()['token'];
+        // $jam = strtotime('15:49');
+        // $lab = $this->countLab($tanggal);
+        // $jmlReq = 1;
+        // foreach($lab as $l){
+        //     $time = date("H:i", strtotime($jmlReq == 20 ? '+20 minutes' : '+1 minutes', $jam));;
+        //     $schedule->command('cron:labparam '.$l->kd_jenis_prw.' '.$l->jml.' '.$tanggal.' '.$token)->daily()->at($time)->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_layanan.log'));
+        //     $jam = strtotime($time);
+        //     $jmlReq == 20 ? $jmlReq = 0 : $jmlReq++;
+        // }
 
-        $schedule->command('cron:poli')->daily()->at(date("H:i", strtotime('+60 minutes', $jam)))->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_layanan.log'));
-        $schedule->command('cron:operasi')->daily()->at(date("H:i", strtotime('+62 minutes', $jam)))->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_layanan.log'));
-        $schedule->command('cron:igd')->daily()->at(date("H:i", strtotime('+70 minutes', $jam)))->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_layanan.log'));
-        $schedule->command('cron:penjab')->daily()->at(date("H:i", strtotime('+75 minutes', $jam)))->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_layanan.log'));
-        $schedule->command('cron:radiologi')->daily()->at(date("H:i", strtotime('+80 minutes', $jam)))->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_layanan.log'));
-        $schedule->command('cron:ralan')->daily()->at(date("H:i", strtotime('+85 minutes', $jam)))->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_layanan.log'));
-        $schedule->command('cron:farmasi')->daily()->at(date("H:i", strtotime('+90 minutes', $jam)))->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_layanan.log'));
+        // $schedule->command('cron:poli')->daily()->at(date("H:i", strtotime('+1 minutes', $jam)))->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_layanan.log'));
+        // $schedule->command('cron:operasi')->daily()->at(date("H:i", strtotime('+62 minutes', $jam)))->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_layanan.log'));
+        // $schedule->command('cron:igd')->daily()->at(date("H:i", strtotime('+70 minutes', $jam)))->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_layanan.log'));
+        // $schedule->command('cron:penjab')->daily()->at(date("H:i", strtotime('+75 minutes', $jam)))->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_layanan.log'));
+        // $schedule->command('cron:radiologi')->daily()->at(date("H:i", strtotime('+80 minutes', $jam)))->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_layanan.log'));
+        // $schedule->command('cron:ralan')->daily()->at(date("H:i", strtotime('+85 minutes', $jam)))->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_layanan.log'));
+        // $schedule->command('cron:farmasi')->daily()->at(date("H:i", strtotime('+90 minutes', $jam)))->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_layanan.log'));
     }
 
     /**

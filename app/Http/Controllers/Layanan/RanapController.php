@@ -7,6 +7,7 @@ use App\Http\Traits\Token;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 class RanapController extends Controller
 {
@@ -15,8 +16,7 @@ class RanapController extends Controller
 
     public function __construct(Request $request)
     {
-        $token = $this->getToken();
-        $this->token = $token->json()['token'];
+        $this->token = Cache::get('token');
         $this->header = [
             'token' => $this->token,
             'Content-Type' => 'multipart/form-data'
