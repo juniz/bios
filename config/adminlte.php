@@ -547,6 +547,11 @@ return [
             ],
         ],
         [
+            'text' => 'Log Viewer',
+            'icon' => 'far fa-fw fa-book',
+            'url' => '/logs'
+        ],
+        [
             'text' => 'Keluar',
             'icon' => 'far fa-fw fa-arrow-right',
             'url' => '/logout'

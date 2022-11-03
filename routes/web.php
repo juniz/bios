@@ -213,4 +213,5 @@ Route::middleware(['ceklogin'])->prefix('ikt')->group(function () {
     Route::post('/pertumbuhan_realisasi_pendapatan_pengelolaan_aset_blu/kirim', [App\Http\Controllers\IKT\PertumbuhanRealisasiPendapatanPengelolaanAsetBLUController::class, 'store']);
 });
 
-Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
+Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])->middleware('ceklogin');
+    

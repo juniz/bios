@@ -5,6 +5,7 @@ namespace App\Http\Traits;
 use Illuminate\Support\Facades\Http;
 use App\Http\Traits\Telegram;
 use GuzzleHttp\Exception\BadResponseException;
+use Illuminate\Support\Facades\Log;
 
 trait Token {
     use Telegram;
@@ -16,7 +17,7 @@ trait Token {
             ]);
         }catch(BadResponseException $e){
             $this->sendMessage($e->getResponse()->getBody()->getContents());
-            $this->info('Token gagal didapatkan error : '.$e->getResponse()->getBody()->getContents());
+            Log::error(config('URL_TOKEN', 'https://training-bios2.kemenkeu.go.id/api/token'), $e->getResponse());
             return $e->getResponse();
         }
         

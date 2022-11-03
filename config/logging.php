@@ -17,7 +17,7 @@ return [
     |
     */
 
-    'default' => env('LOG_CHANNEL', 'stack'),
+    'default' => env('LOG_CHANNEL', 'layanan'),
 
     /*
     |--------------------------------------------------------------------------
@@ -51,6 +51,12 @@ return [
     */
 
     'channels' => [
+        'layanan' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/cron_layanan.log'),
+            'level' => 'debug',
+        ],
+        
         'stack' => [
             'driver' => 'stack',
             'channels' => ['single'],

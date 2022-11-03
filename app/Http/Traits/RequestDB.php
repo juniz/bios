@@ -187,4 +187,17 @@ trait RequestDB {
                     ->select('kamar.kelas', DB::raw('count(kamar_inap.no_rawat) as jml'))
                     ->get();
     }
+
+    public function insertLog($url, $data, $status, $message, $error, $sendAt)
+    {
+        $data = [
+            'post_url' => $url,
+            'data' => $data,
+            'status' => $status,
+            'message' => $message,
+            'error' => $error,
+            'send_at' => $sendAt
+        ];
+        return DB::table('bios_log_pengiriman')->insert($data);
+    }
 }
