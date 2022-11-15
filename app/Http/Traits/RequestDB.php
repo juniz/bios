@@ -184,7 +184,7 @@ trait RequestDB {
                     ->where('kamar_inap.tgl_masuk', $tanggal)
                     ->where('kamar_inap.tgl_keluar', '0000-00-00')
                     ->groupBy('kamar.kelas')
-                    ->select('kamar.kelas', DB::raw('count(kamar_inap.no_rawat) as jml'))
+                    ->select(DB::raw('TRIM("Kelas" FROM kamar.kelas) AS kelas'), DB::raw('count(kamar_inap.no_rawat) as jml'))
                     ->get();
     }
 

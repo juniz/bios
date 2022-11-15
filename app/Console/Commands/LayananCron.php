@@ -55,6 +55,7 @@ class LayananCron extends Command
         $this->postLayananPenjab();
         $this->postLayananLabParameter();
         $this->postLayananLabSample();
+        $this->postLayananRanap();
     }
 
     public function postLayananFarmasi()
@@ -185,6 +186,23 @@ class LayananCron extends Command
         $response = $this->postData($url, $this->header, $input);
         $this->info('#'.$this->count.'.'.$this->now.' '.$this->description.' '.$bidang.':'.$response->body());
         $this->count++;
+    }
+
+    public function postLayananRanap()
+    {
+        $url = 'kesehatan/layanan/pasien_ranap';
+        $bidang = 'PASIEN RANAP';
+        $ranap = $this->counRanap($this->tanggal);
+        foreach($ranap as $l){
+            $input = array(
+                'tgl_transaksi' => $this->tanggal,
+                'kode_kelas' => $l->kelas,
+                'jumlah' => $l->jml,
+            );
+            $response = $this->postData($url, $this->header, $input);
+            $this->info('#'.$this->count.'.'.$this->now.' '.$this->description.' '.$bidang.'-'.$l->kelas.':'.$response->body());
+            $this->count++;
+        }
     }
  
 }
