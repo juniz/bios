@@ -12,7 +12,7 @@ trait RequestAPI {
     use Telegram, RequestDB;
     protected $urlPost ='https://training-bios2.kemenkeu.go.id/api/ws/';
     protected $urlGet = 'https://training-bios2.kemenkeu.go.id/api/get/data/';
-    public function postData($url, $header, $body, $delay = 10)
+    public function postData($url, $header, $body, $delay = 0)
     {
         try{
             sleep($delay);
