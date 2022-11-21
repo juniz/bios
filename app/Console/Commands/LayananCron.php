@@ -67,7 +67,8 @@ class LayananCron extends Command
             'jumlah' => $this->countFarmasi($this->tanggal),
         );
         $response = $this->postData($url, $this->header, $input);
-        $this->info('#'.$this->count.'.'.$this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
+        $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
         $this->count++;
     }
 
@@ -80,7 +81,8 @@ class LayananCron extends Command
             'jumlah' => $this->countIGD($this->tanggal),
         );
         $response = $this->postData($url, $this->header, $input);
-        $this->info('#'.$this->count.'.'.$this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
+        $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
         $this->count++;
     }
 
@@ -96,7 +98,8 @@ class LayananCron extends Command
                 'jumlah' => $p->jml,
             );
             $response = $this->postData($url, $this->header, $input);
-            $this->info('#'.$this->count.'.'.$this->now.' '.$this->description.' '.$bidang.'-'.$p->nm_poli.':'.$response->body());
+            $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
+            $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.'-'.$p->nm_poli.':'.$response->body());
             $this->count++;
         }
     }
@@ -113,7 +116,8 @@ class LayananCron extends Command
                 'jumlah' => $o->jml,
             );
             $response = $this->postData($url, $this->header, $input);
-            $this->info('#'.$this->count.'.'.$this->now.' '.$this->description.' '.$bidang.'-'.$o->kategori.':'.$response->body());
+            $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
+            $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.'-'.$o->kategori.':'.$response->body());
             $this->count++;
         }
     }
@@ -127,7 +131,8 @@ class LayananCron extends Command
             'jumlah' => $this->countRadiologi($this->tanggal),
         );
         $response = $this->postData($url, $this->header, $input);
-        $this->info('#'.$this->count.'.'.$this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
+        $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
         $this->count++;
     }
 
@@ -140,7 +145,8 @@ class LayananCron extends Command
             'jumlah' => $this->countRalan($this->tanggal),
         );
         $response = $this->postData($url, $this->header, $input);
-        $this->info('#'.$this->count.'.'.$this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
+        $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
         $this->count++;
     }
 
@@ -154,7 +160,8 @@ class LayananCron extends Command
             'jumlah_non_bpjs' => $this->countNonBPJS($this->tanggal),
         );
         $response = $this->postData($url, $this->header, $input);
-        $this->info('#'.$this->count.'.'.$this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
+        $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
         $this->count++;
     }
 
@@ -170,7 +177,8 @@ class LayananCron extends Command
                 'jumlah' => $l->jml,
             );
             $response = $this->postData($url, $this->header, $input);
-            $this->info('#'.$this->count.'.'.$this->now.' '.$this->description.' '.$bidang.'-'.$l->nm_perawatan.':'.$response->body());
+            $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
+            $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.'-'.$l->nm_perawatan.':'.$response->body());
             $this->count++;
         }
     }
@@ -184,7 +192,8 @@ class LayananCron extends Command
             'jumlah' =>  $this->getLab($this->tanggal),
         );
         $response = $this->postData($url, $this->header, $input);
-        $this->info('#'.$this->count.'.'.$this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
+        $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
         $this->count++;
     }
 
@@ -200,7 +209,8 @@ class LayananCron extends Command
                 'jumlah' => $l->jml,
             );
             $response = $this->postData($url, $this->header, $input);
-            $this->info('#'.$this->count.'.'.$this->now.' '.$this->description.' '.$bidang.'-'.$l->kelas.':'.$response->body());
+            $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
+            $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.'-'.$l->kelas.':'.$response->body());
             $this->count++;
         }
     }
