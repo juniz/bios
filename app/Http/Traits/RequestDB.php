@@ -200,4 +200,12 @@ trait RequestDB {
         ];
         return DB::table('bios_log_pengiriman')->insert($data);
     }
+
+    public function taskSetting($layanan)
+    {
+        $data = DB::table('bios_task_setting')
+                    ->where('task_name', $layanan)
+                    ->first();
+        return $data;
+    }
 }

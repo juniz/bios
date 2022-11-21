@@ -24,7 +24,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('cron:layanan')->everyThirtyMinutes()->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_layanan.log'));
+        $layanan =$this->taskSetting('layanan');
+        $schedule->command('cron:layanan')->daily()->at($layanan->jam)->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_layanan.log'));
         // $schedule->command('cron:sdm')->weekly()->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_sdm.log'));
 
         // $tanggal = Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
