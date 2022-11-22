@@ -6,10 +6,11 @@ use App\Http\Traits\Token;
 use App\Http\Traits\RequestDB;
 use Illuminate\Support\Carbon;
 use App\Http\Traits\RequestAPI;
+use App\Http\Traits\Telegram;
 
 class LayananCron extends Command
 {
-    use Token, RequestAPI, RequestDB;
+    use Token, RequestAPI, RequestDB, Telegram;
     /**
      * The name and signature of the console command.
      *
@@ -46,6 +47,7 @@ class LayananCron extends Command
      */
     public function handle()
     {
+        $this->sendMessage('Cron job Layanan BIOS telah dijalankan pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss'));
         $this->postLayananFarmasi();
         $this->postLayananIGD();
         $this->postLayananPoli();
