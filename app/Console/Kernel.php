@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Http\Traits\RequestDB;
+use App\Http\Traits\Telegram;
 use Illuminate\Support\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use App\Http\Traits\Token;
@@ -10,7 +11,7 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
-    use RequestDB, Token;
+    use RequestDB, Token, Telegram;
     protected $commands = [
         // Commands\SDMCron::class,
         // Commands\LabParamCron::class,
@@ -24,6 +25,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $this->sendMessage('Cron job Layanan BIOS telah dijalankan pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss'));
         $layanan =$this->taskSetting('layanan');
         $schedule->command('cron:layanan')->daily()->at($layanan->jam)->timezone('Asia/Jakarta')->appendOutputTo(storage_path($layanan->log));
         // $schedule->command('cron:sdm')->weekly()->timezone('Asia/Jakarta')->appendOutputTo(storage_path('logs/cron_sdm.log'));
