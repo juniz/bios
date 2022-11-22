@@ -70,6 +70,7 @@ class LayananCron extends Command
         );
         $response = $this->postData($url, $this->header, $input, $this->count == 20 ? 600 : 0);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
+        $this->sendMessage($this->count . '. ' . $bidang . ' - ' . $now . ' - ' . $response->json()['message']);
         $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
         $this->count == 20 ? $this->count = 1 :  $this->count++;
     }
@@ -84,6 +85,7 @@ class LayananCron extends Command
         );
         $response = $this->postData($url, $this->header, $input, $this->count == 20 ? 600 : 0);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
+        $this->sendMessage($this->count . '. ' . $bidang . ' - ' . $now . ' - ' . $response->json()['message']);
         $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
         $this->count == 20 ? $this->count = 1 :  $this->count++;
     }
@@ -101,6 +103,7 @@ class LayananCron extends Command
             );
             $response = $this->postData($url, $this->header, $input, $this->count == 20 ? 600 : 0);
             $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
+            $this->sendMessage($this->count . '. ' . $bidang . ' - ' . $now . ' - ' . $response->json()['message']);
             $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.'-'.$p->nm_poli.':'.$response->body());
             $this->count == 20 ? $this->count = 1 :  $this->count++;
         }
@@ -119,6 +122,7 @@ class LayananCron extends Command
             );
             $response = $this->postData($url, $this->header, $input, $this->count == 20 ? 600 : 0);
             $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
+            $this->sendMessage($this->count . '. ' . $bidang.' '.$o->kategori . ' - ' . $now . ' - ' . $response->json()['message']);
             $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.'-'.$o->kategori.':'.$response->body());
             $this->count == 20 ? $this->count = 1 :  $this->count++;
         }
@@ -134,6 +138,7 @@ class LayananCron extends Command
         );
         $response = $this->postData($url, $this->header, $input, $this->count == 20 ? 600 : 0);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
+        $this->sendMessage($this->count . '. ' . $bidang . ' - ' . $now . ' - ' . $response->json()['message']);
         $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
         $this->count == 20 ? $this->count = 1 :  $this->count++;
     }
@@ -148,6 +153,7 @@ class LayananCron extends Command
         );
         $response = $this->postData($url, $this->header, $input, $this->count == 20 ? 600 : 0);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
+        $this->sendMessage($this->count . '. ' . $bidang . ' - ' . $now . ' - ' . $response->json()['message']);
         $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
         $this->count == 20 ? $this->count = 1 :  $this->count++;
     }
@@ -163,6 +169,7 @@ class LayananCron extends Command
         );
         $response = $this->postData($url, $this->header, $input, $this->count == 20 ? 600 : 0);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
+        $this->sendMessage($this->count . '. ' . $bidang . ' - ' . $now . ' - ' . $response->json()['message']);
         $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
         $this->count == 20 ? $this->count = 1 :  $this->count++;
     }
@@ -180,6 +187,7 @@ class LayananCron extends Command
             );
             $response = $this->postData($url, $this->header, $input, $this->count == 20 ? 600 : 0);
             $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
+            $this->sendMessage($this->count . '. ' . $bidang.' '.$l->nm_perawatan . ' - ' . $now . ' - ' . $response->json()['message']);
             $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.'-'.$l->nm_perawatan.':'.$response->body());
             $this->count == 20 ? $this->count = 1 :  $this->count++;
         }
@@ -195,6 +203,7 @@ class LayananCron extends Command
         );
         $response = $this->postData($url, $this->header, $input, $this->count == 20 ? 600 : 0);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
+        $this->sendMessage($this->count . '. ' . $bidang . ' - ' . $now . ' - ' . $response->json()['message']);
         $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
         $this->count == 20 ? $this->count = 1 :  $this->count++;
     }
@@ -212,6 +221,7 @@ class LayananCron extends Command
             );
             $response = $this->postData($url, $this->header, $input, $this->count == 20 ? 600 : 0);
             $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
+            $this->sendMessage($this->count . '. ' . $bidang.' '.$l->kelas . ' - ' . $now . ' - ' . $response->json()['message']);
             $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.'-'.$l->kelas.':'.$response->body());
             $this->count == 20 ? $this->count = 1 :  $this->count++;
         }
