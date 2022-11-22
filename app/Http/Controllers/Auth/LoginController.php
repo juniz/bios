@@ -33,7 +33,7 @@ class LoginController extends Controller{
         if($cek){
             if($cek->password == $password){
                 $token = $this->getToken();
-                if($token->successful()){
+                if(!empty($token->json()['token'])){
                     // $request->session()->put('token', $token->json()['token']);
                     Cache::put('token', $token->json()['token']);
                     $request->session()->put('username', $cek->username);
@@ -54,6 +54,7 @@ class LoginController extends Controller{
     public function logout(Request $request)
     {
         $request->session()->flush();
+        Cache::forget('token');
         return redirect('/');
     }
 }
