@@ -23,15 +23,15 @@ class BotManController extends Controller
         ];
         $botman = BotManFactory::create($config, new LaravelCache());
  
-        $botman->hears('/start|start|mulai', function (BotMan $bot) {
-            $user = $bot->getUser();
-            $bot->reply('Selamat datang '.$user->getFirstName().'');
+        // $botman->hears('/start|start|mulai', function (BotMan $bot) {
+        //     $user = $bot->getUser();
+        //     $bot->reply('Selamat datang '.$user->getFirstName().'');
+        //     $bot->startConversation(new SheduleTaskConversation());
+        // })->stopsConversation();
+ 
+        $botman->hears('/kitab|kitab', function (BotMan $bot) {
             $bot->startConversation(new ExampleConversation());
         })->stopsConversation();
- 
-        // $botman->hears('/kitab|kitab', function (BotMan $bot) {
-        //     $bot->startConversation(new ExampleConversation());
-        // })->stopsConversation();
  
         // $botman->hears('/lapor|lapor|laporkan', function (BotMan $bot) {
         //     $bot->reply('Silahkan laporkan di email weare@zalabs.my.id . Laporan kamu akan sangat berharga buat kemajuan bot ini.');
