@@ -29,15 +29,6 @@ class LayananCron extends Command
     public function __construct()
    {
         parent::__construct();
-        $token = $this->getToken();
-        $this->token = $token->json()['token'];
-        $this->header = [
-            'token' => $this->token,
-            'Content-Type' => 'multipart/form-data'
-        ]; 
-        $this->tanggal = Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
-        $this->now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-        $this->count = 1; 
    }
 
     /**
@@ -48,6 +39,7 @@ class LayananCron extends Command
     public function handle()
     {
         $this->sendMessage('Cron job Layanan BIOS telah dijalankan pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss'));
+        $this->init();
         $this->postLayananFarmasi();
         $this->postLayananIGD();
         $this->postLayananPoli();
@@ -58,6 +50,19 @@ class LayananCron extends Command
         $this->postLayananLabParameter();
         $this->postLayananLabSample();
         $this->postLayananRanap();
+    }
+
+    public function init()
+    {
+        $token = $this->getToken();
+        $this->token = $token->json()['token'];
+        $this->header = [
+            'token' => $this->token,
+            'Content-Type' => 'multipart/form-data'
+        ]; 
+        $this->tanggal = Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
+        $this->now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
+        $this->count = 1; 
     }
 
     public function postLayananFarmasi()

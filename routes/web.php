@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use App\Http\Controllers\BotManController;
 
 /*
 |--------------------------------------------------------------------------
@@ -214,4 +215,7 @@ Route::middleware(['ceklogin'])->prefix('ikt')->group(function () {
 });
 
 Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])->middleware('ceklogin');
-    
+Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle']);    
+Route::get('/chat',function(){
+    return view('telegram');
+});
