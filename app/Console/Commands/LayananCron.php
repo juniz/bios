@@ -38,7 +38,7 @@ class LayananCron extends Command
      */
     public function handle()
     {
-        $this->sendMessage('Cron job Layanan BIOS telah dijalankan pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss'));
+        
         $this->init();
         $this->postLayananFarmasi();
         $this->postLayananIGD();
@@ -62,7 +62,8 @@ class LayananCron extends Command
         ]; 
         $this->tanggal = Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
         $this->now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-        $this->count = 1; 
+        $this->count = 1;
+        $this->sendMessage('Cron job Layanan BIOS telah dijalankan pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss')); 
     }
 
     public function postLayananFarmasi()
