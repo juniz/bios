@@ -26,7 +26,7 @@ class BotManController extends Controller
         $botman->hears('/start|start|mulai', function (BotMan $bot) {
             $user = $bot->getUser();
             $bot->reply('Selamat datang '.$user->getFirstName().'');
-            $bot->startConversation(new SheduleTaskConversation());
+            $bot->startConversation(new ExampleConversation());
         })->stopsConversation();
  
         // $botman->hears('/kitab|kitab', function (BotMan $bot) {
