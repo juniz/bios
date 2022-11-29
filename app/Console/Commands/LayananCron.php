@@ -40,16 +40,7 @@ class LayananCron extends Command
     {
         
         $this->init();
-        $this->postLayananFarmasi();
-        $this->postLayananIGD();
-        $this->postLayananPoli();
-        $this->postLayananOperasi();
-        $this->postLayananRadiologi();
-        $this->postLayananRalan();
-        $this->postLayananPenjab();
-        $this->postLayananLabParameter();
-        $this->postLayananLabSample();
-        $this->postLayananRanap();
+        
     }
 
     public function init()
@@ -64,6 +55,17 @@ class LayananCron extends Command
         $this->now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
         $this->count = 1;
         $this->sendMessage('Cron job Layanan BIOS telah dijalankan pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss')); 
+
+        $this->postLayananFarmasi();
+        $this->postLayananIGD();
+        $this->postLayananPoli();
+        $this->postLayananOperasi();
+        $this->postLayananRadiologi();
+        $this->postLayananRalan();
+        $this->postLayananPenjab();
+        $this->postLayananLabParameter();
+        $this->postLayananLabSample();
+        $this->postLayananRanap();
     }
 
     public function postLayananFarmasi()
