@@ -7,6 +7,7 @@ use BotMan\BotMan\Cache\LaravelCache;
 use BotMan\BotMan\BotManFactory;
 use BotMan\BotMan\Drivers\DriverManager;
 use App\Conversations\SheduleTaskConversation;
+use Illuminate\Support\Facades\Artisan;
 
 class BotManController extends Controller
 {
@@ -29,17 +30,18 @@ class BotManController extends Controller
         //     $bot->startConversation(new SheduleTaskConversation());
         // })->stopsConversation();
  
-        $botman->hears('/kitab|kitab', function (BotMan $bot) {
-            $bot->startConversation(new ExampleConversation());
-        })->stopsConversation();
+        // $botman->hears('/kitab|kitab', function (BotMan $bot) {
+        //     $bot->startConversation(new ExampleConversation());
+        // })->stopsConversation();
  
         // $botman->hears('/lapor|lapor|laporkan', function (BotMan $bot) {
         //     $bot->reply('Silahkan laporkan di email weare@zalabs.my.id . Laporan kamu akan sangat berharga buat kemajuan bot ini.');
         // })->stopsConversation();
  
-        // $botman->hears('/tentang|about|tentang', function (BotMan $bot) {
-        //     $bot->reply('HaditsID Telegram Bot By ZaLabs. Mohon maaf jika server terasa lamban, dikarenakan menggunakan free hosting dari Heroku(.)com. Data didapatkan dari https://s.id/zXj6S .');
-        // })->stopsConversation();
+        $botman->hears('/bios', function (BotMan $bot) {
+            Artisan::call('cron:layanan');
+            $bot->reply('Task Schedul Telah dijalankan.');
+        })->stopsConversation();
  
         $botman->listen();
     }
