@@ -39,9 +39,7 @@ class BotManController extends Controller
         // })->stopsConversation();
  
         $botman->hears('/bios', function (BotMan $bot) {
-            Artisan::command('cron:layanan', function(){
-                $this->info('Task Scheduling BIOS sudah dijalankan.');
-            });
+            Artisan::command('cron:layanan');
             $bot->reply('Task Schedul Telah dijalankan.');
         })->stopsConversation();
  
