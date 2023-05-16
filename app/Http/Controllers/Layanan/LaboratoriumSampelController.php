@@ -12,18 +12,18 @@ use Illuminate\Support\Facades\Cache;
 class LaboratoriumSampelController extends Controller
 {
     use Token, RequestAPI, RequestDB;
-    public $header, $token, $url, $data, $headTable, $tanggal;
+    public $header, $token, $url, $data, $headTable, $tanggal, $keterangan;
 
     public function __construct(Request $request)
     {
-        $this->token = Cache::get('token');
+        $this->token = Cache::get('token') ?? $this->getToken()->json()['token'];
         $this->header = [
             'token' => $this->token,
             'Content-Type' => 'multipart/form-data'
         ];
         $this->url = 'kesehatan/layanan/laboratorium';
         $this->data = $this->read();
-        $this->headTable = ['Tgl Transaksi', 'Jumlah'];
+        $this->headTable = ['Tgl Transaksi', 'Nilai Indeks', 'Status', 'Send at'];
         $this->tanggal = $request->input('tgl') ?? Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
         $this->keterangan = [
             'Data yang dikirimkan merupakan posisi data terakhir pada saat tanggal berkenaan, tidak akumulatif.',
@@ -45,14 +45,14 @@ class LaboratoriumSampelController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        $response = $this->postData($this->url, $this->header, $input);
+        unset($input['_token']);
+        $response = $this->postData($this->url, $this->header, $input, 'bios_log_lab_sample');
         return $response->json();
     }
 
     public function read()
     {
-        $response = $this->getData($this->url, $this->header);
-        return $response->json();
+        return $this->bacaLog('bios_log_lab_sample');
     }
 
     // public function countLab()

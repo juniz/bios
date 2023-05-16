@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Http\Traits\Token;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Ramsey\Uuid\Uuid;
 
 class PoliController extends Controller
 {
@@ -16,7 +18,7 @@ class PoliController extends Controller
 
     public function __construct(Request $request)
     {
-        $this->token = Cache::get('token');
+        $this->token = Cache::get('token') ?? $this->getToken()->json()['token'];
         $this->header = [
             'token' => $this->token,
             'Content-Type' => 'multipart/form-data'
@@ -55,6 +57,34 @@ class PoliController extends Controller
                 'jumlah' => $jumlah,
             ];
             $response = $this->postData($this->url, $this->header, $body);
+            $cek = DB::table('bios_log_poli')
+                        ->where('tgl_transaksi', $input['tgl_transaksi'])
+                        ->where('nama_poli', $layanan)
+                        ->first();
+            if($cek){
+                DB::table('bios_log_poli')
+                    ->where('tgl_transaksi', $input['tgl_transaksi'])
+                    ->where('nama_poli', $layanan)
+                    ->update([
+                        'jumlah' => $jumlah,
+                        'user' => $request->session()->get('username'),
+                        'response' => $response->json()['message'] ?? 'Gagal mengirim data',
+                        'updated_at' => Carbon::now()->format('Y-m-d H:i:m'),
+                    ]);
+            }else{
+                DB::table('bios_log_poli')
+                ->insert([
+                    'uuid' => Uuid::uuid5(Uuid::NAMESPACE_URL, $input['tgl_transaksi'].''.$layanan),
+                    'tgl_transaksi' => $input['tgl_transaksi'],
+                    'nama_poli' => $layanan,
+                    'jumlah' => $jumlah,
+                    'user' => $request->session()->get('username'),
+                    'response' => $response->json()['message'] ?? 'Gagal mengirim data',
+                    'send_at' => Carbon::now()->format('Y-m-d H:i:m'),
+                    'updated_at' => Carbon::now()->format('Y-m-d H:i:m'),
+                ]);
+            }
+
             if($response->json()['status'] != 'MSG20003'){
                 return $response->json();
             }

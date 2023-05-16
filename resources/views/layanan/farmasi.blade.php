@@ -42,14 +42,18 @@
                     ];
                 @endphp
                 <x-adminlte-datatable id="tableJumlahFarmasi" :heads="$head" head-theme="dark" :config="$config" striped hoverable bordered compressed>
-                    @if(!empty($data['data']['datas']))
-                        @foreach($data['data']['datas'] as $row)
-                            <tr>
-                                <td>{{ $row['tgl_transaksi'] }}</td>
-                                <td>{{ $row['jumlah'] }}</td>
-                            </tr>
-                        @endforeach
-                    @endif
+                    @forelse($data as $data)
+                        <tr @if($data->response == 'MSG20003') class="bg-success" @endif>
+                            <td>{{ $data->tgl_transaksi }}</td>
+                            <td>{{ $data->jumlah }}</td>
+                            <td>{{ $data->response }}</td>
+                            <td>{{ $data->send_at }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4" class="text-center">Data Kosong</td>
+                        </tr>
+                    @endforelse
                 </x-adminlte-datatable>
             </x-adminlte-card>
         </div>

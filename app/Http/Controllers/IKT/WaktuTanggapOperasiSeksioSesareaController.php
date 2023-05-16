@@ -15,7 +15,7 @@ class WaktuTanggapOperasiSeksioSesareaController extends Controller
 
     public function __construct()
     {
-        $this->token = Cache::get('token');
+        $this->token = Cache::get('token') ?? $this->getToken()->json()['token'];
         $this->header = [
             'token' => $this->token,
             'Content-Type' => 'multipart/form-data'
@@ -41,7 +41,7 @@ class WaktuTanggapOperasiSeksioSesareaController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        $response = $this->postData($this->url, $this->header, $input);
+        $response = $this->postData($this->url, $this->header, $input, 'bios_log_operasi');
         return $response->json();
     }
 

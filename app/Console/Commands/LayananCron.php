@@ -7,6 +7,8 @@ use App\Http\Traits\RequestDB;
 use Illuminate\Support\Carbon;
 use App\Http\Traits\RequestAPI;
 use App\Http\Traits\Telegram;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class LayananCron extends Command
 {
@@ -45,8 +47,7 @@ class LayananCron extends Command
 
     public function init()
     {
-        $token = $this->getToken();
-        $this->token = $token->json()['token'];
+        $this->token = Cache::get('token') ?? $this->getToken()->json()['token'];
         $this->header = [
             'token' => $this->token,
             'Content-Type' => 'multipart/form-data'
@@ -54,7 +55,7 @@ class LayananCron extends Command
         $this->tanggal = Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
         $this->now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
         $this->count = 1;
-        $this->sendMessage('Cron job Layanan BIOS telah dijalankan pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss')); 
+        // $this->sendMessage('Cron job Layanan BIOS telah dijalankan pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss')); 
 
         $this->postLayananFarmasi();
         $this->postLayananIGD();
@@ -72,13 +73,23 @@ class LayananCron extends Command
     {
         $url = 'kesehatan/layanan/farmasi';
         $bidang = 'FARMASI';
+        $jumlah = $this->countFarmasi($this->tanggal);
         $input = array(
             'tgl_transaksi' => $this->tanggal,
-            'jumlah' => $this->countFarmasi($this->tanggal),
+            'jumlah' => $jumlah
         );
-        $response = $this->postData($url, $this->header, $input, $this->count == 20 ? 600 : 0);
+        $response = $this->postData($url, $this->header, $input, 'bios_log_farmasi', $this->count == 20 ? 600 : 0);
+        // $data = [
+        //     'uuid'  =>  Str::uuid(),
+        //     'tgl_transaksi' => $this->tanggal,
+        //     'jumlah' => $jumlah,
+        //     'user'  =>  'server',
+        //     'response' => $response->json()['status'] ?? 500,
+        //     'send_at' => Carbon::now(),
+        //     'updated_at' => Carbon::now(),
+        // ];
+        // $this->simpanLog('bios_log_farmasi', $data);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-        $this->sendMessage($this->count . '. ' . $bidang . ' - ' . $now . ' - ' . $response->json()['message']);
         $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
         $this->count == 20 ? $this->count = 1 :  $this->count++;
     }
@@ -87,13 +98,23 @@ class LayananCron extends Command
     {
         $url = 'kesehatan/layanan/pasien_igd';
         $bidang = 'IGD';
+        $jumlah = $this->countIGD($this->tanggal);
         $input = array(
             'tgl_transaksi' => $this->tanggal,
-            'jumlah' => $this->countIGD($this->tanggal),
+            'jumlah' => $jumlah,
         );
-        $response = $this->postData($url, $this->header, $input, $this->count == 20 ? 600 : 0);
+        $response = $this->postData($url, $this->header, $input, 'bios_log_igd', $this->count == 20 ? 600 : 0);
+        // $data = [
+        //     'uuid'  =>  Str::uuid(),
+        //     'tgl_transaksi' => $this->tanggal,
+        //     'jumlah' => $jumlah,
+        //     'user'  =>  'server',
+        //     'response' => $response->json()['status'] ?? 500,
+        //     'send_at' => Carbon::now(),
+        //     'updated_at' => Carbon::now(),
+        // ];
+        // $this->simpanLog('bios_log_igd', $data);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-        $this->sendMessage($this->count . '. ' . $bidang . ' - ' . $now . ' - ' . $response->json()['message']);
         $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
         $this->count == 20 ? $this->count = 1 :  $this->count++;
     }
@@ -109,10 +130,20 @@ class LayananCron extends Command
                 'nama_poli' => $p->nm_poli,
                 'jumlah' => $p->jml,
             );
-            $response = $this->postData($url, $this->header, $input, $this->count == 20 ? 600 : 0);
+            $response = $this->postData($url, $this->header, $input, 'bios_log_poli', $this->count == 20 ? 600 : 0);
+            // $data = [
+            //     'uuid'  =>  Str::uuid(),
+            //     'tgl_transaksi' => $this->tanggal,
+            //     'nama_poli' => $p->nm_poli,
+            //     'jumlah' => $p->jml,
+            //     'user'  =>  'server',
+            //     'response' => $response->json()['status'] ?? 500,
+            //     'send_at' => Carbon::now(),
+            //     'updated_at' => Carbon::now(),
+            // ];
+            // $this->simpanLog('bios_log_poli', $data);
             $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-            $this->sendMessage($this->count . '. ' . $bidang . ' - ' . $now . ' - ' . $response->json()['message']);
-            $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.'-'.$p->nm_poli.':'.$response->body());
+            $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
             $this->count == 20 ? $this->count = 1 :  $this->count++;
         }
     }
@@ -128,10 +159,20 @@ class LayananCron extends Command
                 'klasifikasi_operasi' => $o->kategori,
                 'jumlah' => $o->jml,
             );
-            $response = $this->postData($url, $this->header, $input, $this->count == 20 ? 600 : 0);
+            $response = $this->postData($url, $this->header, $input, 'bios_log_operasi', $this->count == 20 ? 600 : 0);
+            // $data = [
+            //     'uuid'  =>  Str::uuid(),
+            //     'tgl_transaksi' => $this->tanggal,
+            //     'klasifikasi_operasi' => $o->kategori,
+            //     'jumlah' => $o->jml,
+            //     'user'  =>  'server',
+            //     'response' => $response->json()['status'] ?? 500,
+            //     'send_at' => Carbon::now(),
+            //     'updated_at' => Carbon::now(),
+            // ];
+            // $this->simpanLog('bios_log_operasi', $data);
             $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-            $this->sendMessage($this->count . '. ' . $bidang.' '.$o->kategori . ' - ' . $now . ' - ' . $response->json()['message']);
-            $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.'-'.$o->kategori.':'.$response->body());
+            $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
             $this->count == 20 ? $this->count = 1 :  $this->count++;
         }
     }
@@ -140,13 +181,23 @@ class LayananCron extends Command
     {
         $url = 'kesehatan/layanan/radiologi';
         $bidang = 'RADIOLOGI';
+        $jumlah =  $this->countRadiologi($this->tanggal);
         $input = array(
             'tgl_transaksi' => $this->tanggal,
-            'jumlah' => $this->countRadiologi($this->tanggal),
+            'jumlah' => $jumlah,
         );
-        $response = $this->postData($url, $this->header, $input, $this->count == 20 ? 600 : 0);
+        $response = $this->postData($url, $this->header, $input, 'bios_log_radiologi', $this->count == 20 ? 600 : 0);
+        // $data = [
+        //     'uuid'  =>  Str::uuid(),
+        //     'tgl_transaksi' => $this->tanggal,
+        //     'jumlah' => $jumlah,
+        //     'user'  =>  'server',
+        //     'response' => $response->json()['status'] ?? 500,
+        //     'send_at' => Carbon::now(),
+        //     'updated_at' => Carbon::now(),
+        // ];
+        // $this->simpanLog('bios_log_radiologi', $data);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-        $this->sendMessage($this->count . '. ' . $bidang . ' - ' . $now . ' - ' . $response->json()['message']);
         $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
         $this->count == 20 ? $this->count = 1 :  $this->count++;
     }
@@ -155,13 +206,23 @@ class LayananCron extends Command
     {
         $url = 'kesehatan/layanan/pasien_ralan';
         $bidang = 'RALAN';
+        $jumlah =  $this->countRalan($this->tanggal);
         $input = array(
             'tgl_transaksi' => $this->tanggal,
-            'jumlah' => $this->countRalan($this->tanggal),
+            'jumlah' => $jumlah,
         );
-        $response = $this->postData($url, $this->header, $input, $this->count == 20 ? 600 : 0);
+        $response = $this->postData($url, $this->header, $input, 'bios_log_ralan', $this->count == 20 ? 600 : 0);
+        // $data = [
+        //     'uuid'  =>  Str::uuid(),
+        //     'tgl_transaksi' => $this->tanggal,
+        //     'jumlah' => $jumlah,
+        //     'user'  =>  'server',
+        //     'response' => $response->json()['status'] ?? 500,
+        //     'send_at' => Carbon::now(),
+        //     'updated_at' => Carbon::now(),
+        // ];
+        // $this->simpanLog('bios_log_ralan', $data);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-        $this->sendMessage($this->count . '. ' . $bidang . ' - ' . $now . ' - ' . $response->json()['message']);
         $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
         $this->count == 20 ? $this->count = 1 :  $this->count++;
     }
@@ -170,14 +231,26 @@ class LayananCron extends Command
     {
         $url = 'kesehatan/layanan/bpjs_nonbpbjs';
         $bidang = 'BPJS DAN NON BPJS';
+        $jumlah_bpjs =  $this->countBPJS($this->tanggal);
+        $jumlah_non_bpjs =  $this->countNonBPJS($this->tanggal);
         $input = array(
             'tgl_transaksi' => $this->tanggal,
-            'jumlah_bpjs' => $this->countBPJS($this->tanggal),
-            'jumlah_non_bpjs' => $this->countNonBPJS($this->tanggal),
+            'jumlah_bpjs' => $jumlah_bpjs,
+            'jumlah_non_bpjs' => $jumlah_non_bpjs,
         );
-        $response = $this->postData($url, $this->header, $input, $this->count == 20 ? 600 : 0);
+        $response = $this->postData($url, $this->header, $input, 'bios_log_bpjs', $this->count == 20 ? 600 : 0);
+        // $data = [
+        //     'uuid'  =>  Str::uuid(),
+        //     'tgl_transaksi' => $this->tanggal,
+        //     'jumlah_bpjs' => $jumlah_bpjs,
+        //     'jumlah_non_bpjs' => $jumlah_non_bpjs,
+        //     'user'  =>  'server',
+        //     'response' => $response->json()['status'] ?? 500,
+        //     'send_at' => Carbon::now(),
+        //     'updated_at' => Carbon::now(),
+        // ];
+        // $this->simpanLog('bios_log_bpjs', $data);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-        $this->sendMessage($this->count . '. ' . $bidang . ' - ' . $now . ' - ' . $response->json()['message']);
         $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
         $this->count == 20 ? $this->count = 1 :  $this->count++;
     }
@@ -193,10 +266,20 @@ class LayananCron extends Command
                 'nama_layanan' => $l->nm_perawatan,
                 'jumlah' => $l->jml,
             );
-            $response = $this->postData($url, $this->header, $input, $this->count == 20 ? 600 : 0);
+            $response = $this->postData($url, $this->header, $input, 'bios_log_lab_parameter', $this->count == 20 ? 600 : 0);
+            // $data = [
+            //     'uuid'  =>  Str::uuid(),
+            //     'tgl_transaksi' => $this->tanggal,
+            //     'nama_layanan' => $l->nm_perawatan,
+            //     'jumlah' => $l->jml,
+            //     'user'  =>  'server',
+            //     'response' => $response->json()['status'] ?? 500,
+            //     'send_at' => Carbon::now(),
+            //     'updated_at' => Carbon::now(),
+            // ];
+            // $this->simpanLog('bios_log_lab_parameter', $data);
             $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-            $this->sendMessage($this->count . '. ' . $bidang.' '.$l->nm_perawatan . ' - ' . $now . ' - ' . $response->json()['message']);
-            $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.'-'.$l->nm_perawatan.':'.$response->body());
+            $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
             $this->count == 20 ? $this->count = 1 :  $this->count++;
         }
     }
@@ -205,13 +288,23 @@ class LayananCron extends Command
     {
         $url = 'kesehatan/layanan/laboratorium';
         $bidang = 'LABORATORIUM SAMPLE';
+        $jumlah = $this->getLab($this->tanggal);
         $input = array(
             'tgl_transaksi' => $this->tanggal,
-            'jumlah' =>  $this->getLab($this->tanggal),
+            'jumlah' =>  $jumlah,
         );
-        $response = $this->postData($url, $this->header, $input, $this->count == 20 ? 600 : 0);
+        $response = $this->postData($url, $this->header, $input, 'bios_log_lab_sample', $this->count == 20 ? 600 : 0);
+        // $data = [
+        //     'uuid'  =>  Str::uuid(),
+        //     'tgl_transaksi' => $this->tanggal,
+        //     'jumlah' => $jumlah,
+        //     'user'  =>  'server',
+        //     'response' => $response->json()['status'] ?? 500,
+        //     'send_at' => Carbon::now(),
+        //     'updated_at' => Carbon::now(),
+        // ];
+        // $this->simpanLog('bios_log_lab_sample', $data);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-        $this->sendMessage($this->count . '. ' . $bidang . ' - ' . $now . ' - ' . $response->json()['message']);
         $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
         $this->count == 20 ? $this->count = 1 :  $this->count++;
     }
@@ -227,10 +320,20 @@ class LayananCron extends Command
                 'kode_kelas' => $l->kelas,
                 'jumlah' => $l->jml,
             );
-            $response = $this->postData($url, $this->header, $input, $this->count == 20 ? 600 : 0);
+            $response = $this->postData($url, $this->header, $input, 'bios_log_ranap', $this->count == 20 ? 600 : 0);
+            // $data = [
+            //     'uuid'  =>  Str::uuid(),
+            //     'tgl_transaksi' => $this->tanggal,
+            //     'kode_kelas' => $l->kelas,
+            //     'jumlah' => $l->jml,
+            //     'user'  =>  'server',
+            //     'response' => $response->json()['status'] ?? 500,
+            //     'send_at' => Carbon::now(),
+            //     'updated_at' => Carbon::now(),
+            // ];
+            // $this->simpanLog('bios_log_ranap', $data);
             $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-            $this->sendMessage($this->count . '. ' . $bidang.' '.$l->kelas . ' - ' . $now . ' - ' . $response->json()['message']);
-            $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.'-'.$l->kelas.':'.$response->body());
+            $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
             $this->count == 20 ? $this->count = 1 :  $this->count++;
         }
     }

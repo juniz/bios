@@ -17,7 +17,7 @@ class SpesialisController extends Controller
 
     public function __construct()
     {
-        $this->token = Cache::get('token');
+        $this->token = Cache::get('token') ?? $this->getToken()->json()['token'];
         $this->header = [
             'token' => $this->token,
             'Content-Type' => 'multipart/form-data'

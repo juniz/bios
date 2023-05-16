@@ -6,10 +6,12 @@ use Illuminate\Support\Facades\Http;
 use App\Http\Traits\Telegram;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 trait Token {
     use Telegram;
     public function getToken() {
+        $i = 0;
         try{
             $response = Http::post(config('URL_TOKEN', 'https://training-bios2.kemenkeu.go.id/api/token'),[
                 'satker' => config('SATKER', '679614'),
@@ -17,20 +19,22 @@ trait Token {
             ]);
             if($response->json()['status'] != 'MSG20004'){
                 $this->sendMessage('Token Error : '.$response->getBody());
-                Log::warning($response->getBody());
-                // return response()->json(array(
-                //     "status" => $response->json()['status'],
-                //     "message" => $response->json()['message'],
-                //     "token" => "-"
-                // ));
+                if($i<3){
+                    $i++;
+                    $this->getToken();
+                }
+                
             }
+            Cache::put('token', $response->json()['token'] ?? null, now()->addMinutes(1440));
+            return $response;
         
-        }catch(ConnectionException $e){
-            $this->errorToken($e->getMessage());
-            return null;
+        }catch(\Exception $e){
+            $response = $this->errorToken($e->getMessage());
+            $this->sendMessage($e->getMessage() ?? 'Error Token');
+            return $response;
         }
         
-        return $response;
+        // return $response;
     }
 
     public function errorToken($message){

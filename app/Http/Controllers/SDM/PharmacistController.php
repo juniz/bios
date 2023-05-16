@@ -13,11 +13,11 @@ use Illuminate\Support\Facades\Cache;
 class PharmacistController extends Controller
 {
     use Token, RequestAPI, RequestDB;
-    public $header, $token, $url, $data, $headTable, $bidang, $keterangan;
+    public $header, $token, $url, $data, $headTable, $bidang, $keterangan, $tanggal;
 
     public function __construct()
     {
-        $this->token = Cache::get('token');
+        $this->token = Cache::get('token') ?? $this->getToken()->json()['token'];
         $this->header = [
             'token' => $this->token,
             'Content-Type' => 'multipart/form-data'

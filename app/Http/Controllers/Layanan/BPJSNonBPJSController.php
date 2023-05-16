@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Layanan;
 use App\Http\Traits\RequestAPI;
 use App\Http\Traits\RequestDB;
+use Illuminate\Support\Facades\DB;
 use App\Http\Traits\Token;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Ramsey\Uuid\Uuid;
 
 class BPJSNonBPJSController extends Controller
 {
@@ -16,13 +18,13 @@ class BPJSNonBPJSController extends Controller
 
     public function __construct(Request $request)
     {
-        $this->token = Cache::get('token');
+        $this->token = Cache::get('token') ?? $this->getToken()->json()['token'];
         $this->header = [
             'token' => $this->token,
             'Content-Type' => 'multipart/form-data'
         ]; 
         $this->url = 'kesehatan/layanan/bpjs_nonbpbjs';
-        $this->data = $this->read();
+        // $this->data = $this->read();
         $this->headTable = ['Tgl Transaksi', 'Jumlah BPJS', 'Jumlah Non BPJS'];
         $this->tanggal = $request->input('tgl') ?? Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
         $this->keterangan = [
@@ -47,6 +49,22 @@ class BPJSNonBPJSController extends Controller
     {
         $input = $request->all();
         $response = $this->postData($this->url, $this->header, $input);
+        try{
+            DB::table('bios_log_bpjs')
+            ->upsert([
+                'uuid' => Uuid::uuid5(Uuid::NAMESPACE_URL, $input['tgl_transaksi']),
+                'tgl_transaksi' => $input['tgl_transaksi'],
+                'jumlah_bpjs' => $input['jumlah_bpjs'],
+                'jumlah_non_bpjs' => $input['jumlah_non_bpjs'],
+                'user' => $request->session()->get('username'),
+                'response' => $response->json()['message'] ?? 'Gagal mengirim data',
+                'send_at' => Carbon::now()->format('Y-m-d H:i:m'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:m'),
+            ], ['tgl_transaksi', 'uuid'], 
+            ['jumlah_bpjs', 'jumlah_non_bpjs', 'updated_at']);
+        }catch(\Exception $e){
+            
+        }
         return $response->json();
     }
 

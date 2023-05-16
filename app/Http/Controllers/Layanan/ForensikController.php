@@ -16,14 +16,14 @@ class ForensikController extends Controller
 
     public function __construct(Request $request)
     {
-        $this->token = Cache::get('token');
+        $this->token = Cache::get('token') ?? $this->getToken()->json()['token'];
         $this->header = [
             'token' => $this->token,
             'Content-Type' => 'multipart/form-data'
         ];
         $this->url = 'kesehatan/layanan/forensik';
         $this->data = $this->read();
-        $this->headTable = ['Tgl Transaksi', 'Jumlah'];
+        $this->headTable = ['Tgl Transaksi', 'Jumlah', 'Status', 'Send at'];
         $this->tanggal = $request->input('tgl') ?? Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
         $this->keterangan = [
             'Data yang dikirimkan merupakan posisi data terakhir pada saat tanggal berkenaan, tidak akumulatif.',

@@ -15,7 +15,7 @@ class IGDController extends Controller
 
     public function __construct(Request $request)
     {
-        $this->token = Cache::get('token');
+        $this->token = Cache::get('token') ?? $this->getToken()->json()['token'];
         $this->header = [
             'token' => $this->token,
             'Content-Type' => 'multipart/form-data'

@@ -40,7 +40,7 @@
                         "responsive" => true,
                     ];
                 @endphp
-                <x-adminlte-datatable id="tableBPJS" :heads="$head" head-theme="dark" :config="$config" striped hoverable bordered compressed>
+                {{-- <x-adminlte-datatable id="tableBPJS" :heads="$head" head-theme="dark" :config="$config" striped hoverable bordered compressed>
                     @if(!empty($data['data']['datas']))
                         @foreach($data['data']['datas'] as $row)
                             <tr>
@@ -50,7 +50,7 @@
                             </tr>
                         @endforeach
                     @endif
-                </x-adminlte-datatable>
+                </x-adminlte-datatable> --}}
             </x-adminlte-card>
         </div>
     </div>
@@ -62,7 +62,7 @@
 @stop
 
 @section('js')
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {{-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
     <script>
 
         function reload(){
@@ -119,7 +119,7 @@
                         title: 'Error',
                         text: 'Opsss Terjadi Kesalahan',
                         showConfirmButton: true,
-                        });
+                    });
                 }
             });
         }

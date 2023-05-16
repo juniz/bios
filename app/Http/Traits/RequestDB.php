@@ -2,8 +2,10 @@
 
 namespace App\Http\Traits;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 trait RequestDB {
+    use Telegram;
 
     public function anggota($bidang)
     {
@@ -188,17 +190,104 @@ trait RequestDB {
                     ->get();
     }
 
-    public function insertLog($url, $data, $status, $message, $error, $sendAt)
+    public function countBOR()
     {
-        $data = [
-            'post_url' => $url,
-            'data' => $data,
-            'status' => $status,
-            'message' => $message,
-            'error' => $error,
-            'send_at' => $sendAt
-        ];
-        return DB::table('bios_log_pengiriman')->insert($data);
+        $first = Carbon::now()->startOfMonth()->subMonthsNoOverflow()->toDateString();
+        $last = Carbon::now()->subMonthsNoOverflow()->endOfMonth()->toDateString();
+        $hari = Carbon::now()->subMonthsNoOverflow()->endOfMonth()->format('d');
+        try{
+
+            $lamaInap = DB::table('kamar_inap')
+                    ->whereBetween('tgl_masuk', [$first, $last])
+                    ->sum('lama');
+            $jmlKamar = DB::table('kamar')
+                        ->where('statusdata', '1')
+                        ->count();
+            $bor = ($lamaInap / ($jmlKamar*$hari)) * 100;
+            $this->sendMessage(' '.$first.' '.$last.' '.$hari);
+        }catch(\Exception $e){
+            $this->sendMessage('Simpan Log Bor gagal : '.$e->getMessage() ?? '');
+            $bor = 0;
+        }
+        
+        return round($bor);
+    }
+
+    public function countALOS()
+    {
+        $first = Carbon::now()->startOfMonth()->subMonthsNoOverflow()->toDateString();
+        $last = Carbon::now()->subMonthsNoOverflow()->endOfMonth()->toDateString();
+        try{
+
+            $lamaInap = DB::table('kamar_inap')
+                    ->whereBetween('tgl_masuk', [$first, $last])
+                    ->sum('lama');
+            $jmlRawat = DB::table('kamar_inap')
+                        ->whereBetween('tgl_keluar', [$first, $last])
+                        ->count();
+            $alos = $lamaInap / $jmlRawat;
+            $this->sendMessage(' '.$first.' '.$last);
+        }catch(\Exception $e){
+            $this->sendMessage('Simpan Log Alos gagal : '.$e->getMessage() ?? '');
+            $alos = 0;
+        }
+        
+        return round($alos);
+    }
+
+    public function countTOI()
+    {
+        $first = Carbon::now()->startOfMonth()->subMonthsNoOverflow()->toDateString();
+        $last = Carbon::now()->subMonthsNoOverflow()->endOfMonth()->toDateString();
+        $hari = Carbon::now()->subMonthsNoOverflow()->endOfMonth()->format('d');
+
+        try{
+
+            $lamaInap = DB::table('kamar_inap')
+                        ->whereBetween('tgl_masuk', [$first, $last])
+                        ->sum('lama');
+            $jmlKamar = DB::table('kamar')
+                        ->where('statusdata', '1')
+                        ->count();
+            $jmlRawat = DB::table('kamar_inap')
+                        ->whereBetween('tgl_keluar', [$first, $last])
+                        ->count();
+
+            $toi = (($jmlKamar*$hari)-$lamaInap)/$jmlRawat;
+            $this->sendMessage($toi.' '.$first.' '.$last.' '.$hari);
+
+        }catch(\Exception $e){
+            $this->sendMessage('Simpan Log Toi gagal : '.$e->getMessage() ?? '');
+            $toi = 0;
+        }
+        return round($toi);
+    }
+
+    public function countBTO()
+    {
+        $first = Carbon::now()->startOfMonth()->subMonthsNoOverflow()->toDateString();
+        $last = Carbon::now()->subMonthsNoOverflow()->endOfMonth()->toDateString();
+        $hari = Carbon::now()->subMonthsNoOverflow()->endOfMonth()->format('d');
+
+        try{
+
+            $jmlKamar = DB::table('kamar')
+                        ->where('statusdata', '1')
+                        ->count();
+
+            $jmlRawat = DB::table('kamar_inap')
+                        ->whereBetween('tgl_keluar', [$first, $last])
+                        ->count();
+
+            $bto = $jmlRawat/$jmlKamar;
+            $this->sendMessage($bto.' '.$first.' '.$last.' '.$hari);
+
+        }catch(\Exception $e){
+            $this->sendMessage('Simpan Log Bto gagal : '.$e->getMessage() ?? '');
+            $bto = 0;
+        }
+
+        return round($bto);
     }
 
     public function taskSetting($layanan)
@@ -206,6 +295,25 @@ trait RequestDB {
         $data = DB::table('bios_task_setting')
                     ->where('task_name', $layanan)
                     ->first();
+        return $data;
+    }
+
+    public function simpanLog($table, array $data)
+    {
+        try{
+
+            DB::table($table)->insert($data);
+
+        }catch(\Exception $e){
+            $this->sendMessage('Simpan Log '.$table.' gagal : '.$e->getMessage());
+        }
+    }
+
+    public function bacaLog($table)
+    {
+        $data = DB::table($table)
+                    ->orderBy('tgl_transaksi', 'desc')
+                    ->get();
         return $data;
     }
 }

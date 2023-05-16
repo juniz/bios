@@ -76,7 +76,7 @@
 @stop
 
 @section('js')
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {{-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
     <script>
 
         $(".deleteButton").on("click", function(e){
@@ -130,19 +130,19 @@
                     // console.log(response);
                     if(response.status == 'MSG20003'){
                         Swal.fire({
-                        icon: 'success',
-                        title: response.message,
-                        showConfirmButton: false,
-                        timer: 1500
+                            icon: 'success',
+                            title: response.message,
+                            showConfirmButton: false,
+                            timer: 1500
                         }).then((result) => {
                             window.location.reload();
-                            });
+                        });
                     }else{
                         Swal.fire({
-                        icon: 'error',
-                        title: response.message,
-                        text: JSON.stringify(response.error),
-                        showConfirmButton: true,
+                            icon: 'error',
+                            title: response.message,
+                            text: JSON.stringify(response.error),
+                            showConfirmButton: true,
                         });
                     }
                 },
