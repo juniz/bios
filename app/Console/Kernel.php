@@ -27,12 +27,12 @@ class Kernel extends ConsoleKernel
     {
         
         // $layanan =$this->taskSetting('layanan');
-        $schedule->command('cron:bulanan')->monthly()->timezone('Asia/Jakarta')->before(function(){
-            $this->sendMessage('Cron job Bulanan BIOS telah dijalankan pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss'));
-        })->after(function(){
-            $this->sendMessage('Cron job Bulanan BIOS telah selesai pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss'));
-        });
-        $schedule->command('cron:bulanan')->daily()->timezone('Asia/Jakarta')->before(function(){
+        // $schedule->command('cron:bulanan')->monthly()->timezone('Asia/Jakarta')->before(function(){
+        //     $this->sendMessage('Cron job Bulanan BIOS telah dijalankan pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss'));
+        // })->after(function(){
+        //     $this->sendMessage('Cron job Bulanan BIOS telah selesai pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss'));
+        // });
+        $schedule->command('cron:layanan')->daily()->at('10:25')->timezone('Asia/Jakarta')->before(function(){
             $this->sendMessage('Cron job Bulanan BIOS telah dijalankan pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss'));
         })->after(function(){
             $this->sendMessage('Cron job Bulanan BIOS telah selesai pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss'));
