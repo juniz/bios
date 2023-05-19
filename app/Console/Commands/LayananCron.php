@@ -54,7 +54,7 @@ class LayananCron extends Command
         ]; 
         $this->tanggal = Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
         $this->now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-        $this->count = 1;
+        $this->count = 0;
         // $this->sendMessage('Cron job Layanan BIOS telah dijalankan pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss')); 
 
         $this->postLayananFarmasi();
@@ -90,8 +90,8 @@ class LayananCron extends Command
         // ];
         // $this->simpanLog('bios_log_farmasi', $data);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-        $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
-        $this->count == 20 ? $this->count = 1 :  $this->count++;
+        $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body() ?? '500');
+        $this->count == 20 ? $this->count = 0 :  $this->count++;
     }
 
     public function postLayananIGD()
@@ -115,7 +115,7 @@ class LayananCron extends Command
         // ];
         // $this->simpanLog('bios_log_igd', $data);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-        $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body() ?? '500');
         $this->count == 20 ? $this->count = 1 :  $this->count++;
     }
 
@@ -143,7 +143,7 @@ class LayananCron extends Command
             // ];
             // $this->simpanLog('bios_log_poli', $data);
             $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-            $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
+            $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body() ?? '500');
             $this->count == 20 ? $this->count = 1 :  $this->count++;
         }
     }
@@ -172,7 +172,7 @@ class LayananCron extends Command
             // ];
             // $this->simpanLog('bios_log_operasi', $data);
             $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-            $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
+            $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body() ?? '500');
             $this->count == 20 ? $this->count = 1 :  $this->count++;
         }
     }
@@ -198,7 +198,7 @@ class LayananCron extends Command
         // ];
         // $this->simpanLog('bios_log_radiologi', $data);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-        $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body() ?? '500');
         $this->count == 20 ? $this->count = 1 :  $this->count++;
     }
 
@@ -223,7 +223,7 @@ class LayananCron extends Command
         // ];
         // $this->simpanLog('bios_log_ralan', $data);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-        $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body() ?? '500');
         $this->count == 20 ? $this->count = 1 :  $this->count++;
     }
 
@@ -251,7 +251,7 @@ class LayananCron extends Command
         // ];
         // $this->simpanLog('bios_log_bpjs', $data);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-        $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body() ?? '500');
         $this->count == 20 ? $this->count = 1 :  $this->count++;
     }
 
@@ -279,7 +279,7 @@ class LayananCron extends Command
             // ];
             // $this->simpanLog('bios_log_lab_parameter', $data);
             $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-            $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
+            $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body() ?? 'timeout');
             $this->count == 20 ? $this->count = 1 :  $this->count++;
         }
     }
@@ -305,7 +305,7 @@ class LayananCron extends Command
         // ];
         // $this->simpanLog('bios_log_lab_sample', $data);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-        $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body() ?? '500');
         $this->count == 20 ? $this->count = 1 :  $this->count++;
     }
 
@@ -333,7 +333,7 @@ class LayananCron extends Command
             // ];
             // $this->simpanLog('bios_log_ranap', $data);
             $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-            $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body());
+            $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body() ?? '500');
             $this->count == 20 ? $this->count = 1 :  $this->count++;
         }
     }

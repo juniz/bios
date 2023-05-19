@@ -301,8 +301,197 @@ trait RequestDB {
     public function simpanLog($table, array $data)
     {
         try{
-            if($table == 'bios_log')
-            DB::table($table)->insert($data);
+            switch ($table) {
+                case 'bios_log_lab_parameter':
+                    $cek = DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->where('nama_layanan', $data['nama_layanan'])
+                            ->first();
+                    if($cek){
+                        DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->where('nama_layanan', $data['nama_layanan'])
+                            ->update([
+                                'jumlah'    => $data['jumlah'],
+                                'response'  => $data['response'],
+                                'user'  =>  $data['user'] ?? 'server',
+                                'updated_at'    =>  Carbon::now()->toDateTimeString()
+                            ]);
+                    }else{
+                        DB::table($table)->insert($data);
+                    }
+                    break;
+
+                case 'bios_log_operasi':
+                    $cek = DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->where('klasifikasi_operasi', $data['klasifikasi_operasi'])
+                            ->first();
+                    if($cek){
+                        DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->where('klasifikasi_operasi', $data['klasifikasi_operasi'])
+                            ->update([
+                                'jumlah'    => $data['jumlah'],
+                                'response'  => $data['response'],
+                                'user'  =>  $data['user'] ?? 'server',
+                                'updated_at'    =>  Carbon::now()->toDateTimeString()
+                            ]);
+                    }else{
+                        DB::table($table)->insert($data);
+                    }
+                    break;
+
+                case 'bios_log_poli':
+                    $cek = DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->where('nama_layanan', $data['nama_layanan'])
+                            ->first();
+                    if($cek){
+                        DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->where('nama_poli', $data['nama_poli'])
+                            ->update([
+                                'jumlah'    => $data['jumlah'],
+                                'response'  => $data['response'],
+                                'user'  =>  $data['user'] ?? 'server',
+                                'updated_at'    =>  Carbon::now()->toDateTimeString()
+                            ]);
+                    }else{
+                        DB::table($table)->insert($data);
+                    }
+                    break;
+
+                case 'bios_log_ranap':
+                    $cek = DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->where('kode_kelas', $data['kode_kelas'])
+                            ->first();
+                    if($cek){
+                        DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->where('kode_kelas', $data['kode_kelas'])
+                            ->update([
+                                'jumlah'    => $data['jumlah'],
+                                'response'  => $data['response'],
+                                'user'  =>  $data['user'] ?? 'server',
+                                'updated_at'    =>  Carbon::now()->toDateTimeString()
+                            ]);
+                    }else{
+                        DB::table($table)->insert($data);
+                    }
+                    break;
+
+                case 'bios_log_bpjs':
+                    $cek = DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->first();
+                    if($cek){
+                        DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->update([
+                                'jumlah_bpjs'    => $data['jumlah_bpjs'],
+                                'jumlah_non_bpjs'    => $data['jumlah_non_bpjs'],
+                                'response'  => $data['response'],
+                                'user'  =>  $data['user'] ?? 'server',
+                                'updated_at'    =>  Carbon::now()->toDateTimeString()
+                            ]);
+                    }else{
+                        DB::table($table)->insert($data);
+                    }
+                    break;
+
+                case 'bios_log_alos':
+                    $cek = DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->first();
+                    if($cek){
+                        DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->update([
+                                'alos'    => $data['alos'],
+                                'response'  => $data['response'],
+                                'user'  =>  $data['user'] ?? 'server',
+                                'updated_at'    =>  Carbon::now()->toDateTimeString()
+                            ]);
+                    }else{
+                        DB::table($table)->insert($data);
+                    }
+                    break;
+
+                case 'bios_log_bor':
+                    $cek = DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->first();
+                    if($cek){
+                        DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->update([
+                                'bor'    => $data['bor'],
+                                'response'  => $data['response'],
+                                'user'  =>  $data['user'] ?? 'server',
+                                'updated_at'    =>  Carbon::now()->toDateTimeString()
+                            ]);
+                    }else{
+                        DB::table($table)->insert($data);
+                    }
+                    break;
+
+                case 'bios_log_bto':
+                    $cek = DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->first();
+                    if($cek){
+                        DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->update([
+                                'bto'    => $data['bto'],
+                                'response'  => $data['response'],
+                                'user'  =>  $data['user'] ?? 'server',
+                                'updated_at'    =>  Carbon::now()->toDateTimeString()
+                            ]);
+                    }else{
+                        DB::table($table)->insert($data);
+                    }
+                    break;
+
+                case 'bios_log_toi':
+                    $cek = DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->first();
+                    if($cek){
+                        DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->update([
+                                'toi'    => $data['toi'],
+                                'response'  => $data['response'],
+                                'user'  =>  $data['user'] ?? 'server',
+                                'updated_at'    =>  Carbon::now()->toDateTimeString()
+                            ]);
+                    }else{
+                        DB::table($table)->insert($data);
+                    }
+                    break;
+                
+                default:
+                    $cek = DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->first();
+                    if($cek){
+                        DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->update([
+                                'jumlah'    => $data['jumlah'],
+                                'response'  => $data['response'],
+                                'user'  =>  $data['user'] ?? 'server',
+                                'updated_at'    =>  Carbon::now()->toDateTimeString()
+                            ]);
+                    }else{
+                        DB::table($table)->insert($data);
+                    }
+                    break;
+            }
+            
 
         }catch(\Exception $e){
 
