@@ -43,7 +43,7 @@ trait Token {
         $response = array(
             "status" => "error",
             "message" => $message,
-            "token" => "-"
+            "token" => null
         );
         // return $response;
     }

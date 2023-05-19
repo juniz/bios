@@ -47,7 +47,7 @@ class LayananCron extends Command
 
     public function init()
     {
-        $this->token = Cache::get('token') ?? $this->getToken()->json()['token'];
+        $this->token = $this->getToken()->json()['token'];
         $this->header = [
             'token' => $this->token,
             'Content-Type' => 'multipart/form-data'

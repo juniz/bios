@@ -301,11 +301,13 @@ trait RequestDB {
     public function simpanLog($table, array $data)
     {
         try{
-
+            if($table == 'bios_log')
             DB::table($table)->insert($data);
 
         }catch(\Exception $e){
+
             $this->sendMessage('Simpan Log '.$table.' gagal : '.$e->getMessage());
+
         }
     }
 
