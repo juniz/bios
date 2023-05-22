@@ -345,7 +345,7 @@ trait RequestDB {
                 case 'bios_log_poli':
                     $cek = DB::table($table)
                             ->where('tgl_transaksi', $data['tgl_transaksi'])
-                            ->where('nama_layanan', $data['nama_layanan'])
+                            ->where('nama_poli', $data['nama_poli'])
                             ->first();
                     if($cek){
                         DB::table($table)
