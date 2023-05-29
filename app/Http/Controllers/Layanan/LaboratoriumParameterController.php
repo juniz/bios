@@ -23,7 +23,7 @@ class LaboratoriumParameterController extends Controller
         ];
         $this->url = 'kesehatan/layanan/laboratorium_detail';
         $this->data = $this->read();
-        $this->headTable = ['Tgl Transaksi', 'Nama Layanan', 'Jumlah'];
+        $this->headTable = ['Tgl Transaksi', 'Nama Layanan', 'Jumlah', 'Status', 'Send at', 'Updated at', 'Aksi'];
         $this->tanggal = $request->input('tgl') ?? Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
         $this->keterangan = [
             'Data yang dikirimkan merupakan posisi data terakhir pada saat tanggal berkenaan, tidak akumulatif.',
@@ -46,18 +46,23 @@ class LaboratoriumParameterController extends Controller
     {
         $input = $request->all();
         $response = [];
-        for($i=0; $i < count($input['nama_layanan']); $i++){
-            $layanan = $input['nama_layanan'][$i];
-            $jumlah =  $input['jumlah'][$i];
-            $body = [
-                'tgl_transaksi' => $input['tgl_transaksi'],
-                'nama_layanan' => $layanan,
-                'jumlah' => $jumlah,
-            ];
-            $response = $this->postData($this->url, $this->header, $body);
-            if($response->json()['status'] != 'MSG20003'){
-                return $response->json();
+        unset($input['_token']);
+        if(is_array($input['nama_layanan'])){
+            for($i=0; $i < count($input['nama_layanan']); $i++){
+                $layanan = $input['nama_layanan'][$i];
+                $jumlah =  $input['jumlah'][$i];
+                $body = [
+                    'tgl_transaksi' => $input['tgl_transaksi'],
+                    'nama_layanan' => $layanan,
+                    'jumlah' => $jumlah,
+                ];
+                $response = $this->postData($this->url, $this->header, $body, 'bios_log_lab_parameter');
+                if($response->json()['status'] != 'MSG20003'){
+                    return $response->json();
+                }
             }
+        }else{
+            $response = $this->postData($this->url, $this->header, $input, 'bios_log_lab_parameter');
         }
         
         return $response->json();
@@ -65,8 +70,7 @@ class LaboratoriumParameterController extends Controller
 
     public function read()
     {
-        $response = $this->getData($this->url, $this->header);
-        return $response->json();
+        return $this->bacaLog('bios_log_lab_parameter');
     }
 
     // public function getLab()

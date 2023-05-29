@@ -24,8 +24,8 @@ class BPJSNonBPJSController extends Controller
             'Content-Type' => 'multipart/form-data'
         ]; 
         $this->url = 'kesehatan/layanan/bpjs_nonbpbjs';
-        // $this->data = $this->read();
-        $this->headTable = ['Tgl Transaksi', 'Jumlah BPJS', 'Jumlah Non BPJS'];
+        $this->data = $this->read();
+        $this->headTable = ['Tgl Transaksi', 'Jumlah BPJS', 'Jumlah Non BPJS', 'Status', 'Send at', 'Updated at', 'Aksi'];
         $this->tanggal = $request->input('tgl') ?? Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
         $this->keterangan = [
             'Data yang dikirimkan merupakan posisi data terakhir pada saat tanggal berkenaan, tidak akumulatif.',
@@ -48,30 +48,13 @@ class BPJSNonBPJSController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        $response = $this->postData($this->url, $this->header, $input);
-        try{
-            DB::table('bios_log_bpjs')
-            ->upsert([
-                'uuid' => Uuid::uuid5(Uuid::NAMESPACE_URL, $input['tgl_transaksi']),
-                'tgl_transaksi' => $input['tgl_transaksi'],
-                'jumlah_bpjs' => $input['jumlah_bpjs'],
-                'jumlah_non_bpjs' => $input['jumlah_non_bpjs'],
-                'user' => $request->session()->get('username'),
-                'response' => $response->json()['message'] ?? 'Gagal mengirim data',
-                'send_at' => Carbon::now()->format('Y-m-d H:i:m'),
-                'updated_at' => Carbon::now()->format('Y-m-d H:i:m'),
-            ], ['tgl_transaksi', 'uuid'], 
-            ['jumlah_bpjs', 'jumlah_non_bpjs', 'updated_at']);
-        }catch(\Exception $e){
-            
-        }
+        $response = $this->postData($this->url, $this->header, $input, 'bios_log_bpjs');
         return $response->json();
     }
 
     public function read()
     {
-        $response = $this->getData($this->url, $this->header);
-        return $response->json();
+        return $this->bacaLog('bios_log_bpjs');
     }
 
     // public function countBPJS()

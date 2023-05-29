@@ -472,6 +472,55 @@ trait RequestDB {
                         DB::table($table)->insert($data);
                     }
                     break;
+
+                case 'bios_log_ikm':
+                    $cek = DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->first();
+                    if($cek){
+                        DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->update([
+                                'nilai_indeks'    => $data['nilai_indeks'],
+                                'response'  => $data['response'],
+                                'user'  =>  $data['user'] ?? 'server',
+                                'updated_at'    =>  Carbon::now()->toDateTimeString()
+                            ]);
+                    }else{
+                        DB::table($table)->insert($data);
+                    }
+                    break;
+
+                case 'bios_log_dokpol':
+                    $cek = DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->first();
+                    if($cek){
+                        DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->update([
+                                'kedokteran_forensik'    => $data['kedokteran_forensik'],
+                                'psikiatri_forensik'    => $data['psikiatri_forensik'],
+                                'sentra_visum_dan_medikolegal'  =>  $data['sentra_visum_dan_medikolegal'],
+                                'ppat'  =>  $data['ppat'],
+                                'odontologi_forensik'    => $data['odontologi_forensik'],
+                                'psikologi_forensik'    => $data['psikologi_forensik'],
+                                'antropologi_forensik'    => $data['antropologi_forensik'],
+                                'olah_tkp_medis'    => $data['olah_tkp_medis'],
+                                'kesehatan_tahanan'   => $data['kesehatan_tahanan'],
+                                'narkoba'   => $data['narkoba'],
+                                'toksikologi_medik'   => $data['toksikologi_medik'],
+                                'pelayanan_dna'  => $data['pelayanan_dna'],
+                                'pam_keslap_food_security'  => $data['pam_keslap_food_security'],
+                                'dvi'   => $data['dvi'],
+                                'response'  => $data['response'],
+                                'user'  =>  $data['user'] ?? 'server',
+                                'updated_at'    =>  Carbon::now()->toDateTimeString()
+                            ]);
+                    }else{
+                        DB::table($table)->insert($data);
+                    }
+                    break;
                 
                 default:
                     $cek = DB::table($table)

@@ -33,7 +33,7 @@ class Kernel extends ConsoleKernel
         })->after(function(){
             $this->sendMessage('Cron job Bulanan BIOS telah selesai pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss'));
         });
-        $schedule->command('cron:layanan')->daily()->timezone('Asia/Jakarta')->before(function(){
+        $schedule->command('cron:layanan')->daily()->at('03:00')->timezone('Asia/Jakarta')->before(function(){
             $this->sendMessage('Cron job Bulanan BIOS telah dijalankan pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss'));
         })->after(function(){
             $this->sendMessage('Cron job Bulanan BIOS telah selesai pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss'));

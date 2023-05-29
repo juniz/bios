@@ -22,10 +22,10 @@ class AlosController extends Controller
         ];
         $this->url = 'kesehatan/layanan/alos';
         $this->data = $this->read();
-        $this->headTable = ['Tgl Transaksi', 'Jumlah ALOS'];
+        $this->headTable = ['Tgl Transaksi', 'ALOS', 'Status', 'Send at', 'updated at', 'Aksi'];
         $this->keterangan = [
             'Data yang dikirimkan merupakan posisi data terakhir pada saat tanggal berkenaan, tidak akumulatif.',
-            'Data dikirimkan per periode harian.',
+            'Data dikirimkan per periode bulanan.',
         ];
     }
 
@@ -41,13 +41,12 @@ class AlosController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        $response = $this->postData($this->url, $this->header, $input);
+        $response = $this->postData($this->url, $this->header, $input, 'bios_log_alos');
         return $response->json();
     }
 
     public function read()
     {
-        $response = $this->getData($this->url, $this->header);
-        return $response->json();
+        return $this->bacaLog('bios_log_alos');
     }
 }

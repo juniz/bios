@@ -8,7 +8,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <x-adminlte-card title="Input Jumlah Pasien BPJS / Non-BPJS" theme="dark" theme-mode="outline">
                 <div class="row">
                     <x-adminlte-input id="bpjs" name="bpjs" label="BPJS" type="number" value="{{$jumlah_BPJS}}" fgroup-class="col-md-6" disable-feedback/>
@@ -32,7 +32,7 @@
                 </ol>
             </x-adminlte-card>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-12">
             <x-adminlte-card title="Data Jumlah Pasien BPJS / Non-BPJS" theme="dark" theme-mode="outline">
                 @php
                     $config = [
@@ -40,17 +40,25 @@
                         "responsive" => true,
                     ];
                 @endphp
-                {{-- <x-adminlte-datatable id="tableBPJS" :heads="$head" head-theme="dark" :config="$config" striped hoverable bordered compressed>
-                    @if(!empty($data['data']['datas']))
-                        @foreach($data['data']['datas'] as $row)
-                            <tr>
-                                <td>{{ $row['tgl_transaksi'] }}</td>
-                                <td>{{ $row['jumlah_bpjs'] }}</td>
-                                <td>{{ $row['jumlah_non_bpjs'] }}</td>
-                            </tr>
-                        @endforeach
-                    @endif
-                </x-adminlte-datatable> --}}
+                <x-adminlte-datatable id="tableBPJS" :heads="$head" head-theme="dark" :config="$config" striped hoverable bordered compressed>
+                    @forelse($data as $data)
+                        <tr @if($data->response == 'MSG20003') class="bg-success" @endif>
+                            <td>{{ $data->tgl_transaksi }}</td>
+                            <td>{{ $data->jumlah_bpjs }}</td>
+                            <td>{{ $data->jumlah_non_bpjs }}</td>
+                            <td>{{ $data->response }}</td>
+                            <td>{{ $data->send_at }}</td>
+                            <td>{{ $data->updated_at }}</td>
+                            <td>
+                                <x-adminlte-button label="Kirim Ulang" onclick="kirimUlang('{{$data->tgl_transaksi}}','{{$data->jumlah_bpjs}}','{{$data->jumlah_non_bpjs}}')" class="btn-sm" icon="fas fa-lg fa-save"  />
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="text-center">Data Kosong</td>
+                        </tr>
+                    @endforelse
+                </x-adminlte-datatable>
             </x-adminlte-card>
         </div>
     </div>

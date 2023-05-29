@@ -23,7 +23,7 @@ class LaboratoriumSampelController extends Controller
         ];
         $this->url = 'kesehatan/layanan/laboratorium';
         $this->data = $this->read();
-        $this->headTable = ['Tgl Transaksi', 'Nilai Indeks', 'Status', 'Send at'];
+        $this->headTable = ['Tgl Transaksi', 'Jumlah', 'Status', 'Send at', 'Updated at', 'Aksi'];
         $this->tanggal = $request->input('tgl') ?? Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
         $this->keterangan = [
             'Data yang dikirimkan merupakan posisi data terakhir pada saat tanggal berkenaan, tidak akumulatif.',

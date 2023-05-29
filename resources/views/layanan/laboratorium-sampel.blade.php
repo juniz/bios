@@ -8,7 +8,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <x-adminlte-card title="Input Jumlah Layanan Laboratorium (sampel)" theme="dark" theme-mode="outline">
                 <div class="row">
                     <x-adminlte-input id="jumlah" name="jumlah" label="Jumlah" type="number" value="{{$jumlah}}" fgroup-class="col-md-6" disable-feedback/>
@@ -25,15 +25,8 @@
                     </div>
                 </div>
              </x-adminlte-card>
-             <x-adminlte-card title="Keterangan" theme="dark" theme-mode="outline">
-                <ol>
-                    @foreach($keterangan as $keterangan)
-                        <li>{{ $keterangan }}</li>
-                    @endforeach
-                </ol>
-            </x-adminlte-card>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-12">
             <x-adminlte-card title="Data Jumlah Layanan Laboratorium (sampel)" theme="dark" theme-mode="outline">
                 @php
                     $config = [
@@ -48,13 +41,24 @@
                             <td>{{ $data->jumlah }}</td>
                             <td>{{ $data->response }}</td>
                             <td>{{ $data->send_at }}</td>
+                            <td>{{ $data->updated_at }}</td>
+                            <td>
+                                <x-adminlte-button label="Kirim Ulang" onclick="kirimUlang('{{$data->tgl_transaksi}}','{{$data->jumlah}}')" class="btn-sm" icon="fas fa-lg fa-save"  />
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="text-center">Data Kosong</td>
+                            <td colspan="6" class="text-center">Data Kosong</td>
                         </tr>
                     @endforelse
                 </x-adminlte-datatable>
+            </x-adminlte-card>
+            <x-adminlte-card title="Keterangan" theme="dark" theme-mode="outline">
+                <ol>
+                    @foreach($keterangan as $keterangan)
+                        <li>{{ $keterangan }}</li>
+                    @endforeach
+                </ol>
             </x-adminlte-card>
         </div>
     </div>
@@ -80,6 +84,58 @@
                 _token:$('meta[name="csrf-token"]').attr('content'),
                 tgl_transaksi:$("input[name=tanggal]").val(),
                 jumlah:$("input[name=jumlah]").val(),
+            };
+            // console.log(data);
+            $.ajax({
+                type:'POST',
+                url:'/layanan/laboratoriumsampel/kirim',
+                data:data,
+                dataType:'json',
+                beforeSend:function() {
+                    Swal.fire({
+                        title: 'Loading....',
+                        allowEscapeKey: false,
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                },
+                success:function(response) {
+                    if(response.status == 'MSG20003'){
+                        Swal.fire({
+                        icon: 'success',
+                        title: response.message,
+                        showConfirmButton: false,
+                        timer: 1500
+                        }).then((result) => {
+                            window.location.reload();
+                            });
+                    }else{
+                        Swal.fire({
+                        icon: 'error',
+                        title: response.message,
+                        text: JSON.stringify(response.error),
+                        showConfirmButton: true,
+                        });
+                    }
+                },
+                error:function(error){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Opsss Terjadi Kesalahan',
+                        showConfirmButton: true,
+                        });
+                }
+            });
+        }
+
+        function kirimUlang(tgl,jml) {
+            let data = {
+                _token:$('meta[name="csrf-token"]').attr('content'),
+                tgl_transaksi:tgl,
+                jumlah:jml,
             };
             // console.log(data);
             $.ajax({

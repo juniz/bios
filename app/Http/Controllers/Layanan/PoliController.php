@@ -25,7 +25,7 @@ class PoliController extends Controller
         ];
         $this->url = 'kesehatan/layanan/pasien_ralan_poli';
         $this->data = $this->read();
-        $this->headTable = ['Tgl Transaksi', 'Nama Poli', 'Jumlah'];
+        $this->headTable = ['Tgl Transaksi', 'Nama Poli', 'Jumlah', 'Status', 'Send at', 'Updated at', 'Aksi'];
         $this->tanggal = $request->input('tgl') ?? Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
         $this->keterangan = [
             'Data yang dikirimkan merupakan posisi data terakhir pada saat tanggal berkenaan, tidak akumulatif.',
@@ -48,46 +48,25 @@ class PoliController extends Controller
     {
         $input = $request->all();
         $response = [];
-        for($i=0; $i < count($input['nama_poli']); $i++){
-            $layanan = $input['nama_poli'][$i];
-            $jumlah =  $input['jumlah'][$i];
-            $body = [
-                'tgl_transaksi' => $input['tgl_transaksi'],
-                'nama_poli' => $layanan,
-                'jumlah' => $jumlah,
-            ];
-            $response = $this->postData($this->url, $this->header, $body);
-            $cek = DB::table('bios_log_poli')
-                        ->where('tgl_transaksi', $input['tgl_transaksi'])
-                        ->where('nama_poli', $layanan)
-                        ->first();
-            if($cek){
-                DB::table('bios_log_poli')
-                    ->where('tgl_transaksi', $input['tgl_transaksi'])
-                    ->where('nama_poli', $layanan)
-                    ->update([
-                        'jumlah' => $jumlah,
-                        'user' => $request->session()->get('username'),
-                        'response' => $response->json()['message'] ?? 'Gagal mengirim data',
-                        'updated_at' => Carbon::now()->format('Y-m-d H:i:m'),
-                    ]);
-            }else{
-                DB::table('bios_log_poli')
-                ->insert([
-                    'uuid' => Uuid::uuid5(Uuid::NAMESPACE_URL, $input['tgl_transaksi'].''.$layanan),
+        unset($input['_token']);
+        if(is_array($input['nama_poli'])){
+            for($i=0; $i < count($input['nama_poli']); $i++){
+                $layanan = $input['nama_poli'][$i];
+                $jumlah =  $input['jumlah'][$i];
+                $body = [
                     'tgl_transaksi' => $input['tgl_transaksi'],
                     'nama_poli' => $layanan,
                     'jumlah' => $jumlah,
-                    'user' => $request->session()->get('username'),
-                    'response' => $response->json()['message'] ?? 'Gagal mengirim data',
-                    'send_at' => Carbon::now()->format('Y-m-d H:i:m'),
-                    'updated_at' => Carbon::now()->format('Y-m-d H:i:m'),
-                ]);
+                ];
+                $response = $this->postData($this->url, $this->header, $body, 'bios_log_poli');
+    
+                if($response->json()['status'] != 'MSG20003'){
+                    return $response->json();
+                }
             }
-
-            if($response->json()['status'] != 'MSG20003'){
-                return $response->json();
-            }
+            
+        }else{
+            $response = $this->postData($this->url, $this->header, $input, 'bios_log_poli');
         }
         
         return $response->json();
@@ -95,8 +74,7 @@ class PoliController extends Controller
 
     public function read()
     {
-        $response = $this->getData($this->url, $this->header);
-        return $response->json();
+        return $this->bacaLog('bios_log_poli');
     }
 
     // public function countPoli()

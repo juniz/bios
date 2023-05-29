@@ -51,27 +51,55 @@
         ];
     @endphp
     <x-adminlte-datatable id="tableDokpol" :heads="$head" head-theme="dark" :config="$config" striped hoverable bordered compressed>
-        @if(!empty($data['data']['datas']))
-            @foreach($data['data']['datas'] as $row)
-                <tr>
-                    <td>{{ $row['tgl_transaksi'] }}</td>
-                    <td>{{ $row['kedokteran_forensik'] }}</td>
-                    <td>{{ $row['psikiatri_forensik'] }}</td>
-                    <td>{{ $row['sentra_visum_dan_medikolegal'] }}</td>
-                    <td>{{ $row['ppat'] }}</td>
-                    <td>{{ $row['odontologi_forensik'] }}</td>
-                    <td>{{ $row['psikologi_forensik'] }}</td>
-                    <td>{{ $row['antropologi_forensik'] }}</td>
-                    <td>{{ $row['olah_tkp_medis'] }}</td>
-                    <td>{{ $row['kesehatan_tahanan'] }}</td>
-                    <td>{{ $row['narkoba'] }}</td>
-                    <td>{{ $row['toksikologi_medik'] }}</td>
-                    <td>{{ $row['pelayanan_dna'] }}</td>
-                    <td>{{ $row['pam_keslap_food_security'] }}</td>
-                    <td>{{ $row['dvi'] }}</td>
-                </tr>
-            @endforeach
-        @endif
+        @forelse($data as $data)
+            <tr @if($data->response == 'MSG20003') class="bg-success" @endif>
+                <td>{{ $data->tgl_transaksi }}</td>
+                <td>{{ $data->kedokteran_forensik }}</td>
+                <td>{{ $data->psikiatri_forensik }}</td>
+                <td>{{ $data->sentra_visum_dan_medikolegal }}</td>
+                <td>{{ $data->ppat }}</td>
+                <td>{{ $data->odontologi_forensik }}</td>
+                <td>{{ $data->psikologi_forensik }}</td>
+                <td>{{ $data->antropologi_forensik }}</td>
+                <td>{{ $data->olah_tkp_medis }}</td>
+                <td>{{ $data->kesehatan_tahanan }}</td>
+                <td>{{ $data->narkoba }}</td>
+                <td>{{ $data->toksikologi_medik }}</td>
+                <td>{{ $data->pelayanan_dna }}</td>
+                <td>{{ $data->pam_keslap_food_security }}</td>
+                <td>{{ $data->dvi }}</td>
+                <td>{{ $data->send_at }}</td>
+                <td>{{ $data->updated_at }}</td>
+                <td>
+                    <x-adminlte-button 
+                        label="Kirim Ulang" 
+                        onclick="kirimUlang(
+                            '{{$data->tgl_transaksi}}',
+                            '{{$data->kedokteran_forensik}}',
+                            '{{$data->psikiatri_forensik}}',
+                            '{{$data->sentra_visum_dan_medikolegal}}',
+                            '{{$data->ppat}}',
+                            '{{$data->odontologi_forensik}}',
+                            '{{$data->psikologi_forensik}}',
+                            '{{$data->antropologi_forensik}}',
+                            '{{$data->olah_tkp_medis}}',
+                            '{{$data->kesehatan_tahanan}}',
+                            '{{$data->narkoba}}',
+                            '{{$data->toksikologi_medik}}',
+                            '{{$data->pelayanan_dna}}',
+                            '{{$data->pam_keslap_food_security}}',
+                            '{{$data->dvi}}',
+                            )" 
+                        class="btn-sm" 
+                        icon="fas fa-lg fa-save"  
+                    />
+                </td>
+            </tr>
+        @empty
+            <tr>
+                <td colspan="18" class="text-center">Tidak Ada Data</td>
+            </tr>
+        @endforelse
     </x-adminlte-datatable>
 </x-adminlte-card> 
 <x-adminlte-card title="Keterangan" theme="dark" theme-mode="outline">
@@ -89,7 +117,7 @@
 @stop
 
 @section('js')
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {{-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
     <script>
         function kirimDataPerawat() {
             let data = {
@@ -109,6 +137,71 @@
                 pelayanan_dna:$("input[name=pelayanan_dna]").val(),
                 pam_keslap_food_security:$("input[name=pam_keslap_food_security]").val(),
                 dvi:$("input[name=dvi]").val(),
+            };
+            // console.log(data);
+            $.ajax({
+                type:'POST',
+                url:'/layanan/dokpol/kirim',
+                data:data,
+                dataType:'json',
+                beforeSend:function() {
+                    Swal.fire({
+                        title: 'Loading....',
+                        allowEscapeKey: false,
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                },
+                success:function(response) {
+                    if(response.status == 'MSG20003'){
+                        Swal.fire({
+                        icon: 'success',
+                        title: response.message,
+                        showConfirmButton: false,
+                        timer: 1500
+                        }).then((result) => {
+                            window.location.reload();
+                            });
+                    }else{
+                        Swal.fire({
+                        icon: 'error',
+                        title: response.message,
+                        text: JSON.stringify(response.error, null, 4),
+                        showConfirmButton: true,
+                        });
+                    }
+                },
+                error:function(error){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Opsss Terjadi Kesalahan',
+                        showConfirmButton: true,
+                        });
+                }
+            });
+        }
+
+        function kirimUlang(tgl,kedokteran,psikiatri,sentra,ppat,odontologi,psikologi,antropologi,olah_tkp,kesehatan,narkoba,toksikologi,pelayanan,pam,dvi) {
+            let data = {
+                _token:$('meta[name="csrf-token"]').attr('content'),
+                tgl_transaksi:tgl,
+                kedokteran_forensik:kedokteran,
+                psikiatri_forensik:psikiatri,
+                sentra_visum_dan_medikolegal:sentra,
+                ppat:ppat,
+                odontologi_forensik:odontologi,
+                psikologi_forensik:psikologi,
+                antropologi_forensik:antropologi,
+                olah_tkp_medis:olah_tkp,
+                kesehatan_tahanan:kesehatan,
+                narkoba:narkoba,
+                toksikologi_medik:toksikologi,
+                pelayanan_dna:pelayanan,
+                pam_keslap_food_security:pam,
+                dvi:dvi,
             };
             // console.log(data);
             $.ajax({

@@ -27,6 +27,7 @@ class DokpolController extends Controller
             'Tgl Transaksi', 'Kedokteran Forensik', 'Psikiatri Forensik', 'Sentra Visum dan Medikolegal', 
             'PPAT', 'Odontologi Forensik', 'Psikologi Forensik', 'Antropologi Forensik', 'Olah TKP Medis',
             'Kesehatan Tahanan', 'Narkoba', 'Toksikologi Medik', 'Pelayanan DNA', 'PAM Keslap Food Security', 'DVI',
+            'Send at', 'updated at', 'Aksi'
         ];
         $this->tanggal = $request->input('tgl') ?? Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
         $this->keterangan = [
@@ -48,14 +49,14 @@ class DokpolController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        $response = $this->postData($this->url, $this->header, $input);
+        unset($input['_token']);
+        $response = $this->postData($this->url, $this->header, $input, 'bios_log_dokpol');
         return $response->json();
     }
 
     public function read()
     {
-        $response = $this->getData($this->url, $this->header);
-        return $response->json();
+        return $this->bacaLog('bios_log_dokpol');
     }
 
 }

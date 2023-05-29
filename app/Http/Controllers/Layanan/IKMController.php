@@ -24,7 +24,7 @@ class IKMController extends Controller
         ]; 
         $this->url = 'kesehatan/layanan/ikm_kesehatan';
         $this->data = $this->read();
-        $this->headTable = ['No', 'Tgl Transaksi', 'Nilai Indeks', 'Status', 'Send at'];
+        $this->headTable = ['Tgl Transaksi', 'Nilai Indeks', 'Status', 'Send at', 'Updated at', 'Aksi'];
         $this->keterangan = [
             'Data yang dikirimkan merupakan posisi data terakhir pada saat tanggal berkenaan, tidak akumulatif.',
             'Data dikirimkan per periode pelaksanaan survei kepuasan',
