@@ -23,7 +23,7 @@ class OperasiController extends Controller
         ];
         $this->url = 'kesehatan/layanan/operasi';
         $this->data = $this->read();
-        $this->headTable = ['Tgl Transaksi', 'Klasifikasi Operasi', 'Jumlah'];
+        $this->headTable = ['Tgl Transaksi', 'Klasifikasi', 'Jumlah', 'Status', 'Send at', 'Updated at', 'Aksi'];
         $this->tanggal = $request->input('tgl') ?? Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
         $this->keterangan = [
             'Data yang dikirimkan merupakan posisi data terakhir pada saat tanggal berkenaan, tidak akumulatif.',
@@ -46,18 +46,23 @@ class OperasiController extends Controller
     {
         $input = $request->all();
         $response = [];
-        for($i=0; $i < count($input['klasifikasi_operasi']); $i++){
-            $layanan = $input['klasifikasi_operasi'][$i];
-            $jumlah =  $input['jumlah'][$i];
-            $body = [
-                'tgl_transaksi' => $input['tgl_transaksi'],
-                'klasifikasi_operasi' => $layanan,
-                'jumlah' => $jumlah,
-            ];
-            $response = $this->postData($this->url, $this->header, $body);
-            if($response->json()['status'] != 'MSG20003'){
-                return $response->json();
+        unset($input['_token']);
+        if(is_array($input['klasifikasi_operasi'])){
+            for($i=0; $i < count($input['klasifikasi_operasi']); $i++){
+                $layanan = $input['klasifikasi_operasi'][$i];
+                $jumlah =  $input['jumlah'][$i];
+                $body = [
+                    'tgl_transaksi' => $input['tgl_transaksi'],
+                    'klasifikasi_operasi' => $layanan,
+                    'jumlah' => $jumlah,
+                ];
+                $response = $this->postData($this->url, $this->header, $body, 'bios_log_operasi');
+                if($response->json()['status'] != 'MSG20003'){
+                    return $response->json();
+                }
             }
+        }else{
+            $response = $this->postData($this->url, $this->header, $input, 'bios_log_operasi');
         }
         
         return $response->json();
@@ -65,17 +70,6 @@ class OperasiController extends Controller
 
     public function read()
     {
-        $response = $this->getData($this->url, $this->header);
-        return $response->json();
+        return $this->bacaLog('bios_log_operasi');
     }
-
-    // public function countOperasi()
-    // {
-    //     $data = DB::table('operasi')
-    //                 ->where('tgl_operasi', 'like', $this->tanggal.'%')
-    //                 ->groupBy('kategori')
-    //                 ->selectRaw("kategori, count(no_rawat) as jml")
-    //                 ->get();
-    //     return $data;
-    // }
 }

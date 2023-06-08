@@ -23,7 +23,7 @@ class RanapController extends Controller
         ]; 
         $this->url = 'kesehatan/layanan/pasien_ranap';
         $this->data = $this->read();
-        $this->headTable = ['Tgl Transaksi', 'Kelas', 'Jumlah'];
+        $this->headTable = ['Tgl Transaksi', 'Kode Kelas', 'Jumlah', 'Status', 'Send at', 'Updated at', 'Aksi'];
         $this->tanggal = $request->input('tgl') ?? Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
         $this->keterangan = [
             'Data yang dikirimkan merupakan posisi data terakhir pada saat tanggal berkenaan, tidak akumulatif.',
@@ -45,19 +45,24 @@ class RanapController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
+        unset($input['_token']);
         $response = [];
-        for($i=0; $i < count($input['kode_kelas']); $i++){
-            $layanan = $input['kode_kelas'][$i];
-            $jumlah =  $input['jumlah'][$i];
-            $body = [
-                'tgl_transaksi' => $input['tgl_transaksi'],
-                'kode_kelas' => $layanan,
-                'jumlah' => $jumlah,
-            ];
-            $response = $this->postData($this->url, $this->header, $body);
-            if($response->json()['status'] != 'MSG20003'){
-                return $response->json();
+        if(is_array($input['kode_kelas'])){
+            for($i=0; $i < count($input['kode_kelas']); $i++){
+                $layanan = $input['kode_kelas'][$i];
+                $jumlah =  $input['jumlah'][$i];
+                $body = [
+                    'tgl_transaksi' => $input['tgl_transaksi'],
+                    'kode_kelas' => $layanan,
+                    'jumlah' => $jumlah,
+                ];
+                $response = $this->postData($this->url, $this->header, $body, 'bios_log_ranap');
+                if($response->json()['status'] != 'MSG20003'){
+                    return $response->json();
+                }
             }
+        }else{
+            $response = $this->postData($this->url, $this->header, $input, 'bios_log_ranap');
         }
         
         return $response->json();
@@ -65,8 +70,7 @@ class RanapController extends Controller
 
     public function read()
     {
-        $response = $this->getData($this->url, $this->header);
-        return $response->json();
+        return $this->bacaLog('bios_log_ranap');
     }
     
 }

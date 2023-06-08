@@ -23,7 +23,7 @@ class RadiologiController extends Controller
         ];
         $this->url = 'kesehatan/layanan/radiologi';
         $this->data = $this->read();
-        $this->headTable = ['Tgl Transaksi', 'Jumlah'];
+        $this->headTable = ['Tgl Transaksi', 'Jumlah', 'Status', 'Send at', 'Updated at', 'Aksi'];
         $this->tanggal = $request->input('tgl') ?? Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
         $this->keterangan = [
             'Data yang dikirimkan merupakan posisi data terakhir pada saat tanggal berkenaan, tidak akumulatif.',
@@ -45,21 +45,13 @@ class RadiologiController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        $response = $this->postData($this->url, $this->header, $input);
+        unset($input['_token']);
+        $response = $this->postData($this->url, $this->header, $input, 'bios_log_radiologi');
         return $response->json();
     }
 
     public function read()
     {
-        $response = $this->getData($this->url, $this->header);
-        return $response->json();
+        return $this->bacaLog('bios_log_radiologi');
     }
-
-    // public function countRadiologi()
-    // {
-    //     $data = DB::table('periksa_radiologi')
-    //                 ->where('tgl_periksa', $this->tanggal)
-    //                 ->count();
-    //     return $data;
-    // }
 }

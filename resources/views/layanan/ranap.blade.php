@@ -8,8 +8,8 @@
 
 @section('content')
     <div class="row">
-        <div class="col-md-6">
-            <x-adminlte-card title="Input Jumlah Kunjungan Rawat Inap" theme="dark" theme-mode="outline">
+        <div class="col-md-12">
+            <x-adminlte-card title="Input Jumlah Kunjungan Rawat Inap" theme="dark" theme-mode="outline" collapsible="collapsed">
                 <div class="row">
                     <div class="col-md-12">
                         @php
@@ -46,7 +46,7 @@
                 </ol>
             </x-adminlte-card>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-12">
             <x-adminlte-card title="Data Jumlah Kunjungan Rawat Inap" theme="dark" theme-mode="outline">
                 @php
                     $config = [
@@ -55,15 +55,23 @@
                     ];
                 @endphp
                 <x-adminlte-datatable id="tableRanap" :heads="$head" head-theme="dark" :config="$config" striped hoverable bordered compressed>
-                    @if(!empty($data['data']['datas']))
-                        @foreach($data['data']['datas'] as $row)
-                            <tr>
-                                <td>{{ $row['tgl_transaksi'] }}</td>
-                                <td>{{ $row['kode_kelas'] }}</td>
-                                <td>{{ $row['jumlah'] }}</td>
-                            </tr>
-                        @endforeach
-                    @endif
+                    @forelse($data as $data)
+                        <tr @if($data->response == 'MSG20003') class="bg-success" @endif>
+                            <td>{{ $data->tgl_transaksi }}</td>
+                            <td>{{ $data->kode_kelas }}</td>
+                            <td>{{ $data->jumlah }}</td>
+                            <td>{{ $data->response }}</td>
+                            <td>{{ $data->send_at }}</td>
+                            <td>{{ $data->updated_at }}</td>
+                            <td>
+                                <x-adminlte-button label="Kirim Ulang" onclick="kirimUlang('{{$data->tgl_transaksi}}','{{$data->kode_kelas}}','{{$data->jumlah}}')" class="btn-sm" icon="fas fa-lg fa-save"  />
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="text-center">Data Kosong</td>
+                        </tr>
+                    @endforelse
                 </x-adminlte-datatable>
             </x-adminlte-card>
         </div>
@@ -75,7 +83,7 @@
     
 @stop
 
-@section('js')
+@push('js')
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
 
@@ -157,5 +165,60 @@
                 }
             });
         }
+
+        function kirimUlang(tgl,kelas,jml) {
+            let data = {
+                _token:$('meta[name="csrf-token"]').attr('content'),
+                tgl_transaksi:tgl,
+                kode_kelas:kelas,
+                jumlah:jml,
+            };
+            // console.log(data);
+            $.ajax({
+                type:'POST',
+                url:'/layanan/ranap/kirim',
+                data:data,
+                dataType:'json',
+                beforeSend:function() {
+                    Swal.fire({
+                        title: 'Loading....',
+                        allowEscapeKey: false,
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                },
+                success:function(response) {
+                    console.log(response);
+                    if(response.status == 'MSG20003'){
+                        Swal.fire({
+                        icon: 'success',
+                        title: response.message,
+                        showConfirmButton: false,
+                        timer: 1500
+                        }).then((result) => {
+                            window.location.reload();
+                            });
+                    }else{
+                        Swal.fire({
+                        icon: 'error',
+                        title: response.message,
+                        text: JSON.stringify(response.error),
+                        showConfirmButton: true,
+                        });
+                    }
+                },
+                error:function(error){
+                    console.log(error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Opsss Terjadi Kesalahan',
+                        showConfirmButton: true,
+                        });
+                }
+            });
+        }
     </script>
-@stop
+@endpush

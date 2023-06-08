@@ -48,6 +48,7 @@ class BPJSNonBPJSController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
+        unset($input['_token']);
         $response = $this->postData($this->url, $this->header, $input, 'bios_log_bpjs');
         return $response->json();
     }
@@ -56,31 +57,4 @@ class BPJSNonBPJSController extends Controller
     {
         return $this->bacaLog('bios_log_bpjs');
     }
-
-    // public function countBPJS()
-    // {
-    //    $data = DB::table('reg_periksa')
-    //                 ->where('tgl_registrasi', $this->tanggal)
-    //                 ->where('stts', '<>', 'Batal')
-    //                 ->where(function($query){
-    //                     $query->orWhere('kd_pj', 'BPJ')
-    //                          ->orWhere('kd_pj', 'BTK');
-    //                 })
-    //                 ->where('kd_pj', 'BPJ')
-    //                 ->count();
-    //     return $data;
-    // }
-
-    // public function countNonBPJS()
-    // {
-    //    $data = DB::table('reg_periksa')
-    //                 ->where('tgl_registrasi', $this->tanggal)
-    //                 ->where('stts', '<>', 'Batal')
-    //                 ->where(function($query){
-    //                     $query->orWhere('kd_pj', '<>', 'BPJ')
-    //                          ->orWhere('kd_pj', '<>', 'BTK');
-    //                 })
-    //                 ->count();
-    //     return $data;
-    // }
 }

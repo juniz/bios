@@ -69,7 +69,7 @@
     
 @stop
 
-@section('js')
+@push('js')
     {{-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
     <script>
 
@@ -131,5 +131,58 @@
                 }
             });
         }
+
+        function kirimUlang(tgl,jumlah_bpjs,jumlah_non_bpjs) {
+            let data = {
+                _token:$('meta[name="csrf-token"]').attr('content'),
+                tgl_transaksi:tgl,
+                jumlah_bpjs:jumlah_bpjs,
+                jumlah_non_bpjs:jumlah_non_bpjs,
+            };
+            // console.log(data);
+            $.ajax({
+                type:'POST',
+                url:'/layanan/bpjs_non_bpjs/kirim',
+                data:data,
+                dataType:'json',
+                beforeSend:function() {
+                    Swal.fire({
+                        title: 'Loading....',
+                        allowEscapeKey: false,
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                },
+                success:function(response) {
+                    if(response.status == 'MSG20003'){
+                        Swal.fire({
+                        icon: 'success',
+                        title: response.message,
+                        showConfirmButton: false,
+                        timer: 1500
+                        }).then((result) => {
+                            window.location.reload();
+                            });
+                    }else{
+                        Swal.fire({
+                        icon: 'error',
+                        title: response.message,
+                        text: JSON.stringify(response.error),
+                        showConfirmButton: true,
+                        });
+                    }
+                },
+                error:function(error){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Opsss Terjadi Kesalahan',
+                        showConfirmButton: true,
+                    });
+                }
+            });
+        }
     </script>
-@stop
+@endpush
