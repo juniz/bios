@@ -56,7 +56,7 @@ class RadiographerController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        $response = $this->postData($this->url, $this->header, $input);
+        $response = $this->postData($this->url, $this->header, $input, 'bios_log_radiographer');
         return $response->json();
     }
 

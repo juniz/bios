@@ -24,7 +24,7 @@ class SDMCron extends Command
      * @var string
      */
     protected $description = 'Cron job SDM BIOS';
-    public $token, $header, $tanggal, $now;
+    public $token, $header, $tanggal, $now, $count;
 
     public function __construct()
    {
@@ -46,24 +46,26 @@ class SDMCron extends Command
         $this->postDokterUmum();
         $this->postPranataLaboratorium();
         $this->postTenagaNonMedis();
+        $this->postNonMedis();
         $this->postNutritionist();
         $this->postPharmacist();
         $this->postProfesionalLain();
         $this->postRadiographer();
         $this->postSanitarian();
         $this->postDokterSpesialis();
+        $this->postFisioterapis();
     }
 
     public function init()
     {
-        $token = $this->getToken();
-        $this->token = $token->json()['token'];
+        $this->token = $this->getToken()->json()['token'];
         $this->header = [
             'token' => $this->token,
             'Content-Type' => 'multipart/form-data'
         ]; 
         $this->tanggal = Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
         $this->now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
+        $this->count = 0;
     }
 
     public function postPerawat()
@@ -78,8 +80,8 @@ class SDMCron extends Command
             'non_pns_tetap' => $this->nonPNS($bidang),
             'kontrak' =>  $this->kontrak($bidang),
         );
-        $response = $this->postData($url, $this->header, $input);
-        $this->info($this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->postDataSDM($url, $this->header, $input, 'bios_log_perawat',  $this->count == 20 ? 600 : 0);
+        $this->count == 20 ? $this->count = 0 :  $this->count++;
     }
 
     public function postAdministrasi()
@@ -95,8 +97,8 @@ class SDMCron extends Command
             'kontrak' =>  $this->kontrak($bidang),
             'keterangan' => 'Umum, Keuangan, SDM, Humas, BMN',
         );
-        $response = $this->postData($url, $this->header, $input);
-        $this->info($this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->postDataSDM($url, $this->header, $input, 'bios_log_administrasi',  $this->count == 20 ? 600 : 0);
+        $this->count == 20 ? $this->count = 0 :  $this->count++;
     }
 
     public function postBidan()
@@ -111,8 +113,8 @@ class SDMCron extends Command
             'non_pns_tetap' => $this->nonPNS($bidang),
             'kontrak' =>  $this->kontrak($bidang),
         );
-        $response = $this->postData($url, $this->header, $input);
-        $this->info($this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->postDataSDM($url, $this->header, $input, 'bios_log_bidan',  $this->count == 20 ? 600 : 0);
+        $this->count == 20 ? $this->count = 0 :  $this->count++;
     }
 
     public function postDokterGigi()
@@ -127,8 +129,8 @@ class SDMCron extends Command
             'non_pns_tetap' => $this->nonPNS($bidang),
             'kontrak' =>  $this->kontrak($bidang),
         );
-        $response = $this->postData($url, $this->header, $input);
-        $this->info($this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->postDataSDM($url, $this->header, $input, 'bios_log_dokter_gigi',  $this->count == 20 ? 600 : 0);
+        $this->count == 20 ? $this->count = 0 :  $this->count++;
     }
 
     public function postDokterUmum()
@@ -143,8 +145,8 @@ class SDMCron extends Command
             'non_pns_tetap' => $this->nonPNS($bidang),
             'kontrak' =>  $this->kontrak($bidang),
         );
-        $response = $this->postData($url, $this->header, $input);
-        $this->info($this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->postDataSDM($url, $this->header, $input, 'bios_log_dokter_umum',  $this->count == 20 ? 600 : 0);
+        $this->count == 20 ? $this->count = 0 :  $this->count++;
     }
 
     public function postPranataLaboratorium()
@@ -159,14 +161,14 @@ class SDMCron extends Command
             'non_pns_tetap' => $this->nonPNS($bidang),
             'kontrak' =>  $this->kontrak($bidang),
         );
-        $response = $this->postData($url, $this->header, $input);
-        $this->info($this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->postDataSDM($url, $this->header, $input, 'bios_log_laboratorium',  $this->count == 20 ? 600 : 0);
+        $this->count == 20 ? $this->count = 0 :  $this->count++;
     }
 
     public function postTenagaNonMedis()
     {
         $url = 'kesehatan/sdm/non_medis_administrasi';
-        $bidang = 'TENAGA NON MEDIS';
+        $bidang = 'TENAGA NON MEDIS ADMINISTRASI';
         $input = array(
             'tgl_transaksi' => $this->tanggal,
             'pns' =>  $this->pns($bidang),
@@ -176,8 +178,24 @@ class SDMCron extends Command
             'kontrak' =>  $this->kontrak($bidang),
             'keterangan' => 'Umum, Keuangan, SDM, Humas, BMN',
         );
-        $response = $this->postData($url, $this->header, $input);
-        $this->info($this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->postDataSDM($url, $this->header, $input, 'bios_log_tenaga_non_medis',  $this->count == 20 ? 600 : 0);
+        $this->count == 20 ? $this->count = 0 :  $this->count++;
+    }
+
+    public function postNonMedis()
+    {
+        $url = 'kesehatan/sdm/non_medis';
+        $bidang = 'TENAGA NON MEDIS';
+        $input = array(
+            'tgl_transaksi' => $this->tanggal,
+            'pns' =>  $this->pns($bidang),
+            'pppk' => $this->p3k($bidang),
+            'anggota' => $this->anggota($bidang),
+            'non_pns_tetap' => $this->nonPNS($bidang),
+            'kontrak' =>  $this->kontrak($bidang),
+        );
+        $this->postDataSDM($url, $this->header, $input, 'bios_log_non_medis',  $this->count == 20 ? 600 : 0);
+        $this->count == 20 ? $this->count = 0 :  $this->count++;
     }
 
     public function postNutritionist()
@@ -192,8 +210,8 @@ class SDMCron extends Command
             'non_pns_tetap' => $this->nonPNS($bidang),
             'kontrak' =>  $this->kontrak($bidang),
         );
-        $response = $this->postData($url, $this->header, $input);
-        $this->info($this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->postDataSDM($url, $this->header, $input, 'bios_log_nutritionist',  $this->count == 20 ? 600 : 0);
+        $this->count == 20 ? $this->count = 0 :  $this->count++;
     }
 
     public function postPharmacist()
@@ -208,8 +226,8 @@ class SDMCron extends Command
             'non_pns_tetap' => $this->nonPNS($bidang),
             'kontrak' =>  $this->kontrak($bidang),
         );
-        $response = $this->postData($url, $this->header, $input);
-        $this->info($this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->postDataSDM($url, $this->header, $input, 'bios_log_pharmacist',  $this->count == 20 ? 600 : 0);
+        $this->count == 20 ? $this->count = 0 :  $this->count++;
     }
 
     public function postProfesionalLain()
@@ -224,8 +242,8 @@ class SDMCron extends Command
             'non_pns_tetap' => $this->nonPNS($bidang),
             'kontrak' =>  $this->kontrak($bidang),
         );
-        $response = $this->postData($url, $this->header, $input);
-        $this->info($this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->postDataSDM($url, $this->header, $input, 'bios_log_profesional_lainnya',  $this->count == 20 ? 600 : 0);
+        $this->count == 20 ? $this->count = 0 :  $this->count++;
     }
 
     public function postRadiographer()
@@ -240,8 +258,8 @@ class SDMCron extends Command
             'non_pns_tetap' => $this->nonPNS($bidang),
             'kontrak' =>  $this->kontrak($bidang),
         );
-        $response = $this->postData($url, $this->header, $input);
-        $this->info($this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->postDataSDM($url, $this->header, $input, 'bios_log_radiographer',  $this->count == 20 ? 600 : 0);
+        $this->count == 20 ? $this->count = 0 :  $this->count++;
     }
 
     public function postSanitarian()
@@ -256,8 +274,8 @@ class SDMCron extends Command
             'non_pns_tetap' => $this->nonPNS($bidang),
             'kontrak' =>  $this->kontrak($bidang),
         );
-        $response = $this->postData($url, $this->header, $input);
-        $this->info($this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->postDataSDM($url, $this->header, $input, 'bios_log_sanitarian',  $this->count == 20 ? 600 : 0);
+        $this->count == 20 ? $this->count = 0 :  $this->count++;
     }
 
     public function postDokterSpesialis()
@@ -272,7 +290,23 @@ class SDMCron extends Command
             'non_pns_tetap' => $this->nonPNS($bidang),
             'kontrak' =>  $this->kontrak($bidang),
         );
-        $response = $this->postData($url, $this->header, $input);
-        $this->info($this->now.' '.$this->description.' '.$bidang.':'.$response->body());
+        $this->postDataSDM($url, $this->header, $input, 'bios_log_spesialis',  $this->count == 20 ? 600 : 0);
+        $this->count == 20 ? $this->count = 0 :  $this->count++;
+    }
+
+    public function postFisioterapis()
+    {
+        $url = 'kesehatan/sdm/fisioterapis';
+        $bidang = 'FISIOTERAPIS';
+        $input = array(
+            'tgl_transaksi' => $this->tanggal,
+            'pns' =>  $this->pns($bidang),
+            'pppk' => $this->p3k($bidang),
+            'anggota' => $this->anggota($bidang),
+            'non_pns_tetap' => $this->nonPNS($bidang),
+            'kontrak' =>  $this->kontrak($bidang),
+        );
+        $this->postDataSDM($url, $this->header, $input, 'bios_log_fisioterapis',  $this->count == 20 ? 600 : 0);
+        $this->count == 20 ? $this->count = 0 :  $this->count++;
     }
 }

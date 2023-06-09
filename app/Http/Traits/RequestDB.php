@@ -522,6 +522,8 @@ trait RequestDB {
                     }
                     break;
                 
+
+
                 default:
                     $cek = DB::table($table)
                             ->where('tgl_transaksi', $data['tgl_transaksi'])
@@ -531,6 +533,88 @@ trait RequestDB {
                             ->where('tgl_transaksi', $data['tgl_transaksi'])
                             ->update([
                                 'jumlah'    => $data['jumlah'],
+                                'response'  => $data['response'],
+                                'user'  =>  $data['user'] ?? 'server',
+                                'updated_at'    =>  Carbon::now()->toDateTimeString()
+                            ]);
+                    }else{
+                        DB::table($table)->insert($data);
+                    }
+                    break;
+            }
+            
+
+        }catch(\Exception $e){
+
+            $this->sendMessage('Simpan Log '.$table.' gagal : '.$e->getMessage());
+
+        }
+    }
+
+    public function simpanLogSDM($table, array $data)
+    {
+        try{
+            switch ($table) {
+
+                case 'bios_log_administrasi':
+                    $cek = DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->first();
+                    if($cek){
+                        DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->update([
+                                'pns'    => $data['pns'],
+                                'pppk'  => $data['pppk'],
+                                'anggota'   => $data['anggota'],
+                                'non_pns_tetap' => $data['non_pns_tetap'],
+                                'kontrak'   => $data['kontrak'],
+                                'keterangan'    => $data['keterangan'],
+                                'response'  => $data['response'],
+                                'user'  =>  $data['user'] ?? 'server',
+                                'updated_at'    =>  Carbon::now()->toDateTimeString()
+                            ]);
+                    }else{
+                        DB::table($table)->insert($data);
+                    }
+                    break;
+                    
+                case 'bios_log_tenaga_non_medis':
+                    $cek = DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->first();
+                    if($cek){
+                        DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->update([
+                                'pns'    => $data['pns'],
+                                'pppk'  => $data['pppk'],
+                                'anggota'   => $data['anggota'],
+                                'non_pns_tetap' => $data['non_pns_tetap'],
+                                'kontrak'   => $data['kontrak'],
+                                'keterangan'    => $data['keterangan'],
+                                'response'  => $data['response'],
+                                'user'  =>  $data['user'] ?? 'server',
+                                'updated_at'    =>  Carbon::now()->toDateTimeString()
+                            ]);
+                    }else{
+                        DB::table($table)->insert($data);
+                    }
+                    break; 
+
+                default:
+                    $cek = DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->first();
+                    if($cek){
+                        DB::table($table)
+                            ->where('tgl_transaksi', $data['tgl_transaksi'])
+                            ->update([
+                                'pns'    => $data['pns'],
+                                'pppk'  => $data['pppk'],
+                                'anggota'   => $data['anggota'],
+                                'non_pns_tetap' => $data['non_pns_tetap'],
+                                'kontrak'   => $data['kontrak'],
                                 'response'  => $data['response'],
                                 'user'  =>  $data['user'] ?? 'server',
                                 'updated_at'    =>  Carbon::now()->toDateTimeString()

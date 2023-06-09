@@ -57,7 +57,7 @@ class PerawatController extends Controller
     {
         $input = $request->all();
         // $response = Http::asForm()->withHeaders($this->header)->post(env('URL_POST_DATA'). $this->url, $input);
-        $response = $this->postData($this->url, $this->header, $input);
+        $response = $this->postData($this->url, $this->header, $input, 'bios_log_perawat');
         return $response->json();
     }
 

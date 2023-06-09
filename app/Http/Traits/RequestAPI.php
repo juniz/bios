@@ -14,6 +14,7 @@ trait RequestAPI {
     use Telegram, RequestDB;
     protected $urlPost ='https://training-bios2.kemenkeu.go.id/api/ws/';
     protected $urlGet = 'https://training-bios2.kemenkeu.go.id/api/get/data/';
+
     public function postData($url, $header, $body, $table, $delay = 0)
     {
         try{
@@ -27,6 +28,35 @@ trait RequestAPI {
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ]);
             $this->simpanLog($table, $payloads);
+            if($response->json()['status'] == 'MSG20003'){
+                // $this->sendMessage($url.' : '.$response->getBody());
+                // Log::info($this->urlPost.$url, $response->json());
+            }else{
+                $this->sendMessage($url.' : '.$response->getBody());
+                // Log::warning($this->urlPost.$url, $response->json());
+            }
+            
+        }catch(\Exception $e){
+            $this->sendMessage($e->getMessage() ?? 'Terjadi kesalahan saat akses server bios');
+            // Log::error($this->urlPost.$url, $e->getResponse());
+            return $e->getMessage() ?? 'Terjadi kesalahan saat akses server bios';
+        }
+        return $response;
+    }
+
+    public function postDataSDM($url, $header, $body, $table, $delay = 0)
+    {
+        try{
+            sleep($delay);
+            $response = Http::asForm()->withHeaders($header)->post(env('URL_POST_DATA' ,$this->urlPost). $url, $body);
+            $data = $response->json();
+            $payloads = array_merge($body, [
+                'uuid'  =>  Str::uuid(),
+                'response'  =>  $data['status'],
+                'send_at' => Carbon::now()->toDateTimeString(),
+                'updated_at' => Carbon::now()->toDateTimeString(),
+            ]);
+            $this->simpanLogSDM($table, $payloads);
             if($response->json()['status'] == 'MSG20003'){
                 // $this->sendMessage($url.' : '.$response->getBody());
                 // Log::info($this->urlPost.$url, $response->json());

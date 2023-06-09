@@ -52,7 +52,7 @@ class DokterUmumController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        $response = $this->postData($this->url, $this->header, $input);
+        $response = $this->postData($this->url, $this->header, $input, 'bios_log_dokter_umum');
         return $response->json();
     }
 
