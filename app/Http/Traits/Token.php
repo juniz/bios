@@ -8,36 +8,37 @@ use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 
-trait Token {
+trait Token
+{
     use Telegram;
-    public function getToken() {
+    public function getToken()
+    {
         $i = 0;
-        try{
-            $response = Http::post(config('URL_TOKEN', 'https://training-bios2.kemenkeu.go.id/api/token'),[
-                'satker' => config('SATKER', '679614'),
-                'key' => config('KEY', 'HE7FjyqfTfmh5N6ozvniuHxT9Ho530Rv')
+        try {
+            $response = Http::post(env('URL_TOKEN', 'https://bios.kemenkeu.go.id/api/token'), [
+                'satker' => env('SATKER', '679614'),
+                'key' => env('KEY', 'ibpwxlOzD5dX9ZTDZfOAyGWS3EX05noJ')
             ]);
-            if($response->json()['status'] != 'MSG20004'){
-                $this->sendMessage('Token Error : '.$response->getBody());
-                if($i<3){
+            if ($response->json()['status'] != 'MSG20004') {
+                $this->sendMessage('Token Error : ' . $response->getBody());
+                if ($i < 3) {
                     $i++;
                     $this->getToken();
                 }
-                
             }
             Cache::put('token', $response->json()['token'] ?? null, now()->addMinutes(1440));
             return $response;
-        
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $response = $this->errorToken($e->getMessage());
             $this->sendMessage($e->getMessage() ?? 'Error Token');
             return $response;
         }
-        
+
         // return $response;
     }
 
-    public function errorToken($message){
+    public function errorToken($message)
+    {
         $this->sendMessage($message);
         Log::error($message);
         $response = array(
