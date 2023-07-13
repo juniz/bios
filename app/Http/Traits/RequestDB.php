@@ -591,7 +591,6 @@ trait RequestDB
                         DB::table($table)
                             ->where('tgl_transaksi', $data['tgl_transaksi'])
                             ->update([
-                                'no_rekening'    => $data['no_rekening'],
                                 'kd_akun'   => $data['kd_akun'],
                                 'jumlah'  => $data['jumlah'],
                                 'response'  => $data['response'],
@@ -611,7 +610,6 @@ trait RequestDB
                         DB::table($table)
                             ->where('tgl_transaksi', $data['tgl_transaksi'])
                             ->update([
-                                'no_rekening'    => $data['no_rekening'],
                                 'kd_akun'   => $data['kd_akun'],
                                 'jumlah'  => $data['jumlah'],
                                 'response'  => $data['response'],

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Console\Commands;
+
 use Illuminate\Console\Command;
 use App\Http\Traits\Token;
 use App\Http\Traits\RequestDB;
@@ -25,13 +26,15 @@ class LayananCron extends Command
      *
      * @var string
      */
+
+
     protected $description = 'Cron job Layanan BIOS';
     public $token, $header, $tanggal, $now, $count;
 
     public function __construct()
-   {
+    {
         parent::__construct();
-   }
+    }
 
     /**
      * Execute the console command.
@@ -40,9 +43,8 @@ class LayananCron extends Command
      */
     public function handle()
     {
-        
+
         $this->init();
-        
     }
 
     public function init()
@@ -51,7 +53,7 @@ class LayananCron extends Command
         $this->header = [
             'token' => $this->token,
             'Content-Type' => 'multipart/form-data'
-        ]; 
+        ];
         $this->tanggal = Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
         $this->now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
         $this->count = 0;
@@ -80,7 +82,7 @@ class LayananCron extends Command
         );
         $response = $this->postData($url, $this->header, $input, 'bios_log_farmasi', $this->count == 20 ? 600 : 0);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-        $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body() ?? '500');
+        $this->info('#' . $this->count . '.' . $now . ' ' . $this->description . ' ' . $bidang . ':' . $response->body() ?? '500');
         $this->count == 20 ? $this->count = 0 :  $this->count++;
     }
 
@@ -95,7 +97,7 @@ class LayananCron extends Command
         );
         $response = $this->postData($url, $this->header, $input, 'bios_log_igd', $this->count == 20 ? 600 : 0);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-        $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body() ?? '500');
+        $this->info('#' . $this->count . '.' . $now . ' ' . $this->description . ' ' . $bidang . ':' . $response->body() ?? '500');
         $this->count == 20 ? $this->count = 1 :  $this->count++;
     }
 
@@ -104,7 +106,7 @@ class LayananCron extends Command
         $url = 'kesehatan/layanan/pasien_ralan_poli';
         $bidang = 'POLI';
         $poli = $this->countPoli($this->tanggal);
-        foreach($poli as $p){
+        foreach ($poli as $p) {
             $input = array(
                 'tgl_transaksi' => $this->tanggal,
                 'nama_poli' => $p->nm_poli,
@@ -112,7 +114,7 @@ class LayananCron extends Command
             );
             $response = $this->postData($url, $this->header, $input, 'bios_log_poli', $this->count == 20 ? 600 : 0);
             $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-            $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body() ?? '500');
+            $this->info('#' . $this->count . '.' . $now . ' ' . $this->description . ' ' . $bidang . ':' . $response->body() ?? '500');
             $this->count == 20 ? $this->count = 1 :  $this->count++;
         }
     }
@@ -122,7 +124,7 @@ class LayananCron extends Command
         $url = 'kesehatan/layanan/operasi';
         $bidang = 'OPERASI';
         $operasi = $this->countOperasi($this->tanggal);
-        foreach($operasi as $o){
+        foreach ($operasi as $o) {
             $input = array(
                 'tgl_transaksi' => $this->tanggal,
                 'klasifikasi_operasi' => $o->kategori,
@@ -130,7 +132,7 @@ class LayananCron extends Command
             );
             $response = $this->postData($url, $this->header, $input, 'bios_log_operasi', $this->count == 20 ? 600 : 0);
             $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-            $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body() ?? '500');
+            $this->info('#' . $this->count . '.' . $now . ' ' . $this->description . ' ' . $bidang . ':' . $response->body() ?? '500');
             $this->count == 20 ? $this->count = 1 :  $this->count++;
         }
     }
@@ -146,7 +148,7 @@ class LayananCron extends Command
         );
         $response = $this->postData($url, $this->header, $input, 'bios_log_radiologi', $this->count == 20 ? 600 : 0);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-        $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body() ?? '500');
+        $this->info('#' . $this->count . '.' . $now . ' ' . $this->description . ' ' . $bidang . ':' . $response->body() ?? '500');
         $this->count == 20 ? $this->count = 1 :  $this->count++;
     }
 
@@ -161,7 +163,7 @@ class LayananCron extends Command
         );
         $response = $this->postData($url, $this->header, $input, 'bios_log_ralan', $this->count == 20 ? 600 : 0);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-        $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body() ?? '500');
+        $this->info('#' . $this->count . '.' . $now . ' ' . $this->description . ' ' . $bidang . ':' . $response->body() ?? '500');
         $this->count == 20 ? $this->count = 1 :  $this->count++;
     }
 
@@ -178,7 +180,7 @@ class LayananCron extends Command
         );
         $response = $this->postData($url, $this->header, $input, 'bios_log_bpjs', $this->count == 20 ? 600 : 0);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-        $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body() ?? '500');
+        $this->info('#' . $this->count . '.' . $now . ' ' . $this->description . ' ' . $bidang . ':' . $response->body() ?? '500');
         $this->count == 20 ? $this->count = 1 :  $this->count++;
     }
 
@@ -187,7 +189,7 @@ class LayananCron extends Command
         $url = 'kesehatan/layanan/laboratorium_detail';
         $bidang = 'LABORATORIUM PARAMETER';
         $lab = $this->countLab($this->tanggal);
-        foreach($lab as $l){
+        foreach ($lab as $l) {
             $input = array(
                 'tgl_transaksi' => $this->tanggal,
                 'nama_layanan' => $l->nm_perawatan,
@@ -195,7 +197,7 @@ class LayananCron extends Command
             );
             $response = $this->postData($url, $this->header, $input, 'bios_log_lab_parameter', $this->count == 20 ? 600 : 0);
             $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-            $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body() ?? 'timeout');
+            $this->info('#' . $this->count . '.' . $now . ' ' . $this->description . ' ' . $bidang . ':' . $response->body() ?? 'timeout');
             $this->count == 20 ? $this->count = 1 :  $this->count++;
         }
     }
@@ -211,7 +213,7 @@ class LayananCron extends Command
         );
         $response = $this->postData($url, $this->header, $input, 'bios_log_lab_sample', $this->count == 20 ? 600 : 0);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-        $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body() ?? '500');
+        $this->info('#' . $this->count . '.' . $now . ' ' . $this->description . ' ' . $bidang . ':' . $response->body() ?? '500');
         $this->count == 20 ? $this->count = 1 :  $this->count++;
     }
 
@@ -220,7 +222,7 @@ class LayananCron extends Command
         $url = 'kesehatan/layanan/pasien_ranap';
         $bidang = 'PASIEN RANAP';
         $ranap = $this->counRanap($this->tanggal);
-        foreach($ranap as $l){
+        foreach ($ranap as $l) {
             $input = array(
                 'tgl_transaksi' => $this->tanggal,
                 'kode_kelas' => $l->kelas,
@@ -228,9 +230,8 @@ class LayananCron extends Command
             );
             $response = $this->postData($url, $this->header, $input, 'bios_log_ranap', $this->count == 20 ? 600 : 0);
             $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
-            $this->info('#'.$this->count.'.'.$now.' '.$this->description.' '.$bidang.':'.$response->body() ?? '500');
+            $this->info('#' . $this->count . '.' . $now . ' ' . $this->description . ' ' . $bidang . ':' . $response->body() ?? '500');
             $this->count == 20 ? $this->count = 1 :  $this->count++;
         }
     }
- 
 }
