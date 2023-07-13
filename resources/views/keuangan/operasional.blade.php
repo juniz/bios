@@ -71,7 +71,7 @@
                     <td>{{ $data->updated_at }}</td>
                     <td>
                         <x-adminlte-button label="Kirim Ulang"
-                            onclick="kirimUlang('{{$data->tgl_transaksi}}','{{$data->no_rekening}}','{{$data->kd_bank}}', '{{$data->unit}}', '{{$data->saldo_akhir}}')"
+                            onclick="kirimUlang('{{$data->tgl_transaksi}}','{{$data->no_rekening}}','{{$data->kdbank}}', '{{$data->unit}}', '{{$data->saldo_akhir}}')"
                             class="btn-sm" icon="fas fa-lg fa-save" />
                     </td>
                 </tr>
