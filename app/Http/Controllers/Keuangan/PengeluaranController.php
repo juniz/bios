@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Keuangan;
+
 use App\Http\Traits\RequestAPI;
 use App\Http\Traits\RequestDB;
 use App\Http\Controllers\Controller;
@@ -22,7 +23,7 @@ class PengeluaranController extends Controller
         ];
         $this->url = 'keuangan/akuntansi/pengeluaran';
         $this->data = $this->read();
-        $this->headTable = ['Tgl Transaksi', 'Kd. Akun', 'Jumlah'];
+        $this->headTable = ['Tgl Transaksi', 'Kd. Akun', 'Jumlah', 'Status', 'Send at', 'updated at', 'Aksi'];
         $this->keterangan = [
             'Data yang dikirimkan merupakan posisi data pada saat tanggal berkenaan, bersifat akumulatif.',
             'Data dikirimkan per periode harian atau per terjadinya transaksi.',
@@ -32,9 +33,9 @@ class PengeluaranController extends Controller
 
     public function index()
     {
-        return view('keuangan.pengeluaran',[
-            'data' => $this->data, 
-            'head' => $this->headTable, 
+        return view('keuangan.pengeluaran', [
+            'data' => $this->data,
+            'head' => $this->headTable,
             'akun' => $this->getAkun()->json()['data'],
             'keterangan' => $this->keterangan,
         ]);
@@ -43,13 +44,13 @@ class PengeluaranController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        $response = $this->postData($this->url, $this->header, $input);
+        unset($input['_token']);
+        $response = $this->postData($this->url, $this->header, $input, 'bios_log_pengeluaran');
         return $response->json();
     }
 
     public function read()
     {
-        $response = $this->getData($this->url, $this->header);
-        return $response->json();
+        return $this->bacaLog('bios_log_pengeluaran');
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Keuangan;
+
 use App\Http\Traits\RequestAPI;
 use App\Http\Traits\RequestDB;
 use App\Http\Controllers\Controller;
@@ -22,7 +23,7 @@ class PenerimaanController extends Controller
         ];
         $this->url = 'keuangan/akuntansi/penerimaan';
         $this->data = $this->read();
-        $this->headTable = ['Tgl Transaksi', 'Kd. Akun', 'Jumlah'];
+        $this->headTable = ['Tgl Transaksi', 'Kd. Akun', 'Jumlah', 'Status', 'Send at', 'updated at', 'Aksi'];
         $this->keterangan = [
             'Data yang dikirimkan digrouping per tanggal per akun dan posisi data pada saat tanggal berkenaan, bersifat akumulatif.',
             'Data dikirimkan per periode harian atau per terjadinya transaksi. Data yang dikirimkan termasuk yang belum di SP3B/disahkan.'
@@ -31,9 +32,9 @@ class PenerimaanController extends Controller
 
     public function index()
     {
-        return view('keuangan.penerimaan',[
-            'data' => $this->data, 
-            'head' => $this->headTable, 
+        return view('keuangan.penerimaan', [
+            'data' => $this->data,
+            'head' => $this->headTable,
             'akun' => $this->getAkun()->json()['data'],
             'keterangan' => $this->keterangan,
         ]);
@@ -42,16 +43,13 @@ class PenerimaanController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        $response = $this->postData($this->url, $this->header, $input);
+        unset($input['_token']);
+        $response = $this->postData($this->url, $this->header, $input, 'bios_log_penerimaan');
         return $response->json();
     }
 
     public function read()
     {
-        $response = $this->getData($this->url, $this->header);
-        return $response->json();
+        return $this->bacaLog('bios_log_penerimaan');
     }
-
-
-
 }

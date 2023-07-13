@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Keuangan;
+
 use App\Http\Traits\RequestAPI;
 use App\Http\Traits\RequestDB;
 use App\Http\Controllers\Controller;
@@ -22,7 +23,7 @@ class KelolaanController extends Controller
         ];
         $this->url = 'keuangan/saldo/saldo_dana_kelolaan';
         $this->data = $this->read();
-        $this->headTable = ['Tgl Transaksi', 'No. Rekening', 'Kd. Bank', 'Saldo Akhir'];
+        $this->headTable = ['Tgl Transaksi', 'No. Rekening', 'Kd. Bank', 'Saldo Akhir', 'Status', 'Send at', 'updated at', 'Aksi'];
         $this->keterangan = [
             'Data yang dikirimkan merupakan posisi data terakhir pada saat tanggal berkenaan, tidak akumulatif.',
             'Data dikirimkan per periode harian.',
@@ -31,9 +32,9 @@ class KelolaanController extends Controller
 
     public function index()
     {
-        return view('keuangan.kelolaan',[
-            'data' => $this->data, 
-            'head' => $this->headTable, 
+        return view('keuangan.kelolaan', [
+            'data' => $this->data,
+            'head' => $this->headTable,
             'bank' => $this->getBank()->json()['data'],
             'rekening' => $this->getRekening(),
             'keterangan' => $this->keterangan,
@@ -43,16 +44,13 @@ class KelolaanController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        $response = $this->postData($this->url, $this->header, $input);
+        unset($input['_token']);
+        $response = $this->postData($this->url, $this->header, $input, 'bios_log_kelolaan');
         return $response->json();
     }
 
     public function read()
     {
-        $response = $this->getData($this->url, $this->header);
-        return $response->json();
+        return $this->bacaLog('bios_log_kelolaan');
     }
-
-
-
 }
