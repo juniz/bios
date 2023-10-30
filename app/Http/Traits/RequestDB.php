@@ -2,6 +2,7 @@
 
 namespace App\Http\Traits;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 
@@ -647,6 +648,7 @@ trait RequestDB
 
     public function simpanLogSDM($table, array $data)
     {
+        $data = Arr::except($data, ['_token']);
         try {
             switch ($table) {
 

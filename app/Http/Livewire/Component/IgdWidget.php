@@ -1,0 +1,89 @@
+<?php
+
+namespace App\Http\Livewire\Component;
+
+use Livewire\Component;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
+
+class IgdWidget extends Component
+{
+    public array $label = [];
+    public array $years = [];
+    public array $dataset = [];
+    public $selectedYear;
+
+    public function mount()
+    {
+        $this->years = $this->getYears();
+        $this->selectedYear = Carbon::today()->format('Y');
+        $this->label = $this->getLabel();
+        $this->dataset =  [
+            [
+                'label' => 'Pasien IGD',
+                'borderColor' => "rgb(62,149,205)",
+                'backgroundColor' => "rgb(62,149,205,0.1)",
+                'data' => [0,0,0,0,0,0,0,0,0,0,0,0],
+            ],
+        ];
+    }
+
+    public function render()
+    {
+        return view('livewire.component.igd-widget');
+    }
+
+    public function updatedSelectedYear()
+    {
+        $this->dataset();
+    }
+
+    public function getYears()
+    {
+        $years = [];
+        for ($i = 0; $i < 5; $i++) {
+            $years[] = Carbon::today()->subYear($i)->format('Y');
+        }
+        return $years;
+    }
+
+    public function getLabel()
+    {
+        $labels = [];
+        for ($i = 1; $i < 13; $i++) {
+            $labels[] = date('F', mktime(0,0,0,$i, 1, date('Y')));
+        } 
+        return $labels;
+    }
+
+    public function getData($database, $month, $year)
+    {
+        $data = [];
+        for($i = 1; $i <= 13; $i++) {
+            $data = DB::table($database)
+                    ->where('tgl_transaksi', 'like', $year.'-'.$month.'%')
+                    ->groupBy(DB::raw('MONTH(tgl_transaksi)'))
+                    ->sum('jumlah');
+        }
+        return $data;
+    }
+
+    public function dataset()
+    {
+        $year = $this->selectedYear;
+        $data = [];
+        for ($i = 1; $i < 13; $i++) {
+            $month = date('m', mktime(0,0,0,$i, 1, $year));
+            $data[] = $this->getData('bios_log_igd', $month, $year);
+        }
+        $datasets = [
+            [
+                'label' => 'Pasien IGD',
+                'borderColor' => "rgb(62,149,205)",
+                'backgroundColor' => "rgb(62,149,205,0.1)",
+                'data' => $data,
+            ],
+        ];
+        $this->emit('updateIGDChart', $datasets);
+    }
+}

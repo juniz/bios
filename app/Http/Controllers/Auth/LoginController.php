@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Traits\Token;
 use Illuminate\Support\Facades\Cache;
 
-class LoginController extends Controller{
+class LoginController extends Controller
+{
     use Token;
     public function index()
     {
@@ -26,27 +27,27 @@ class LoginController extends Controller{
         $password = $request->get('password');
 
         $cek = DB::table('user')
-                    ->join('pegawai', 'pegawai.nik', '=', DB::Raw("AES_DECRYPT(id_user, 'nur')"))
-                    ->whereRaw("id_user = AES_ENCRYPT('{$username}', 'nur')")
-                    ->selectRaw("AES_DECRYPT(id_user, 'nur') as username, AES_DECRYPT(password, 'windi') as password, pegawai.nama")
-                    ->first();
-        if($cek){
-            if($cek->password == $password){
+            ->join('pegawai', 'pegawai.nik', '=', DB::Raw("AES_DECRYPT(id_user, 'nur')"))
+            ->whereRaw("id_user = AES_ENCRYPT('{$username}', 'nur')")
+            ->selectRaw("AES_DECRYPT(id_user, 'nur') as username, AES_DECRYPT(password, 'windi') as password, pegawai.nama")
+            ->first();
+        if ($cek) {
+            if ($cek->password == $password) {
                 $token = $this->getToken();
-                if(!empty($token->json()['token'])){
+                if (!empty($token->json()['token'])) {
                     // $request->session()->put('token', $token->json()['token']);
                     Cache::put('token', $token->json()['token']);
                     $request->session()->put('username', $cek->username);
                     $request->session()->put('password', $cek->password);
                     $request->session()->put('nama', $cek->nama);
                     return redirect('/dashboard');
-                }else{
+                } else {
                     return back()->withErrors(['message' => 'Gagal mendapatkan Token']);
-                }    
-            }else{
+                }
+            } else {
                 return back()->withErrors(['password' => 'Password salah']);
             }
-        }else{
+        } else {
             return back()->withErrors(['password' => 'Password salah', 'username' => 'User tidak ditemukan']);
         }
     }

@@ -19,7 +19,7 @@ class LayananCron extends Command
      *
      * @var string
      */
-    protected $signature = 'cron:layanan';
+    protected $signature = 'cron:layanan {tanggal?}';
 
     /**
      * The console command description.
@@ -43,18 +43,22 @@ class LayananCron extends Command
      */
     public function handle()
     {
-
-        $this->init();
+        for ($i = 9; $i <= 31; $i++) {
+            $tgl = $i < 10 ? '0' . $i : $i;
+            $this->init($tgl);
+        }
+        // $this->init();
     }
 
-    public function init()
+    public function init($tgl)
     {
         $this->token = $this->getToken()->json()['token'];
         $this->header = [
             'token' => $this->token,
             'Content-Type' => 'multipart/form-data'
         ];
-        $this->tanggal = Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
+        $tgl = '2023-07-' . $tgl;
+        $this->tanggal = $tgl ??  Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
         $this->now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
         $this->count = 0;
         // $this->sendMessage('Cron job Layanan BIOS telah dijalankan pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss')); 
@@ -83,7 +87,7 @@ class LayananCron extends Command
         $response = $this->postData($url, $this->header, $input, 'bios_log_farmasi', $this->count == 20 ? 600 : 0);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
         $this->info('#' . $this->count . '.' . $now . ' ' . $this->description . ' ' . $bidang . ':' . $response->body() ?? '500');
-        $this->count == 20 ? $this->count = 0 :  $this->count++;
+        // $this->count == 20 ? $this->count = 0 :  $this->count++;
     }
 
     public function postLayananIGD()
@@ -98,7 +102,7 @@ class LayananCron extends Command
         $response = $this->postData($url, $this->header, $input, 'bios_log_igd', $this->count == 20 ? 600 : 0);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
         $this->info('#' . $this->count . '.' . $now . ' ' . $this->description . ' ' . $bidang . ':' . $response->body() ?? '500');
-        $this->count == 20 ? $this->count = 1 :  $this->count++;
+        // $this->count == 20 ? $this->count = 1 :  $this->count++;
     }
 
     public function postLayananPoli()
@@ -115,7 +119,7 @@ class LayananCron extends Command
             $response = $this->postData($url, $this->header, $input, 'bios_log_poli', $this->count == 20 ? 600 : 0);
             $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
             $this->info('#' . $this->count . '.' . $now . ' ' . $this->description . ' ' . $bidang . ':' . $response->body() ?? '500');
-            $this->count == 20 ? $this->count = 1 :  $this->count++;
+            // $this->count == 20 ? $this->count = 1 :  $this->count++;
         }
     }
 
@@ -133,7 +137,7 @@ class LayananCron extends Command
             $response = $this->postData($url, $this->header, $input, 'bios_log_operasi', $this->count == 20 ? 600 : 0);
             $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
             $this->info('#' . $this->count . '.' . $now . ' ' . $this->description . ' ' . $bidang . ':' . $response->body() ?? '500');
-            $this->count == 20 ? $this->count = 1 :  $this->count++;
+            // $this->count == 20 ? $this->count = 1 :  $this->count++;
         }
     }
 
@@ -149,7 +153,7 @@ class LayananCron extends Command
         $response = $this->postData($url, $this->header, $input, 'bios_log_radiologi', $this->count == 20 ? 600 : 0);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
         $this->info('#' . $this->count . '.' . $now . ' ' . $this->description . ' ' . $bidang . ':' . $response->body() ?? '500');
-        $this->count == 20 ? $this->count = 1 :  $this->count++;
+        // $this->count == 20 ? $this->count = 1 :  $this->count++;
     }
 
     public function postLayananRalan()
@@ -164,7 +168,7 @@ class LayananCron extends Command
         $response = $this->postData($url, $this->header, $input, 'bios_log_ralan', $this->count == 20 ? 600 : 0);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
         $this->info('#' . $this->count . '.' . $now . ' ' . $this->description . ' ' . $bidang . ':' . $response->body() ?? '500');
-        $this->count == 20 ? $this->count = 1 :  $this->count++;
+        // $this->count == 20 ? $this->count = 1 :  $this->count++;
     }
 
     public function postLayananPenjab()
@@ -181,7 +185,7 @@ class LayananCron extends Command
         $response = $this->postData($url, $this->header, $input, 'bios_log_bpjs', $this->count == 20 ? 600 : 0);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
         $this->info('#' . $this->count . '.' . $now . ' ' . $this->description . ' ' . $bidang . ':' . $response->body() ?? '500');
-        $this->count == 20 ? $this->count = 1 :  $this->count++;
+        // $this->count == 20 ? $this->count = 1 :  $this->count++;
     }
 
     public function postLayananLabParameter()
@@ -198,7 +202,7 @@ class LayananCron extends Command
             $response = $this->postData($url, $this->header, $input, 'bios_log_lab_parameter', $this->count == 20 ? 600 : 0);
             $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
             $this->info('#' . $this->count . '.' . $now . ' ' . $this->description . ' ' . $bidang . ':' . $response->body() ?? 'timeout');
-            $this->count == 20 ? $this->count = 1 :  $this->count++;
+            // $this->count == 20 ? $this->count = 1 :  $this->count++;
         }
     }
 
@@ -214,7 +218,7 @@ class LayananCron extends Command
         $response = $this->postData($url, $this->header, $input, 'bios_log_lab_sample', $this->count == 20 ? 600 : 0);
         $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
         $this->info('#' . $this->count . '.' . $now . ' ' . $this->description . ' ' . $bidang . ':' . $response->body() ?? '500');
-        $this->count == 20 ? $this->count = 1 :  $this->count++;
+        // $this->count == 20 ? $this->count = 1 :  $this->count++;
     }
 
     public function postLayananRanap()
@@ -231,7 +235,7 @@ class LayananCron extends Command
             $response = $this->postData($url, $this->header, $input, 'bios_log_ranap', $this->count == 20 ? 600 : 0);
             $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
             $this->info('#' . $this->count . '.' . $now . ' ' . $this->description . ' ' . $bidang . ':' . $response->body() ?? '500');
-            $this->count == 20 ? $this->count = 1 :  $this->count++;
+            // $this->count == 20 ? $this->count = 1 :  $this->count++;
         }
     }
 }

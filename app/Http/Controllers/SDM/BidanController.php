@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Traits\Token;
 use App\Http\Traits\RequestAPI;
 use App\Http\Traits\RequestDB;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 
@@ -52,6 +53,7 @@ class BidanController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
+        Arr::forget($input, ['_token']);
         $response = $this->postData($this->url, $this->header, $input, 'bios_log_bidan');
         return $response->json();
     }

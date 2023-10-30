@@ -678,8 +678,13 @@ return [
             'files' => [
                 [
                     'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/chart.js/Chart.bundle.min.js',
+                ],
+                [
+                    'type' => 'js',
                     'asset' => false,
-                    'location' => '//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js',
+                    'location' => 'https://cdn.jsdelivr.net/gh/emn178/chartjs-plugin-labels/src/chartjs-plugin-labels.js',
                 ],
             ],
         ],
@@ -780,5 +785,5 @@ return [
     |
     */
 
-    'livewire' => false,
+    'livewire' => true,
 ];
