@@ -547,6 +547,16 @@ return [
             ],
         ],
         [
+            'text'    => 'Monitoring',
+            'icon'    => 'fas fa-fw fa-server',
+            'submenu' => [
+                [
+                    'text' => 'Scheduler',
+                    'url'  => '/monitoring/scheduler',
+                ]
+            ],
+        ],
+        [
             'text' => 'Keluar',
             'icon' => 'far fa-fw fa-arrow-right',
             'url' => '/logout'
