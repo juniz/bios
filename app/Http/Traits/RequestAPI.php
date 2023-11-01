@@ -29,7 +29,11 @@ trait RequestAPI
                 'send_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ]);
-            $this->simpanLog($table, $payloads);
+            if(Arr::has($payloads, 'pns')){
+                $this->simpanLogSDM($table, $payloads);
+            }else{
+                $this->simpanLog($table, $payloads);
+            }
             if ($response->json()['status'] == 'MSG20003') {
                 // $this->sendMessage($url.' : '.$response->getBody());
                 // Log::info($this->urlPost.$url, $response->json());

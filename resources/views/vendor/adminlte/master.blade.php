@@ -108,6 +108,8 @@
         @endif
     @endif
 
+    <x-livewire-alert::scripts />
+
     {{-- Custom Scripts --}}
     @yield('adminlte_js')
 
