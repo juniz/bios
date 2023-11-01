@@ -214,6 +214,10 @@ Route::middleware(['ceklogin'])->prefix('ikt')->group(function () {
     Route::post('/pertumbuhan_realisasi_pendapatan_pengelolaan_aset_blu/kirim', [App\Http\Controllers\IKT\PertumbuhanRealisasiPendapatanPengelolaanAsetBLUController::class, 'store']);
 });
 
+Route::middleware(['ceklogin'])->prefix('monitoring')->group(function () {
+    Route::get('scheduler', fn() => view('monitoring.scheduler'))->named('scheduler');
+});
+
 Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])->middleware('ceklogin');
 Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle']);    
 Route::get('/chat',function(){
