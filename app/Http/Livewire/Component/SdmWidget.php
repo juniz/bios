@@ -4,11 +4,13 @@ namespace App\Http\Livewire\Component;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 class SdmWidget extends Component
 {
     public array $label = [];
     public array $dataset = [];
+    public array $years = [];
     public $jenis = [
         'Perawat' => 'bios_log_perawat',
         'Bidan' => 'bios_log_bidan',
@@ -25,6 +27,7 @@ class SdmWidget extends Component
         'Dokter Umum' => 'bios_log_dokter_umum',
     ];
     public $selectedJenis;
+    public $selectedYear;
 
     public function render()
     {
@@ -33,6 +36,8 @@ class SdmWidget extends Component
 
     public function mount()
     {
+        $this->years = $this->getYears();
+        $this->selectedYear = Carbon::today()->format('Y');
         $this->selectedJenis = 'Perawat';
         $this->label = $this->getLabel();
         $this->dataset = [
@@ -45,6 +50,15 @@ class SdmWidget extends Component
         // $this->getDataset($this->jenis[$this->selectedJenis]);
     }
 
+    public function getYears()
+    {
+        $years = [];
+        for ($i = 0; $i < 5; $i++) {
+            $years[] = Carbon::today()->subYear($i)->format('Y');
+        }
+        return $years;
+    }
+
     public function getLabel()
     {
         return ['PNS', 'PPPK', 'Anggota', 'Non PNS Tetap', 'Kontrak'];
@@ -52,7 +66,10 @@ class SdmWidget extends Component
 
     public function getData($database)
     {
-        return DB::table($database)->orderByDesc('tgl_transaksi')->first();
+        return DB::table($database)
+                    ->where('tgl_transaksi', 'like', $this->selectedYear.'%')
+                    ->orderByDesc('tgl_transaksi')
+                    ->first();
     }
 
     public function getDataset($database)
@@ -62,12 +79,18 @@ class SdmWidget extends Component
             [
                 'backgroundColor' => ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b'],
                 'hoverBackgroundColor' => ['#2e59d9', '#17a673', '#2c9faf', '#dda20a', '#e74a3b'],
-                'data' => [$data->pns, $data->pppk, $data->anggota, $data->non_pns_tetap, $data->kontrak],
+                'data' => [$data->pns ?? 0, $data->pppk ?? 0, $data->anggota ?? 0, $data->non_pns_tetap ?? 0, $data->kontrak ?? 0],
             ]
         ];
     }
 
     public function updatedSelectedJenis()
+    {
+        $this->getDataset($this->jenis[$this->selectedJenis]);
+        $this->emit('updateSDM', $this->dataset);
+    }
+
+    public function updatedSelectedYear()
     {
         $this->getDataset($this->jenis[$this->selectedJenis]);
         $this->emit('updateSDM', $this->dataset);
