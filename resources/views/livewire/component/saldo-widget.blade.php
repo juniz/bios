@@ -27,7 +27,7 @@
             <div class="info-box-content">
                 <span class="info-box-text">Pengelolaan Kas</span>
                 <span class="info-box-number">
-                    @money(0)
+                    @money($kas)
                 </span>
             </div>
         </div>

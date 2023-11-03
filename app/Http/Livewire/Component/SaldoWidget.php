@@ -14,6 +14,7 @@ class SaldoWidget extends Component
         return view('livewire.component.saldo-widget', [
             'operasional' => $this->loadOperasional ? $this->getOperasional() : 0,
             'kelolaan' => $this->loadKelolaan ? $this->getKelolaan() : 0,
+            'kas' => $this->loadKas ? $this->getKas() : 0,
         ]);
     }
 
