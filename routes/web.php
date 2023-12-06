@@ -23,6 +23,14 @@ Route::get('/dashboard', function (Request $request) {
     return view('dashboard',['nama' => $nama]);
 })->middleware('ceklogin');
 
+Route::get('dahboard-renstra', fn() => view('dashboard.renstra'))->middleware('ceklogin');
+
+Route::middleware(['ceklogin'])->prefix('renstra')->group(function () {
+    Route::get('dokpol', fn() => view('renstra.dokpol'))->named('renstra.dokpol');
+    Route::get('sdm', fn() => view('renstra.sdm'))->named('renstra.sdm');
+    Route::get('pelayanan', fn() => view('renstra.pelayanan'))->named('renstra.pelayanan');
+});
+
 Route::middleware(['ceklogin'])->prefix('sdm')->group(function () {
 
     Route::get('/perawat', fn() => view('sdm.perawat'))->named('perawat');
@@ -123,7 +131,7 @@ Route::middleware(['ceklogin'])->prefix('layanan')->group(function () {
 
 Route::middleware(['ceklogin'])->prefix('keuangan')->group(function () {
 
-    Route::get('/operasional', [App\Http\Controllers\Keuangan\OperasionalController::class, 'index'])->named('operasional');
+    Route::get('/operasional', fn() => view('keuangan.operasional'))->named('operasional');
     Route::post('/operasional/kirim', [App\Http\Controllers\Keuangan\OperasionalController::class, 'store']);
 
     Route::get('/kas', [App\Http\Controllers\Keuangan\KasController::class, 'index'])->named('kas');

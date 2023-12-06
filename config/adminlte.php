@@ -698,6 +698,16 @@ return [
                 ],
             ],
         ],
+        'ApexChart' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => 'https://cdn.jsdelivr.net/npm/apexcharts',
+                ],
+            ],
+        ],
         'Sweetalert2' => [
             'active' => true,
             'files' => [

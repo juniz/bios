@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
         // Commands\LabParamCron::class,
         Commands\LayananCron::class,
         Commands\BulananCron::class,
+        // Commands\SendRanap::class,
     ];
     /**
      * Define the application's command schedule.

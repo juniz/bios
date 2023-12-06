@@ -150,6 +150,7 @@ trait RequestDB
     {
         $data = DB::table('reg_periksa')
             ->where('tgl_registrasi', $tanggal)
+            ->where('status_lanjut', 'Ralan')
             ->where('stts', 'Sudah')
             ->count();
         return $data;
@@ -186,8 +187,9 @@ trait RequestDB
     {
         return DB::table('kamar')
             ->join('kamar_inap', 'kamar_inap.kd_kamar', '=', 'kamar.kd_kamar')
-            ->where('kamar_inap.tgl_masuk', $tanggal)
-            ->where('kamar_inap.tgl_keluar', '0000-00-00')
+            ->where('kamar_inap.tgl_keluar', '>=', $tanggal)
+            ->where('kamar_inap.tgl_masuk', '<=', $tanggal)
+            ->where('kamar_inap.tgl_keluar', '<>', '0000-00-00')
             ->groupBy('kamar.kelas')
             ->select(DB::raw('TRIM("Kelas" FROM kamar.kelas) AS kelas'), DB::raw('count(kamar_inap.no_rawat) as jml'))
             ->get();

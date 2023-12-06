@@ -17,14 +17,17 @@ trait Token
         try {
             $response = Http::post(env('URL_TOKEN', 'https://bios.kemenkeu.go.id/api/token'), [
                 'satker' => env('SATKER', '679614'),
-                'key' => env('KEY', 'ibpwxlOzD5dX9ZTDZfOAyGWS3EX05noJ')
+                'key' => env('KEY')
             ]);
             if ($response->json()['status'] != 'MSG20004') {
                 $this->sendMessage('Token Error : ' . $response->getBody());
-                if ($i < 3) {
-                    $i++;
+                for($i = 0; $i < 3; $i++){
                     $this->getToken();
                 }
+                // if ($i < 3) {
+                //     $i++;
+                //     $this->getToken();
+                // }
             }
             Cache::put('token', $response->json()['token'] ?? null, now()->addMinutes(1440));
             return $response;

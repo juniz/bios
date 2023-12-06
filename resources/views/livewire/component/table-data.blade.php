@@ -14,6 +14,7 @@
                     <th>Last Failed</th>
                     <th>Last Skipped</th>
                     <th>Last Ping</th>
+                    <th>Menu</th>
                 </tr>
             </thead>
             <tbody>
@@ -30,6 +31,7 @@
                     <td>{{ $log->last_failed_at }}</td>
                     <td>{{ $log->last_skipped_at }}</td>
                     <td>{{ $log->last_pinged_at }}</td>
+                    <td><button type="button" class="btn btn-sm btn-primary">Run</button></td>
                 </tr>
                 @empty
                 <tr>
