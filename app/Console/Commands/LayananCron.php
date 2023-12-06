@@ -66,7 +66,7 @@ class LayananCron extends Command
             'token' => $this->token,
             'Content-Type' => 'multipart/form-data'
         ];
-        $tgl = empty($tgl) ? null : '2022-12-' . $tgl ;
+        // $tgl = empty($tgl) ? null : '2022-12-' . $tgl ;
         $tanggal = $tgl ??  Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
         $this->now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
         $this->count = 0;
