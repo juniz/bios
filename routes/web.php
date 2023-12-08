@@ -131,7 +131,8 @@ Route::middleware(['ceklogin'])->prefix('layanan')->group(function () {
 
 Route::middleware(['ceklogin'])->prefix('keuangan')->group(function () {
 
-    Route::get('/operasional', fn() => view('keuangan.operasional'))->named('operasional');
+    // Route::get('/operasional', fn() => view('keuangan.operasional'))->named('operasional');
+    Route::get('/operasional', [App\Http\Controllers\Keuangan\OperasionalController::class, 'index'])->named('operasional');
     Route::post('/operasional/kirim', [App\Http\Controllers\Keuangan\OperasionalController::class, 'store']);
 
     Route::get('/kas', [App\Http\Controllers\Keuangan\KasController::class, 'index'])->named('kas');
