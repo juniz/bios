@@ -94,9 +94,9 @@
             let data = {
                 _token:$('meta[name="csrf-token"]').attr('content'),
                 tgl_transaksi:$("input[name=tanggal]").val(),
-                no_rekening:JSON.stringify($("select[name=no_rekening]").val()),
+                no_rekening:$("select[name=no_rekening]").val(),
                 saldo_akhir:$("input[name=saldo_akhir]").val(),
-                kdbank:JSON.stringify($("select[name=kdbank]").val()),
+                kdbank:$("select[name=kdbank]").val(),
             };
 
             $.ajax({
