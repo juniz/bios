@@ -191,7 +191,7 @@ trait RequestDB
             ->where('kamar_inap.tgl_masuk', '<=', $tanggal)
             ->where('kamar_inap.tgl_keluar', '<>', '0000-00-00')
             ->groupBy('kamar.kelas')
-            ->select(DB::raw('TRIM("Kelas" FROM kamar.kelas) AS kelas'), DB::raw('count(kamar_inap.no_rawat) as jml'))
+            ->select('kamar.kelas', DB::raw('count(kamar_inap.no_rawat) as jml'))
             ->get();
     }
 
@@ -734,5 +734,50 @@ trait RequestDB
             ->orderBy('tgl_transaksi', 'desc')
             ->get();
         return $data;
+    }
+
+    public function countVisitePertama($tanggal)
+    {
+        return DB::table('rawat_inap_dr')
+            ->join('jns_perawatan_inap', 'rawat_inap_dr.kd_jenis_prw', '=', 'jns_perawatan_inap.kd_jenis_prw')
+            ->join('dpjp_ranap', 'dpjp_ranap.no_rawat', '=', 'rawat_inap_dr.no_rawat')
+            ->where('rawat_inap_dr.jam_rawat', '<=', '10:00:00')
+            ->where('rawat_inap_dr.tgl_perawatan', $tanggal)
+            ->where('jns_perawatan_inap.nm_perawatan', 'like', '%Visit%')
+            ->selectRaw("count( DISTINCT rawat_inap_dr.kd_dokter ) as jml ")
+            ->first();
+    }
+
+    public function countVisite1($tanggal)
+    {
+        return DB::table('rawat_inap_dr')
+            ->join('jns_perawatan_inap', 'rawat_inap_dr.kd_jenis_prw', '=', 'jns_perawatan_inap.kd_jenis_prw')
+            ->join('dpjp_ranap', 'dpjp_ranap.no_rawat', '=', 'rawat_inap_dr.no_rawat')
+            ->where('rawat_inap_dr.jam_rawat', '<=', '10:00:00')
+            ->where('rawat_inap_dr.tgl_perawatan', $tanggal)
+            ->where('jns_perawatan_inap.nm_perawatan', 'like', '%Visit%')
+            ->count('rawat_inap_dr.no_rawat');
+    }
+
+    public function countVisite2($tanggal)
+    {
+        return DB::table('rawat_inap_dr')
+            ->join('jns_perawatan_inap', 'rawat_inap_dr.kd_jenis_prw', '=', 'jns_perawatan_inap.kd_jenis_prw')
+            ->join('dpjp_ranap', 'dpjp_ranap.no_rawat', '=', 'rawat_inap_dr.no_rawat')
+            ->whereBetween('rawat_inap_dr.jam_rawat', ['10:00:01', '12:00:00'])
+            ->where('rawat_inap_dr.tgl_perawatan', $tanggal)
+            ->where('jns_perawatan_inap.nm_perawatan', 'like', '%Visit%')
+            ->count('rawat_inap_dr.no_rawat');
+    }
+
+    public function countVisite3($tanggal)
+    {
+        return DB::table('rawat_inap_dr')
+            ->join('jns_perawatan_inap', 'rawat_inap_dr.kd_jenis_prw', '=', 'jns_perawatan_inap.kd_jenis_prw')
+            ->join('dpjp_ranap', 'dpjp_ranap.no_rawat', '=', 'rawat_inap_dr.no_rawat')
+            ->where('rawat_inap_dr.jam_rawat', '>', '12:00:00')
+            ->where('rawat_inap_dr.tgl_perawatan', $tanggal)
+            ->where('jns_perawatan_inap.nm_perawatan', 'like', '%Visit%')
+            ->count('rawat_inap_dr.no_rawat');
     }
 }

@@ -212,4 +212,13 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
+
+    'api' => [
+        'url' => env('URL_API', 'https://bios.kemenkeu.go.id/api/ws/'),
+        'token' => env('TOKEN_API', 'https://bios.kemenkeu.go.id/api/token'),
+        'satker' => env('SATKER_API', '679614'),
+        'key' => env('KEY_API', 'b1b05f2b-8b9b-4b9b-9b9b-9b9b9b9b9b9b'),
+        'url_get' => env('URL_GET_API', 'https://bios.kemenkeu.go.id/api/get/data/'),
+    ],
+
 ];

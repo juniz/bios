@@ -10,10 +10,12 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
+use App\Http\Traits\Token;
 
 trait RequestAPI
 {
-    use Telegram, RequestDB;
+    use Telegram, RequestDB, Token;
     protected $urlPost = 'https://bios.kemenkeu.go.id/api/ws/';
     protected $urlGet = 'https://bios.kemenkeu.go.id/api/get/data/';
 
@@ -102,6 +104,67 @@ trait RequestAPI
     public function getAkun()
     {
         $response = Http::retry(5, 100)->get(env('URL_POST_DATA', $this->urlGet) . 'ref/akun');
+        return $response;
+    }
+
+    public function responseStatus($status)
+    {
+        $response = "";
+        switch($status){
+            case "MSG20001":
+                $response = "Data ditemukan";
+                break;
+            case "MSG20002":
+                $response = "Data tidak ditemukan";
+                break;
+            case "MSG20003":
+                $response = "Data berhasil disimpan";
+                break;
+            case "MSG20004":
+                $response = "Request token berhasil";
+                break;
+            case "MSG20005":
+                $response = "Parameter tidak valid";
+                break;
+            case "MSG40101":
+                $response = "Otentikasi gagal, kode satker salah";
+                break;
+            case "MSG40102":
+                $response = "Otentikasi gagal, key salah";
+                break;
+            case "MSG40103":
+                $response = "Token invalid atau sudah tidak berlaku";
+                break;
+            case "MSG40401":
+                $response = "Resource tidak ditemukan";
+                break;
+            case "MSG50001":
+                $response = "Controller error, silahkan hubungi administrator";
+                break;
+            default:
+                $response = "Terjadi kesalahan saat akses server bios";
+                break;
+        }
+        return $response;
+    }
+
+    public function responseFailed($message)
+    {
+        $response = [
+            'status' => 'MSG50000',
+            'message' => $message
+        ];
+        return $response;
+    }
+
+    public function sendData($url, $body)
+    {
+        $token = Cache::get('token') ?? $this->getToken()->json()['token'];
+        $header = [
+            'token' => $token ?? '-',
+            'Content-Type' => 'multipart/form-data'
+        ];
+        $response = Http::asForm()->withHeaders($header)->post(env('URL_POST_DATA', $this->urlPost) . $url, $body);
         return $response;
     }
 }

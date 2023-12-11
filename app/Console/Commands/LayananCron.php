@@ -8,9 +8,13 @@ use App\Http\Traits\RequestDB;
 use Illuminate\Support\Carbon;
 use App\Http\Traits\RequestAPI;
 use App\Http\Traits\Telegram;
+use App\Models\Visite1;
+use App\Models\Visite2;
+use App\Models\Visite3;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
+use App\Models\VisitePertama;
 
 class LayananCron extends Command
 {
@@ -82,6 +86,10 @@ class LayananCron extends Command
         $this->postLayananLabParameter($tanggal);
         $this->postLayananLabSample($tanggal);
         $this->postLayananRanap($tanggal);
+        $this->postVisitePertama($tanggal);
+        $this->postVisite1($tanggal);
+        $this->postVisite2($tanggal);
+        $this->postVisite3($tanggal);
     }
 
     public function postLayananFarmasi($tanggal)
@@ -245,6 +253,182 @@ class LayananCron extends Command
             $now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
             $this->info('#' . $this->count . '.' . $tanggal . ' ' . $this->description . ' ' . $bidang . ':' . $response->body() ?? '500');
             $this->count++;
+        }
+    }
+
+    public function postVisitePertama($tanggal)
+    {
+        $url = 'kesehatan/ikt/visite_pertama';
+        try{
+
+            $jumlah = $this->countVisitePertama($tanggal);
+            $input = array(
+                'tgl_transaksi' => $tanggal,
+                'jumlah' => $jumlah->jml
+            );
+            $response = $this->sendData($url, $input);
+            if($response->successful()){
+                
+                VisitePertama::updateOrCreate([
+                    'tgl_transaksi' => $tanggal
+                ],[
+                    'jumlah' => $jumlah->jml,
+                    'kode' => $response->status(),
+                    'status' => $response->json()['status'],
+                    'response' => $response->body(),
+                ]);
+
+            }else{
+
+                VisitePertama::updateOrCreate([
+                    'tgl_transaksi' => $tanggal
+                ],[
+                    'jumlah' => $jumlah,
+                    'kode' => $response->status() ?? 500,
+                    'status' => $response->json()['status'] ?? '500',
+                    'response' => $response->body() ?? 'Error Server',
+                ]);
+
+            }
+
+            $this->info($url . ' : ' . $response->body() ?? '500');
+
+        }catch(\Exception $e){
+
+            $this->info($url . ' : ' . $e->getMessage() ?? '500');
+            $this->sendMessage('Error Visite Pertama : ' . $e->getMessage() ?? '500');
+        }
+    }
+
+    public function postVisite1($tanggal)
+    {
+        $url = 'kesehatan/ikt/visite_1';
+        try{
+
+            $jumlah = $this->countVisite1($tanggal);
+            $input = array(
+                'tgl_transaksi' => $tanggal,
+                'jumlah' => $jumlah
+            );
+            $response = $this->sendData($url, $input);
+            if($response->successful()){
+                
+                Visite1::updateOrCreate([
+                    'tgl_transaksi' => $tanggal
+                ],[
+                    'jumlah' => $jumlah,
+                    'kode' => $response->status(),
+                    'status' => $response->json()['status'],
+                    'response' => $response->body(),
+                ]);
+
+            }else{
+
+                Visite1::updateOrCreate([
+                    'tgl_transaksi' => $tanggal
+                ],[
+                    'jumlah' => $jumlah,
+                    'kode' => $response->status() ?? 408,
+                    'status' => $response->json()['status'] ?? 'Request Timeout',
+                    'response' => $response->body() ?? 'Request Timeout',
+                ]);
+
+            }
+
+            $this->info($url . ' (' . $tanggal . ') : ' . $response->body() ?? 'Request Timeout');
+
+        }catch(\Exception $e){
+
+            $this->info($url . ' : ' . $e->getMessage() ?? '500');
+            $this->sendMessage('Error Visite 1 : ' . $e->getMessage() ?? '500');
+        }
+    }
+
+    public function postVisite2($tanggal)
+    {
+        $url = 'kesehatan/ikt/visite_2';
+        try{
+
+            $jumlah = $this->countVisite2($tanggal);
+            $input = array(
+                'tgl_transaksi' => $tanggal,
+                'jumlah' => $jumlah
+            );
+            $response = $this->sendData($url, $input);
+            if($response->successful()){
+                
+                Visite2::updateOrCreate([
+                    'tgl_transaksi' => $tanggal
+                ],[
+                    'jumlah' => $jumlah,
+                    'kode' => $response->status(),
+                    'status' => $response->json()['status'],
+                    'response' => $response->body(),
+                ]);
+
+            }else{
+
+                Visite2::updateOrCreate([
+                    'tgl_transaksi' => $tanggal
+                ],[
+                    'jumlah' => $jumlah,
+                    'kode' => $response->status() ?? 408,
+                    'status' => $response->json()['status'] ?? 'Request Timeout',
+                    'response' => $response->body() ?? 'Request Timeout',
+                ]);
+
+            }
+
+            $this->info($url . ' (' . $tanggal . ') : ' . $response->body() ?? 'Request Timeout');
+
+        }catch(\Exception $e){
+
+            $this->info($url . ' : ' . $e->getMessage() ?? '500');
+            $this->sendMessage('Error Visite 2 : ' . $e->getMessage() ?? '500');
+        }
+    }
+
+    public function postVisite3($tanggal)
+    {
+        $url = 'kesehatan/ikt/visite_3';
+        try{
+
+            $jumlah = $this->countVisite3($tanggal);
+            $input = array(
+                'tgl_transaksi' => $tanggal,
+                'jumlah' => $jumlah
+            );
+            $response = $this->sendData($url, $input);
+            if($response->successful()){
+                
+                Visite3::updateOrCreate([
+                    'tgl_transaksi' => $tanggal
+                ],[
+                    'jumlah' => $jumlah,
+                    'kode' => $response->status(),
+                    'status' => $response->json()['status'],
+                    'response' => $response->body(),
+                ]);
+
+            }else{
+
+                Visite3::updateOrCreate([
+                    'tgl_transaksi' => $tanggal
+                ],[
+                    'jumlah' => $jumlah,
+                    'kode' => $response->status() ?? 408,
+                    'status' => $response->json()['status'] ?? 'Request Timeout',
+                    'response' => $response->body() ?? 'Request Timeout',
+                ]);
+
+            }
+
+            $this->info($url . ' (' . $tanggal . ') : ' . $response->body() ?? 'Request Timeout');
+
+        }catch(\Exception $e){
+
+            $this->info($url . ' : ' . $e->getMessage() ?? '500');
+            $this->sendMessage('Error Visite 3 : ' . $e->getMessage() ?? '500');
         }
     }
 }
