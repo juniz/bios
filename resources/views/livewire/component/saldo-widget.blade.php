@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-12 col-sm-12 col-md-4">
+    {{-- <div class="col-12 col-sm-12 col-md-4">
         @foreach($operasional as $key => $value)
         <div class="info-box">
         <span class="info-box-icon bg-info elevation-1"><i class="fas fa-money-bill"></i></span>
@@ -13,8 +13,8 @@
             </div>
         </div>
         @endforeach
-    </div>
-    <div class="col-12 col-sm-12 col-md-4">
+    </div> --}}
+    <div class="col-12 col-sm-12 col-md-6">
         <div class="info-box">
         <span class="info-box-icon bg-success elevation-1"><i class="fas fa-coins"></i></span>
             <div wire:init='readyLoadKelolaan' class="info-box-content">
@@ -25,7 +25,7 @@
             </div>
         </div>
     </div>
-    <div class="col-12 col-sm-12 col-md-4">
+    <div class="col-12 col-sm-12 col-md-6">
         <div class="info-box">
         <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-briefcase"></i></span>
             <div class="info-box-content">

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\BotManController;
+use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -131,14 +132,15 @@ Route::middleware(['ceklogin'])->prefix('layanan')->group(function () {
 
 Route::middleware(['ceklogin'])->prefix('keuangan')->group(function () {
 
-    // Route::get('/operasional', fn() => view('keuangan.operasional'))->named('operasional');
-    Route::get('/operasional', [App\Http\Controllers\Keuangan\OperasionalController::class, 'index'])->named('operasional');
+    Route::get('/operasional', fn() => view('keuangan.operasional'))->named('operasional');
+    // Route::get('/operasional', [App\Http\Controllers\Keuangan\OperasionalController::class, 'index'])->named('operasional');
     Route::post('/operasional/kirim', [App\Http\Controllers\Keuangan\OperasionalController::class, 'store']);
 
     Route::get('/kas', [App\Http\Controllers\Keuangan\KasController::class, 'index'])->named('kas');
     Route::post('/kas/kirim', [App\Http\Controllers\Keuangan\KasController::class, 'store']);
 
-    Route::get('/kelolaan', [App\Http\Controllers\Keuangan\KelolaanController::class, 'index'])->named('kelolaan');
+    // Route::get('/kelolaan', [App\Http\Controllers\Keuangan\KelolaanController::class, 'index'])->named('kelolaan');
+    Route::get('/kelolaan', fn() => view('keuangan.kelolaan'))->named('kelolaan');
     Route::post('/kelolaan/kirim', [App\Http\Controllers\Keuangan\KelolaanController::class, 'store']);
 
     Route::get('/penerimaan', [App\Http\Controllers\Keuangan\PenerimaanController::class, 'index'])->named('penerimaan');
@@ -231,4 +233,9 @@ Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'i
 Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle']);    
 Route::get('/chat',function(){
     return view('telegram');
+});
+
+Route::get('/artisan', function(){
+    Artisan::call('cron:layanan 2022');
+    dd();
 });

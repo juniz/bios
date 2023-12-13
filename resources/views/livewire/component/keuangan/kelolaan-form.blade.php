@@ -19,21 +19,13 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-6 col-md-4">
-                <x-ui.input label="Unit" id="unit" model="unit" />
+            <div class="col-6 col-md-6">
+                <x-ui.input label="Saldo Akhir" id="saldo_akhir" type="number" model="saldo_akhir" />
             </div>
-            <div class="col-6 col-md-4">
-                <x-ui.input label="Saldo Akhir" id="saldo_akhir" model="saldo_akhir" />
-            </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <x-ui.input-datetime label="Tanggal Transaksi" id="tgl_transaksi" model="tgl_transaksi" />
             </div>
         </div>
         <button type="submit" class="btn btn-block btn-primary mt-3">Simpan</button>
     </form>
 </div>
-
-@push('js')
-<script>
-</script>
-@endpush

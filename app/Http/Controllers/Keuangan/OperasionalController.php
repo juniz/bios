@@ -7,6 +7,7 @@ use App\Http\Traits\RequestDB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Traits\Token;
+use App\Models\Kelolaan;
 use App\Models\Operasional;
 use Illuminate\Support\Facades\Cache;
 
@@ -88,14 +89,13 @@ class OperasionalController extends Controller
                     'tgl_transaksi' => $r['tgl_transaksi'],
                     'no_rekening' => $r['no_rekening'],
                     'kdbank' => $r['kdbank'],
-                    'unit' => $r['unit'],
                     'saldo_akhir' => $r['saldo_akhir'],
                     'kode' => 200,
                     'status' => 'MSG20003',
                     'response' => ''
                 ];
 
-                Operasional::create($input);
+                Kelolaan::create($input);
             }
 
             return response()->json([

@@ -18,6 +18,7 @@
         "livewire/livewire": "^2.12",
         "ramsey/uuid": "^4.7",
         "rap2hpoutre/laravel-log-viewer": "^2.2",
+        "rappasoft/laravel-livewire-tables": "^2.15",
         "spatie/laravel-schedule-monitor": "^3.0"
     },
     "require-dev": {

@@ -12,7 +12,6 @@ class SaldoWidget extends Component
     public function render()
     {
         return view('livewire.component.saldo-widget', [
-            'operasional' => $this->getOperasional(),
             'kelolaan' => $this->loadKelolaan ? $this->getKelolaan() : 0,
             'kas' => $this->loadKas ? $this->getKas() : 0,
         ]);
@@ -30,10 +29,9 @@ class SaldoWidget extends Component
 
     public function getOperasional()
     {
-        $rek = DB::table('bios_log_operasional')->groupBy('no_rekening')->get();
+        $rek = DB::table('bios_operasional')->groupBy('no_rekening')->get();
         foreach($rek as $r){
-            $data[$r->no_rekening] = DB::table('bios_log_operasional')
-                                        ->join('rekening_rumkit', 'bios_log_operasional.no_rekening', '=', 'rekening_rumkit.no_rekening')
+            $data[$r->no_rekening] = DB::table('bios_operasional')
                                         ->where('no_rekening', $r->no_rekening)
                                         ->orderByDesc('tgl_transaksi')
                                         ->first();

@@ -10,7 +10,7 @@
         <label for="{{ $id }}" class="form-label">{{ $label }}</label>
     @endif
 
-    <div wire:ignore.self class="input-group date" id="{{ $id }}" data-target-input="nearest">
+    <div class="input-group date" id="{{ $id }}" data-target-input="nearest">
         <input 
             {{ $attributes->merge(['class' => 'form-control datetimepicker-input']) }}
             @if ($model)
@@ -51,10 +51,28 @@
             $('#{{ $id }}').on('change.datetimepicker', function(e) {
                 // console.log(e.date);
                 if(!e.date){
-                    @this.set('{{ $model }}', '', true);
+                    @this.set('{{ $model }}', '');
                 }else{
-                    @this.set('{{ $model }}', e.date.format('YYYY-MM-DD'), true);
+                    @this.set('{{ $model }}', e.date.format('YYYY-MM-DD'));
                 }
+            });
+
+            Livewire.hook('message.processed', (message, component) => {
+                $('#{{ $id }}').datetimepicker({
+                    format: 'YYYY-MM-DD',
+                    allowInputToggle: true,
+                    icons: {
+                        time: "fa fa-clock",
+                        date: "fa fa-calendar",
+                        up: "fa fa-chevron-up",
+                        down: "fa fa-chevron-down",
+                        previous: "fa fa-chevron-left",
+                        next: "fa fa-chevron-right",
+                        today: "fa fa-screenshot",
+                        clear: "fa fa-trash",
+                        close: "fa fa-remove"
+                    }
+                });
             });
         });
     </script>
