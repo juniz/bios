@@ -77,19 +77,19 @@ class LayananCron extends Command
         // $this->sendMessage('Cron job Layanan BIOS telah dijalankan pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss')); 
 
         $this->postLayananFarmasi($tanggal);
-        // $this->postLayananIGD($tanggal);
-        // $this->postLayananPoli($tanggal);
-        // $this->postLayananOperasi($tanggal);
-        // $this->postLayananRadiologi($tanggal);
-        // $this->postLayananRalan($tanggal);
-        // $this->postLayananPenjab($tanggal);
-        // $this->postLayananLabParameter($tanggal);
-        // $this->postLayananLabSample($tanggal);
-        // $this->postLayananRanap($tanggal);
-        // $this->postVisitePertama($tanggal);
-        // $this->postVisite1($tanggal);
-        // $this->postVisite2($tanggal);
-        // $this->postVisite3($tanggal);
+        $this->postLayananIGD($tanggal);
+        $this->postLayananPoli($tanggal);
+        $this->postLayananOperasi($tanggal);
+        $this->postLayananRadiologi($tanggal);
+        $this->postLayananRalan($tanggal);
+        $this->postLayananPenjab($tanggal);
+        $this->postLayananLabParameter($tanggal);
+        $this->postLayananLabSample($tanggal);
+        $this->postLayananRanap($tanggal);
+        $this->postVisitePertama($tanggal);
+        $this->postVisite1($tanggal);
+        $this->postVisite2($tanggal);
+        $this->postVisite3($tanggal);
     }
 
     public function postLayananFarmasi($tanggal)
