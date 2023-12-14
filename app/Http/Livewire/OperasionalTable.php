@@ -26,10 +26,11 @@ class OperasionalTable extends DataTableComponent
                 ->sortable(),
             Column::make("Bank", "bank.uraian")
                 ->sortable(),
-            Column::make("No rekening", "rekening.nama")
+            Column::make("No rekening", "no_rekening")
+                ->format(fn($value, $row, Column $column)=> $value .' - '. $row->rekening->nama)
                 ->sortable(),
-            Column::make("Unit", "unit")
-                ->sortable(),
+            // Column::make("Unit", "unit")
+            //     ->sortable(),
             Column::make("Saldo akhir", "saldo_akhir")
                 ->sortable()
                 ->format(fn($value, $row, Column $column)=> 'Rp. '. number_format($value, 2, ',', '.')),

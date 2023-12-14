@@ -25,7 +25,8 @@ class KelolaanTable extends DataTableComponent
                 ->sortable(),
             Column::make("Bank", "bank.uraian")
                 ->sortable(),
-            Column::make("No rekening", "rekening.nama")
+            Column::make("No rekening", "no_rekening")
+                ->format(fn($value, $row, Column $column)=> $value .' - '. $row->rekening->nama)
                 ->sortable(),
             Column::make("Saldo akhir", "saldo_akhir")
                 ->sortable()
@@ -33,7 +34,9 @@ class KelolaanTable extends DataTableComponent
             Column::make("Kode", "kode")
                 ->sortable(),
             Column::make("Status", "status")
-                ->sortable(),
+                ->sortable()
+                ->format(fn($value, $row, Column $column)=> '<span class="badge badge-'. ($value == 'MSG20003' ? 'success' : 'danger') .'">'. $value .'</span>')
+                ->html(),
             Column::make("Response", "response")
                 ->sortable(),
         ];
