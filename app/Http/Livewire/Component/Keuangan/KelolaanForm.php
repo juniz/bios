@@ -8,10 +8,12 @@ use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Illuminate\Support\Carbon;
 use App\Models\BiosBank;
 use App\Models\BiosRekening;
+use Illuminate\Support\Facades\App;
+use App\Http\Traits\RequestAPI;
 
 class KelolaanForm extends Component
 {
-    use LivewireAlert;
+    use LivewireAlert, RequestAPI;
     public $kdbank;
     public $no_rekening;
     public $saldo_akhir;
@@ -57,9 +59,9 @@ class KelolaanForm extends Component
                 'tgl_transaksi' => $this->tgl_transaksi,
                 'kdbank' => $this->kdbank,
                 'no_rekening' => $this->no_rekening,
-                'unit' => $this->unit,
                 'saldo_akhir' => $this->saldo_akhir,
             ];
+            // dd($payload);
             $response = $this->sendData('keuangan/saldo/saldo_operasional', $payload);
             if($response->successful()){
                 Kelolaan::updateOrCreate([
@@ -82,7 +84,7 @@ class KelolaanForm extends Component
                 'position' =>  'center',
                 'timer' =>  '',
                 'toast' =>  false,
-                'text' =>  $response->getBody() ?? 'Terjadi Kesalahan saat kirim data server bios',
+                'text' =>  App::environment('local') ? $e->getMessage() : 'Terjadi Kesalahan saat kirim data server bios',
                 'confirmButtonText' =>  'Oke'
             ]);
         }

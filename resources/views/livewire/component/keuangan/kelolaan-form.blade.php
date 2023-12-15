@@ -13,7 +13,7 @@
                 <x-ui.select2 label="Kode Bank" id="kdbank" placeholder="Pilih Bank ...." model="kdbank">
                     <option value="">Pilih Kode Bank</option>
                     @foreach ($listBank as $item)
-                        <option value="{{ $item->kode }}">{{ $item->uraian }}</option>
+                        <option value="{{ str_pad($item->kode, 3, '0', STR_PAD_LEFT) }}">{{ $item->uraian }}</option>
                     @endforeach
                 </x-ui.select2>
             </div>
