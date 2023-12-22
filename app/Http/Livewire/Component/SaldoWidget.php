@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Component;
 
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use App\Models\Kelolaan;
 
 class SaldoWidget extends Component
 {
@@ -44,7 +45,7 @@ class SaldoWidget extends Component
 
     public function getKelolaan()
     {
-        $data = DB::table('bios_log_kelolaan')->orderByDesc('tgl_transaksi')->first();
+        $data = Kelolaan::orderByDesc('tgl_transaksi')->first();
         return $data->saldo_akhir;
     }
 

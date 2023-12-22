@@ -5,29 +5,31 @@
     'placeholder' => '',
 ])
 
-<div class="form-group">
+<div class="form-group row">
     @if ($label)
-        <label for="{{ $id }}" class="form-label">{{ $label }}</label>
+        <label for="{{ $id }}" class="col-sm-3 col-form-label">{{ $label }}</label>
     @endif
 
-    <select
-        id="{{ $id }}"
-        name="{{ $id }}"
-        placeholder="{{ $placeholder }}"
-        {{ $attributes->merge(['class' => 'form-control']) }}
-        @if ($model)
-            wire:model.defer="{{ $model }}"
-        @endif
-        @if($attributes->has('multiple'))
-            multiple
-        @endif
-    >
-        {{ $slot }}
-    </select>
+    <div class="col-sm-9">
+        <select
+            id="{{ $id }}"
+            name="{{ $id }}"
+            placeholder="{{ $placeholder }}"
+            {{ $attributes->merge(['class' => 'form-control']) }}
+            @if ($model)
+                wire:model.defer="{{ $model }}"
+            @endif
+            @if($attributes->has('multiple'))
+                multiple
+            @endif
+        >
+            {{ $slot }}
+        </select>
 
-    @error($id)
-        <span class="text-danger">{{ $message }}</span>
-    @enderror
+        @error($id)
+            <span class="text-danger">{{ $message }}</span>
+        @enderror
+    </div>
 </div>
 
 @push('js')

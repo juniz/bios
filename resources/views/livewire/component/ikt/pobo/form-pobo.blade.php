@@ -9,7 +9,8 @@
             </div>
         </div>
         <div class="col-md-12">
-            <button class="btn btn-primary btn-block" type="submit">Simpan</button>
+            {{-- <button class="btn btn-primary btn-block" type="submit">Simpan</button> --}}
+            <x-ui.button type="submit" color="primary" block="true" label="Simpan" />
         </div>
     </form>
 </div>

@@ -19,6 +19,9 @@ class KunjunganRajalWidget extends Component
         'bios_log_farmasi' => 'Farmasi',
         'bios_log_radiologi' => 'Radiologi',
         'bios_log_lab_sample' => 'Laboratorium',
+        'bios_log_bor' => 'BOR',
+        'bios_log_alos' => 'ALOS',
+        'bios_log_toi' => 'TOI',
     ];
     public $selectedYear, $selectedJenis, $labelName, $database;
 
@@ -78,11 +81,34 @@ class KunjunganRajalWidget extends Component
     public function getData($database, $month, $year)
     {
         $data = [];
-        for($i = 1; $i <= 13; $i++) {
-            $data = DB::table($database)
-                    ->where('tgl_transaksi', 'like', $year.'-'.$month.'%')
-                    ->groupBy(DB::raw('MONTH(tgl_transaksi)'))
-                    ->sum('jumlah');
+        if($database == 'bios_log_toi'){
+                for($i = 1; $i <= 13; $i++) {
+                    $data = DB::table($database)
+                            ->where('tgl_transaksi', 'like', $year.'-'.$month.'%')
+                            ->groupBy(DB::raw('MONTH(tgl_transaksi)'))
+                            ->sum('toi');
+                }
+        }else if($database == 'bios_log_alos'){
+            for($i = 1; $i <= 13; $i++) {
+                $data = DB::table($database)
+                        ->where('tgl_transaksi', 'like', $year.'-'.$month.'%')
+                        ->groupBy(DB::raw('MONTH(tgl_transaksi)'))
+                        ->sum('alos');
+            }
+        }else if($database == 'bios_log_bor'){
+            for($i = 1; $i <= 13; $i++) {
+                $data = DB::table($database)
+                        ->where('tgl_transaksi', 'like', $year.'-'.$month.'%')
+                        ->groupBy(DB::raw('MONTH(tgl_transaksi)'))
+                        ->sum('bor');
+            }
+        }else{
+            for($i = 1; $i <= 13; $i++) {
+                $data = DB::table($database)
+                        ->where('tgl_transaksi', 'like', $year.'-'.$month.'%')
+                        ->groupBy(DB::raw('MONTH(tgl_transaksi)'))
+                        ->sum('jumlah');
+            }
         }
         return $data;
     }
