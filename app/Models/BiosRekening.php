@@ -10,4 +10,5 @@ class BiosRekening extends Model
     use HasFactory;
     protected $table = 'rekening_rumkit';
     protected $primaryKey = 'no_rek';
+    public $incrementing = false;
 }
