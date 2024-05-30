@@ -11,8 +11,8 @@ trait Telegram
     protected $chatIdTelegram = '998698140';
     public function sendMessage($message)
     {
-        // $response = Http::get($this->urlTelegram.$this->tokenTelegram.'/sendMessage?chat_id='.$this->chatIdTelegram.'&text='.$message);
+        $response = Http::get($this->urlTelegram . $this->tokenTelegram . '/sendMessage?chat_id=' . $this->chatIdTelegram . '&text=' . $message);
 
-        // return $response;
+        return $response;
     }
 }

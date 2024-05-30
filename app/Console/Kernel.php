@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
         // Commands\LabParamCron::class,
         Commands\LayananCron::class,
         Commands\BulananCron::class,
+        Commands\PingBios::class,
         // Commands\SendRanap::class,
     ];
     /**
@@ -27,24 +28,25 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('cron:sdm')->monthly()->at('02:34')->timezone('Asia/Jakarta')->before(function(){
-            $this->sendMessage('Cron job SDM BIOS telah dijalankan pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss'));
-        })->after(function(){
-            $this->sendMessage('Cron job SDM BIOS telah selesai pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss'));
-        });
-        
-        $schedule->command('cron:bulanan')->monthly()->timezone('Asia/Jakarta')->before(function(){
-            $this->sendMessage('Cron job Bulanan BIOS telah dijalankan pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss'));
-        })->after(function(){
-            $this->sendMessage('Cron job Bulanan BIOS telah selesai pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss'));
-        });
+        // $schedule->command('cron:sdm')->monthly()->at('02:34')->timezone('Asia/Jakarta')->before(function () {
+        //     $this->sendMessage('Cron job SDM BIOS telah dijalankan pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss'));
+        // })->after(function () {
+        //     $this->sendMessage('Cron job SDM BIOS telah selesai pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss'));
+        // });
 
-        $schedule->command('cron:layanan')->daily()->at('03:00')->timezone('Asia/Jakarta')->before(function(){
-            $this->sendMessage('Cron job Harian BIOS telah dijalankan pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss'));
-        })->after(function(){
-            $this->sendMessage('Cron job Harian BIOS telah selesai pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss'));
-        });
+        // $schedule->command('cron:bulanan')->monthly()->timezone('Asia/Jakarta')->before(function () {
+        //     $this->sendMessage('Cron job Bulanan BIOS telah dijalankan pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss'));
+        // })->after(function () {
+        //     $this->sendMessage('Cron job Bulanan BIOS telah selesai pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss'));
+        // });
 
+        // $schedule->command('cron:layanan')->daily()->at('03:00')->timezone('Asia/Jakarta')->before(function () {
+        //     $this->sendMessage('Cron job Harian BIOS telah dijalankan pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss'));
+        // })->after(function () {
+        //     $this->sendMessage('Cron job Harian BIOS telah selesai pada ' . Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss'));
+        // });
+
+        $schedule->command('cron:ping')->everyMinute();
     }
 
     /**
@@ -54,7 +56,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }
