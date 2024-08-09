@@ -165,7 +165,7 @@ trait RequestDB
                 $query->orWhere('kd_pj', 'BPJ')
                     ->orWhere('kd_pj', 'BTK');
             })
-            ->where('kd_pj', 'BPJ')
+            // ->where('kd_pj', 'BPJ')
             ->count();
         return $data;
     }

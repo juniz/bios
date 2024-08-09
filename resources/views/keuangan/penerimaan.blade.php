@@ -10,7 +10,8 @@
 <div class="row">
     <div class="col-md-12">
         <x-adminlte-card title="Input Penerimaan" theme="dark" theme-mode="outline">
-            <div class="col-md-12">
+            <livewire:component.keuangan.penerimaan-form />
+            {{-- <div class="col-md-12">
                 <x-adminlte-select2 name="kd_akun" label="Akun"
                     data-placeholder="6 digit kode akun diawali dengan angka 4">
                     <option />
@@ -32,46 +33,12 @@
                     </div>
                 </x-slot>
             </x-adminlte-input-date>
-            <x-adminlte-button class="btn-block" label="Kirim" onclick="kirimDataPerawat()" theme="primary" />
-        </x-adminlte-card>
-        <x-adminlte-card title="Keterangan" theme="dark" theme-mode="outline">
-            <ol>
-                @foreach($keterangan as $keterangan)
-                <li>{{ $keterangan }}</li>
-                @endforeach
-            </ol>
+            <x-adminlte-button class="btn-block" label="Kirim" onclick="kirimDataPerawat()" theme="primary" /> --}}
         </x-adminlte-card>
     </div>
     <div class="col-md-12">
         <x-adminlte-card title="Data Penerimaan" theme="dark" theme-mode="outline">
-            @php
-            $config = [
-            'order' => [[0, 'desc']],
-            "responsive" => true,
-            ];
-            @endphp
-            <x-adminlte-datatable id="tablePenerimaan" :heads="$head" head-theme="dark" :config="$config" striped
-                hoverable bordered compressed>
-                @forelse($data as $data)
-                <tr @if($data->response == 'MSG20003') class="bg-success" @endif>
-                    <td>{{ $data->tgl_transaksi }}</td>
-                    <td>{{ $data->kd_akun }}</td>
-                    <td>{{ $data->jumlah }}</td>
-                    <td>{{ $data->response }}</td>
-                    <td>{{ $data->send_at }}</td>
-                    <td>{{ $data->updated_at }}</td>
-                    <td>
-                        <x-adminlte-button label="Kirim Ulang"
-                            onclick="kirimUlang('{{$data->tgl_transaksi}}','{{$data->kd_akun}}','{{$data->jumlah}}')"
-                            class="btn-sm" icon="fas fa-lg fa-save" />
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="7" class="text-center">Data Kosong</td>
-                </tr>
-                @endforelse
-            </x-adminlte-datatable>
+            <livewire:penerimaan-table />
         </x-adminlte-card>
     </div>
 </div>

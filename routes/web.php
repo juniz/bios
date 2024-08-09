@@ -143,7 +143,8 @@ Route::middleware(['ceklogin'])->prefix('keuangan')->group(function () {
     Route::get('/kelolaan', fn() => view('keuangan.kelolaan'))->named('kelolaan');
     Route::post('/kelolaan/kirim', [App\Http\Controllers\Keuangan\KelolaanController::class, 'store']);
 
-    Route::get('/penerimaan', [App\Http\Controllers\Keuangan\PenerimaanController::class, 'index'])->named('penerimaan');
+    // Route::get('/penerimaan', [App\Http\Controllers\Keuangan\PenerimaanController::class, 'index'])->named('penerimaan');
+    Route::get('/penerimaan', fn() => view('keuangan.penerimaan'))->named('penerimaan');
     Route::post('/penerimaan/kirim', [App\Http\Controllers\Keuangan\PenerimaanController::class, 'store']);
 
     Route::get('/pengeluaran', [App\Http\Controllers\Keuangan\PengeluaranController::class, 'index'])->named('pengeluaran');

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Traits\Token;
+use GuzzleHttp\Exception\GuzzleException;
 
 trait RequestAPI
 {
@@ -31,9 +32,9 @@ trait RequestAPI
                 'send_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ]);
-            if(Arr::has($payloads, 'pns')){
+            if (Arr::has($payloads, 'pns')) {
                 $this->simpanLogSDM($table, $payloads);
-            }else{
+            } else {
                 $this->simpanLog($table, $payloads);
             }
             if ($response->json()['status'] == 'MSG20003') {
@@ -43,10 +44,14 @@ trait RequestAPI
                 $this->sendMessage($url . ' : ' . $response->getBody());
                 // Log::warning($this->urlPost.$url, $response->json());
             }
-        } catch (\Exception $e) {
-            $this->sendMessage($e->getMessage() ?? 'Terjadi kesalahan saat akses server bios');
-            // Log::error($this->urlPost.$url, $e->getResponse());
-            return $e->getMessage() ?? 'Terjadi kesalahan saat akses server bios';
+        } catch (GuzzleException $e) {
+            if (Str::contains($e->getMessage(), 'time')) {
+                $this->sendMessage($e->getMessage() ?? 'Terjadi kesalahan saat akses server bios');
+                $this->postData($url, $header, $body, $table, 60);
+            } else {
+                $this->sendMessage($e->getMessage() ?? 'Terjadi kesalahan saat akses server bios');
+                return $e->getMessage() ?? 'Terjadi kesalahan saat akses server bios';
+            }
         }
         return $response;
     }
@@ -110,7 +115,7 @@ trait RequestAPI
     public function responseStatus($status)
     {
         $response = "";
-        switch($status){
+        switch ($status) {
             case "MSG20001":
                 $response = "Data ditemukan";
                 break;

@@ -67,14 +67,15 @@ class SdmWidget extends Component
     public function getData($database)
     {
         return DB::table($database)
-                    ->where('tgl_transaksi', 'like', $this->selectedYear.'%')
-                    ->orderByDesc('tgl_transaksi')
-                    ->first();
+            ->where('tgl_transaksi', 'like', $this->selectedYear . '%')
+            ->orderByDesc('tgl_transaksi')
+            ->first();
     }
 
     public function getDataset($database)
     {
         $data = $this->getData($database);
+        // dd($data);
         $this->dataset = [
             [
                 'backgroundColor' => ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b'],

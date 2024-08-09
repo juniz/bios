@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Console\Commands;
+
 use App\Http\Controllers\Layanan\RalanController;
 use Illuminate\Console\Command;
 use App\Http\Traits\Token;
@@ -27,10 +28,9 @@ class SDMCron extends Command
     public $token, $header, $tanggal, $now, $count;
 
     public function __construct()
-   {
+    {
         parent::__construct();
-        
-   }
+    }
 
     /**
      * Execute the console command.
@@ -41,6 +41,7 @@ class SDMCron extends Command
     {
         $this->init();
         $this->postPerawat();
+        $this->postBidan();
         $this->postAdministrasi();
         $this->postDokterGigi();
         $this->postDokterUmum();
@@ -62,7 +63,7 @@ class SDMCron extends Command
         $this->header = [
             'token' => $this->token,
             'Content-Type' => 'multipart/form-data'
-        ]; 
+        ];
         $this->tanggal = Carbon::now()->subDay()->isoFormat('YYYY-MM-DD');
         $this->now = Carbon::now()->isoFormat('DD-MM-YYYY HH:mm:ss');
         $this->count = 0;
@@ -249,7 +250,7 @@ class SDMCron extends Command
     public function postRadiographer()
     {
         $url = 'kesehatan/sdm/radiographer';
-        $bidang = 'RADIOGRAPHER';
+        $bidang = 'RADIOGRAFER';
         $input = array(
             'tgl_transaksi' => $this->tanggal,
             'pns' =>  $this->pns($bidang),

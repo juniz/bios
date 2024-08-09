@@ -5,7 +5,7 @@
                 <x-ui.select2 label="No Rekening" id="no_rekening" placeholder="Pilih Rekening ...." model="no_rekening">
                     <option value="">Pilih No Rekening</option>
                     @foreach ($listRekening as $item)
-                        <option value="{{ $item->no_rek }}">{{ $item->no_rek }} - {{ $item->nama }}</option>
+                        <option value="{{ $item->no_rek }}">{{ strval($item->no_rek) }} - {{ $item->nama }}</option>
                     @endforeach
                 </x-ui.select2>
             </div>

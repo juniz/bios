@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Traits\Token;
 use App\Models\Kelolaan;
 use App\Models\Operasional;
+use App\Models\Penerimaan;
 use Illuminate\Support\Facades\Cache;
 
 
@@ -87,15 +88,14 @@ class OperasionalController extends Controller
             foreach($request->all() as $r){
                 $input = [
                     'tgl_transaksi' => $r['tgl_transaksi'],
-                    'no_rekening' => $r['no_rekening'],
-                    'kdbank' => $r['kdbank'],
-                    'saldo_akhir' => $r['saldo_akhir'],
+                    'kode_akun' => $r['kode_akun'],
+                    'jumlah' => $r['jumlah'],
                     'kode' => 200,
                     'status' => 'MSG20003',
                     'response' => ''
                 ];
 
-                Kelolaan::create($input);
+                Penerimaan::create($input);
             }
 
             return response()->json([

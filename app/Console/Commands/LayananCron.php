@@ -52,10 +52,10 @@ class LayananCron extends Command
         //     $tgl = $i < 10 ? '0' . $i : $i;
         //     $this->init($tgl);
         // }
-        if(empty($this->argument('tahun'))){
+        if (empty($this->argument('tahun'))) {
             $this->init();
-        }else{
-            $periode = CarbonPeriod::create($this->argument('tahun'). '-01-01', $this->argument('tahun').'-12-31');
+        } else {
+            $periode = CarbonPeriod::create($this->argument('tahun') . '-01-01', $this->argument('tahun') . '-12-31');
             foreach ($periode as $date) {
                 $this->init($date->format('Y-m-d'));
             }
@@ -259,7 +259,7 @@ class LayananCron extends Command
     public function postVisitePertama($tanggal)
     {
         $url = 'kesehatan/ikt/visite_pertama';
-        try{
+        try {
 
             $jumlah = $this->countVisitePertama($tanggal);
             $input = array(
@@ -267,33 +267,30 @@ class LayananCron extends Command
                 'jumlah' => $jumlah->jml
             );
             $response = $this->sendData($url, $input);
-            if($response->successful()){
-                
+            if ($response->successful()) {
+
                 VisitePertama::updateOrCreate([
                     'tgl_transaksi' => $tanggal
-                ],[
+                ], [
                     'jumlah' => $jumlah->jml,
                     'kode' => $response->status(),
                     'status' => $response->json()['status'],
                     'response' => $response->body(),
                 ]);
-
-            }else{
+            } else {
 
                 VisitePertama::updateOrCreate([
                     'tgl_transaksi' => $tanggal
-                ],[
+                ], [
                     'jumlah' => $jumlah,
                     'kode' => $response->status() ?? 500,
                     'status' => $response->json()['status'] ?? '500',
                     'response' => $response->body() ?? 'Error Server',
                 ]);
-
             }
 
             $this->info($url . ' : ' . $response->body() ?? '500');
-
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
 
             $this->info($url . ' : ' . $e->getMessage() ?? '500');
             $this->sendMessage('Error Visite Pertama : ' . $e->getMessage() ?? '500');
@@ -303,7 +300,7 @@ class LayananCron extends Command
     public function postVisite1($tanggal)
     {
         $url = 'kesehatan/ikt/visite_1';
-        try{
+        try {
 
             $jumlah = $this->countVisite1($tanggal);
             $input = array(
@@ -311,33 +308,30 @@ class LayananCron extends Command
                 'jumlah' => $jumlah
             );
             $response = $this->sendData($url, $input);
-            if($response->successful()){
-                
+            if ($response->successful()) {
+
                 Visite1::updateOrCreate([
                     'tgl_transaksi' => $tanggal
-                ],[
+                ], [
                     'jumlah' => $jumlah,
                     'kode' => $response->status(),
                     'status' => $response->json()['status'],
                     'response' => $response->body(),
                 ]);
-
-            }else{
+            } else {
 
                 Visite1::updateOrCreate([
                     'tgl_transaksi' => $tanggal
-                ],[
+                ], [
                     'jumlah' => $jumlah,
                     'kode' => $response->status() ?? 408,
                     'status' => $response->json()['status'] ?? 'Request Timeout',
                     'response' => $response->body() ?? 'Request Timeout',
                 ]);
-
             }
 
             $this->info($url . ' (' . $tanggal . ') : ' . $response->body() ?? 'Request Timeout');
-
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
 
             $this->info($url . ' : ' . $e->getMessage() ?? '500');
             $this->sendMessage('Error Visite 1 : ' . $e->getMessage() ?? '500');
@@ -347,7 +341,7 @@ class LayananCron extends Command
     public function postVisite2($tanggal)
     {
         $url = 'kesehatan/ikt/visite_2';
-        try{
+        try {
 
             $jumlah = $this->countVisite2($tanggal);
             $input = array(
@@ -355,33 +349,30 @@ class LayananCron extends Command
                 'jumlah' => $jumlah
             );
             $response = $this->sendData($url, $input);
-            if($response->successful()){
-                
+            if ($response->successful()) {
+
                 Visite2::updateOrCreate([
                     'tgl_transaksi' => $tanggal
-                ],[
+                ], [
                     'jumlah' => $jumlah,
                     'kode' => $response->status(),
                     'status' => $response->json()['status'],
                     'response' => $response->body(),
                 ]);
-
-            }else{
+            } else {
 
                 Visite2::updateOrCreate([
                     'tgl_transaksi' => $tanggal
-                ],[
+                ], [
                     'jumlah' => $jumlah,
                     'kode' => $response->status() ?? 408,
                     'status' => $response->json()['status'] ?? 'Request Timeout',
                     'response' => $response->body() ?? 'Request Timeout',
                 ]);
-
             }
 
             $this->info($url . ' (' . $tanggal . ') : ' . $response->body() ?? 'Request Timeout');
-
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
 
             $this->info($url . ' : ' . $e->getMessage() ?? '500');
             $this->sendMessage('Error Visite 2 : ' . $e->getMessage() ?? '500');
@@ -391,7 +382,7 @@ class LayananCron extends Command
     public function postVisite3($tanggal)
     {
         $url = 'kesehatan/ikt/visite_3';
-        try{
+        try {
 
             $jumlah = $this->countVisite3($tanggal);
             $input = array(
@@ -399,33 +390,30 @@ class LayananCron extends Command
                 'jumlah' => $jumlah
             );
             $response = $this->sendData($url, $input);
-            if($response->successful()){
-                
+            if ($response->successful()) {
+
                 Visite3::updateOrCreate([
                     'tgl_transaksi' => $tanggal
-                ],[
+                ], [
                     'jumlah' => $jumlah,
                     'kode' => $response->status(),
                     'status' => $response->json()['status'],
                     'response' => $response->body(),
                 ]);
-
-            }else{
+            } else {
 
                 Visite3::updateOrCreate([
                     'tgl_transaksi' => $tanggal
-                ],[
+                ], [
                     'jumlah' => $jumlah,
                     'kode' => $response->status() ?? 408,
                     'status' => $response->json()['status'] ?? 'Request Timeout',
                     'response' => $response->body() ?? 'Request Timeout',
                 ]);
-
             }
 
             $this->info($url . ' (' . $tanggal . ') : ' . $response->body() ?? 'Request Timeout');
-
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
 
             $this->info($url . ' : ' . $e->getMessage() ?? '500');
             $this->sendMessage('Error Visite 3 : ' . $e->getMessage() ?? '500');
