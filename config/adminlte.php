@@ -63,12 +63,12 @@ return [
     |
     */
 
-    'logo' => '<b>RSB</b> Nganjuk',
+    'logo' => '<b>RSB</b> Makassar',
     'logo_img' => 'assets/img/logo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
-    'logo_img_alt' => 'RSB Nganjuk',
+    'logo_img_alt' => 'RSB Makaasar Logo',
 
     /*
     |--------------------------------------------------------------------------
