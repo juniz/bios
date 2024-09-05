@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'BIOS RSB Nganjuk',
+    'title' => env('APP_NAME', 'Laravel'),
     'title_prefix' => '',
     'title_postfix' => '',
 
