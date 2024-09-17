@@ -21,7 +21,7 @@ Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'
 Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout']);
 Route::get('/dashboard', function (Request $request) {
     $nama = $request->session()->get('nama');
-    return view('dashboard',['nama' => $nama]);
+    return view('dashboard', ['nama' => $nama]);
 })->middleware('ceklogin');
 
 Route::get('dahboard-renstra', fn() => view('dashboard.renstra'))->middleware('ceklogin');
@@ -72,7 +72,6 @@ Route::middleware(['ceklogin'])->prefix('sdm')->group(function () {
 
     Route::get('/dokterumum', fn() => view('sdm.dokterumum'))->named('dokterumum');
     Route::post('/dokterumum/kirim', [App\Http\Controllers\SDM\DokterUmumController::class, 'store']);
-
 });
 
 Route::middleware(['ceklogin'])->prefix('layanan')->group(function () {
@@ -127,7 +126,6 @@ Route::middleware(['ceklogin'])->prefix('layanan')->group(function () {
 
     Route::get('/dokpol', [App\Http\Controllers\Layanan\DokpolController::class, 'index'])->named('dokpol');
     Route::post('/dokpol/kirim', [App\Http\Controllers\Layanan\DokpolController::class, 'store']);
-
 });
 
 Route::middleware(['ceklogin'])->prefix('keuangan')->group(function () {
@@ -149,6 +147,8 @@ Route::middleware(['ceklogin'])->prefix('keuangan')->group(function () {
 
     Route::get('/pengeluaran', [App\Http\Controllers\Keuangan\PengeluaranController::class, 'index'])->named('pengeluaran');
     Route::post('/pengeluaran/kirim', [App\Http\Controllers\Keuangan\PengeluaranController::class, 'store']);
+
+    Route::get('/rekening', fn() => view('keuangan.rekening'))->named('rekening');
 });
 
 Route::middleware(['ceklogin'])->prefix('ikt')->group(function () {
@@ -231,12 +231,12 @@ Route::middleware(['ceklogin'])->prefix('monitoring')->group(function () {
 });
 
 Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])->middleware('ceklogin');
-Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle']);    
-Route::get('/chat',function(){
+Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle']);
+Route::get('/chat', function () {
     return view('telegram');
 });
 
-Route::get('/artisan', function(){
+Route::get('/artisan', function () {
     Artisan::call('cron:layanan 2022');
     dd();
 });

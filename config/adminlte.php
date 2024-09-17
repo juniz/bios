@@ -423,6 +423,10 @@ return [
             'icon'    => 'fas fa-fw fa-dollar-sign',
             'submenu' => [
                 [
+                    'text' => 'Rekening',
+                    'url'  => '/keuangan/rekening',
+                ],
+                [
                     'text' => 'Operasional',
                     'url'  => '/keuangan/operasional',
                 ],
