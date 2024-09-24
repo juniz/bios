@@ -38,7 +38,7 @@ class OperasionalWidget extends Component
     public function getData($rek)
     {
         $data = Operasional::where('no_rekening', $rek)->orderByDesc('tgl_transaksi')->first();
-        return $data->saldo_akhir;
+        return $data->saldo_akhir ?? 0;
     }
 
     public function getDataset()
@@ -48,11 +48,11 @@ class OperasionalWidget extends Component
                 'backgroundColor' => ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b'],
                 'hoverBackgroundColor' => ['#2e59d9', '#17a673', '#2c9faf', '#dda20a', '#e74a3b'],
                 'data' => [
-                    $this->getData('005601002334303') ?? 0, 
-                    $this->getData('005601003859306') ?? 0, 
-                    $this->getData('0128811573') ?? 0, 
-                    $this->getData('8686575888') ?? 0, 
-                    $this->getData('8686575899') ?? 0, 
+                    $this->getData('005601002334303') ?? 0,
+                    $this->getData('005601003859306') ?? 0,
+                    $this->getData('0128811573') ?? 0,
+                    $this->getData('8686575888') ?? 0,
+                    $this->getData('8686575899') ?? 0,
                 ],
             ]
         ];

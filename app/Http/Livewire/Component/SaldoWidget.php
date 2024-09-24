@@ -31,11 +31,11 @@ class SaldoWidget extends Component
     public function getOperasional()
     {
         $rek = DB::table('bios_operasional')->groupBy('no_rekening')->get();
-        foreach($rek as $r){
+        foreach ($rek as $r) {
             $data[$r->no_rekening] = DB::table('bios_operasional')
-                                        ->where('no_rekening', $r->no_rekening)
-                                        ->orderByDesc('tgl_transaksi')
-                                        ->first();
+                ->where('no_rekening', $r->no_rekening)
+                ->orderByDesc('tgl_transaksi')
+                ->first();
         }
         // $data = DB::table('bios_log_operasional')->orderByDesc('tgl_transaksi')->first();
         // return $data->saldo_akhir;
@@ -46,7 +46,7 @@ class SaldoWidget extends Component
     public function getKelolaan()
     {
         $data = Kelolaan::orderByDesc('tgl_transaksi')->first();
-        return $data->saldo_akhir;
+        return $data->saldo_akhir ?? 0;
     }
 
     public function getKas()
